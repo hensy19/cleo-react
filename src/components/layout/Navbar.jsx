@@ -34,8 +34,10 @@ export default function Navbar() {
               <Link to="/dashboard" className="nav-link" onClick={handleNavClick}>Dashboard</Link>
               <Link to="/calendar" className="nav-link" onClick={handleNavClick}>Calendar</Link>
               <Link to="/log-symptoms" className="nav-link" onClick={handleNavClick}>Symptoms</Link>
-              <Link to="/log-period" className="nav-link" onClick={handleNavClick}>Mood</Link>
-              <Link to="/history" className="nav-link" onClick={handleNavClick}>Notes</Link>
+              <Link to="/log-period" className="nav-link" onClick={handleNavClick}>Log Period</Link>
+              <Link to="/history" className="nav-link" onClick={handleNavClick}>History</Link>
+              <Link to="/mood" className="nav-link" onClick={handleNavClick}>Mood</Link>
+              <Link to="/notes" className="nav-link" onClick={handleNavClick}>Notes</Link>
               <Link to="/tips" className="nav-link" onClick={handleNavClick}>Tips</Link>
               <Link to="/profile" className="nav-link" onClick={handleNavClick}>Profile</Link>
               <button className="nav-logout" onClick={handleLogout}>Logout</button>

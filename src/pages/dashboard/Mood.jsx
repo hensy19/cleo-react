@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
-import Navbar from '../../components/layout/Navbar'
-import Sidebar from '../../components/layout/Sidebar'
-import Footer from '../../components/layout/Footer'
-import Button from '../../components/common/Button'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import Button from '../../components/common/Button'
 import './Mood.css'
 
 export default function Mood() {
