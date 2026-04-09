@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
+import Modal from '../../components/common/Modal'
 import './History.css'
 
 export default function History() {
@@ -14,6 +15,61 @@ export default function History() {
     { id: 5, cycleNum: 2, startDate: 'Oct 10, 2025', endDate: 'Oct 15, 2025', length: '27 days', flow: 'Medium' },
     { id: 6, cycleNum: 1, startDate: 'Sep 13, 2025', endDate: 'Sep 18, 2025', length: '28 days', flow: 'Heavy' }
   ])
+
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [selectedPeriod, setSelectedPeriod] = useState(null)
+  const [editFormData, setEditFormData] = useState({
+    startDate: '',
+    endDate: '',
+    length: '',
+    flow: ''
+  })
+
+  const handleEditClick = (period) => {
+    setSelectedPeriod(period)
+    setEditFormData({
+      startDate: period.startDate,
+      endDate: period.endDate,
+      length: period.length,
+      flow: period.flow
+    })
+    setShowEditModal(true)
+  }
+
+  const handleDeleteClick = (period) => {
+    setSelectedPeriod(period)
+    setShowDeleteModal(true)
+  }
+
+  const handleSaveEdit = () => {
+    setPeriodHistory(periodHistory.map(period =>
+      period.id === selectedPeriod.id
+        ? {
+            ...period,
+            startDate: editFormData.startDate,
+            endDate: editFormData.endDate,
+            length: editFormData.length,
+            flow: editFormData.flow
+          }
+        : period
+    ))
+    setShowEditModal(false)
+    setSelectedPeriod(null)
+  }
+
+  const handleConfirmDelete = () => {
+    setPeriodHistory(periodHistory.filter(period => period.id !== selectedPeriod.id))
+    setShowDeleteModal(false)
+    setSelectedPeriod(null)
+  }
+
+  const handleEditInputChange = (field, value) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
 
   return (
     <DashboardLayout>
@@ -72,8 +128,8 @@ export default function History() {
                     </span>
                   </td>
                   <td className="actions-cell">
-                    <button className="icon-btn edit-btn" title="Edit">📝</button>
-                    <button className="icon-btn delete-btn" title="Delete">🗑️</button>
+                    <button className="icon-btn edit-btn" title="Edit" onClick={() => handleEditClick(period)}>📝</button>
+                    <button className="icon-btn delete-btn" title="Delete" onClick={() => handleDeleteClick(period)}>🗑️</button>
                   </td>
                 </tr>
               ))}
@@ -106,6 +162,82 @@ export default function History() {
             </div>
           </div>
         </Card>
+
+        {/* Edit Modal */}
+        <Modal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          title="Edit Period Record"
+          size="medium"
+        >
+          <div className="modal-form">
+            <div className="form-group">
+              <label>Start Date</label>
+              <input
+                type="text"
+                value={editFormData.startDate}
+                onChange={(e) => handleEditInputChange('startDate', e.target.value)}
+                placeholder="e.g., Jan 31, 2026"
+              />
+            </div>
+            <div className="form-group">
+              <label>End Date</label>
+              <input
+                type="text"
+                value={editFormData.endDate}
+                onChange={(e) => handleEditInputChange('endDate', e.target.value)}
+                placeholder="e.g., Feb 5, 2026"
+              />
+            </div>
+            <div className="form-group">
+              <label>Cycle Length</label>
+              <input
+                type="text"
+                value={editFormData.length}
+                onChange={(e) => handleEditInputChange('length', e.target.value)}
+                placeholder="e.g., 28 days"
+              />
+            </div>
+            <div className="form-group">
+              <label>Flow</label>
+              <select
+                value={editFormData.flow}
+                onChange={(e) => handleEditInputChange('flow', e.target.value)}
+              >
+                <option value="">Select Flow</option>
+                <option value="Light">Light</option>
+                <option value="Medium">Medium</option>
+                <option value="Heavy">Heavy</option>
+              </select>
+            </div>
+            <div className="modal-buttons">
+              <button className="btn-save" onClick={handleSaveEdit}>Save Changes</button>
+              <button className="btn-cancel" onClick={() => setShowEditModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          title="Delete Period Record"
+          size="small"
+        >
+          <div className="delete-confirmation">
+            <p>Are you sure you want to delete this period record?</p>
+            {selectedPeriod && (
+              <p className="period-info">
+                <strong>Cycle #{selectedPeriod.cycleNum}</strong> • {selectedPeriod.startDate} to {selectedPeriod.endDate}
+              </p>
+            )}
+            <p className="warning-text">This action cannot be undone.</p>
+            <div className="modal-buttons">
+              <button className="btn-delete" onClick={handleConfirmDelete}>Delete</button>
+              <button className="btn-cancel" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </DashboardLayout>
   )
