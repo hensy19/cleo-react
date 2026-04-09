@@ -19,6 +19,7 @@ import Profile from '../pages/dashboard/Profile'
 import Mood from '../pages/dashboard/Mood'
 import Notes from '../pages/dashboard/Notes'
 import ChangePassword from '../pages/dashboard/ChangePassword'
+import Reminders from '../pages/dashboard/Reminders'
 
 // Admin Pages
 import AdminLogin from '../pages/admin/AdminLogin'
@@ -58,6 +59,7 @@ export default function AppRoutes() {
       <Route path="/tips" element={<ProtectedRoute><Tips /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
+      <Route path="/reminders" element={<ProtectedRoute><Reminders /></ProtectedRoute>} />
 
       {/* Admin Routes */}
       <Route path="/admin/login" element={<AdminLogin />} />
