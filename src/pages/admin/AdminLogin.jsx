@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
@@ -41,8 +40,6 @@ export default function AdminLogin() {
 
   return (
     <div className="admin-login-page">
-      <Navbar />
-
       <div className="admin-login-container">
         <div className="admin-login-card">
           <div className="admin-login-header">
@@ -95,7 +92,6 @@ export default function AdminLogin() {
         </div>
       </div>
 
-      <Footer />
     </div>
   )
 }

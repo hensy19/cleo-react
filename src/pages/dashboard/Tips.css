@@ -85,9 +85,14 @@
   flex-direction: column;
 }
 
+.modern-tip-card.clickable {
+  cursor: pointer;
+}
+
 .modern-tip-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  border-color: #10517F;
 }
 
 .tip-card-header {
@@ -134,8 +139,24 @@
   color: #355C7D;
   font-size: 0.95rem;
   line-height: 1.6;
-  margin: 0;
+  margin: 0 0 1rem 0;
   opacity: 0.9;
+}
+
+.read-more-link {
+  color: #10517F;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.modern-tip-card:hover .read-more-link {
+  gap: 0.75rem;
 }
 
 .no-tips {
@@ -145,70 +166,105 @@
   font-size: 1.2rem;
 }
 
-/* Tip Modal Styles */
+/* Modern Tip Modal Styles */
 .tip-modal-content {
-  max-width: 600px;
-  max-height: 80vh;
-  overflow-y: auto;
+  padding: 1rem;
 }
 
-.tip-modal-header {
+.tip-modal-header-modern {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.tip-modal-icon {
-  font-size: 2.5rem;
-}
-
-.tip-modal-header h2 {
-  margin: 0;
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.tip-modal-category {
-  display: inline-block;
-  background-color: var(--primary-color);
+.tip-modal-icon-bubble {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-top: 0.25rem;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.tip-modal-body {
-  color: var(--text-color);
-  line-height: 1.6;
+.tip-modal-icon-bubble.green { background: #81C784; }
+.tip-modal-icon-bubble.blue { background: #64B5F6; }
+.tip-modal-icon-bubble.pink { background: #F06292; }
+.tip-modal-icon-bubble.purple { background: #BA68C8; }
+.tip-modal-icon-bubble.lightblue { background: #4FC3F7; }
+
+.tip-modal-category-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #355C7D;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
 }
 
-.tip-modal-body h4 {
-  color: var(--primary-color);
-  margin: 1.5rem 0 0.75rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
+.tip-modal-header-modern h2 {
+  margin: 0;
+  color: #10517F;
+  font-size: 1.75rem;
+  font-weight: 800;
 }
 
-.tip-modal-body p {
-  margin: 0.75rem 0;
+.tip-modal-body-modern {
+  color: #355C7D;
+  line-height: 1.7;
 }
 
-.tip-modal-body ul {
-  margin: 0.75rem 0;
+.tip-modal-body-modern p {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.tip-modal-body-modern h4 {
+  color: #10517F;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+}
+
+.tip-modal-body-modern ul {
   padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.tip-modal-body li {
-  margin: 0.5rem 0;
+.tip-modal-body-modern li {
+  margin-bottom: 0.75rem;
 }
 
-.tip-modal-body strong {
-  color: var(--primary-color);
-  font-weight: 600;
+.tip-modal-body-modern strong {
+  color: #10517F;
+}
+
+.tip-modal-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #E8F2F9;
+  text-align: right;
+}
+
+.close-tip-btn {
+  background: #10517F;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.2);
+}
+
+.close-tip-btn:hover {
+  background: #0D3F63;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(16, 81, 127, 0.3);
 }

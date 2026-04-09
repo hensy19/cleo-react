@@ -94,11 +94,7 @@ export default function Home() {
               </Link>
               <button className="btn-secondary">Learn More</button>
             </div>
-            <div className="admin-button-container">
-              <Link to="/admin/login">
-                <Button variant="outline" size="medium">Become Admin</Button>
-              </Link>
-            </div>
+            
           </div>
           <div className="hero-visual">
             <img src={femaleImage} alt="Woman illustration" className="hero-illustration" />

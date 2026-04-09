@@ -1,0 +1,2 @@
+﻿src/pages/dashboard/Notes.css
+src/pages/dashboard/Notes.jsx

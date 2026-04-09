@@ -1,0 +1,10 @@
+﻿4e0bffe HEAD@{0}: commit: feat: add onboarding component styles and supplementary assets
+5553332 HEAD@{1}: pull --tags origin main: Fast-forward
+86eee59 HEAD@{2}: commit: feat: implement admin panel
+be32297 HEAD@{3}: commit: refactor: remove unused files and associated references
+0bb5b83 HEAD@{4}: commit: feat: implement core dashboard components, onboarding flow, and asset library
+c06e7f4 HEAD@{5}: commit: UI: Revamp Notes page layout and styling
+c093f47 HEAD@{6}: commit: Added History, LogPeriod and modified notes and mood pages.
+31b9b34 HEAD@{7}: commit: Removed design folder
+0fcce03 HEAD@{8}: Branch: renamed refs/heads/master to refs/heads/main
+0fcce03 HEAD@{10}: commit (initial): Initial clean commit

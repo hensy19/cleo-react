@@ -30,9 +30,7 @@ export default function AdminLayout({ children, activePage = 'dashboard', onSear
       <aside className="admin-sidebar">
         <div className="admin-sidebar-top">
           <div className="admin-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-               <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z" fill="#3B82F6" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round"/>
-            </svg>
+            
             <span>cleoAdmin</span>
           </div>
 
@@ -51,10 +49,7 @@ export default function AdminLayout({ children, activePage = 'dashboard', onSear
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Content
               </a>
-              <a href="/admin/roles" className={`nav-item ${activePage === 'roles' ? 'active' : ''}`}>
-                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                Admin Roles
-              </a>
+              
               
               {/* Settings Accordion */}
               <a href="#settings" onClick={toggleSettings} className={`nav-item with-dropdown ${activePage.startsWith('settings') ? 'active' : ''}`}>

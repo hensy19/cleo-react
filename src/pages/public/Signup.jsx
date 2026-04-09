@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
@@ -63,8 +62,6 @@ export default function Signup() {
 
   return (
     <div className="signup-page">
-      <Navbar />
-
       <div className="signup-wrapper">
         <div className="signup-visual">
           <img src={signupImage} alt="Sign Up Illustration" className="signup-image" />
@@ -73,8 +70,8 @@ export default function Signup() {
         <div className="signup-container">
           <div className="signup-card">
             <div className="signup-header">
-              <h1>Create Your Account</h1>
-              <p>Join CLEO and start tracking your cycle</p>
+              <h1>Create Account</h1>
+              <p>Join us to start tracking your health</p>
             </div>
 
             <form onSubmit={handleSubmit} className="signup-form">
@@ -90,7 +87,7 @@ export default function Signup() {
               />
 
               <Input
-                label="Email"
+                label="Email Address"
                 type="email"
                 placeholder="you@example.com"
                 name="email"
@@ -165,7 +162,6 @@ export default function Signup() {
         </div>
       </div>
 
-      <Footer />
     </div>
   )
 }

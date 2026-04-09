@@ -52,19 +52,7 @@ export default function AdminSettingsData() {
 
         <form className="as-form" onSubmit={handleSave}>
 
-          <div className="as-toggle-row">
-            <div className="as-toggle-info">
-              <span className="as-toggle-title">Enable Automatic Backup</span>
-            </div>
-            <label className="as-switch">
-              <input
-                type="checkbox"
-                checked={autoBackup}
-                onChange={e => setAutoBackup(e.target.checked)}
-              />
-              <span className="as-slider"></span>
-            </label>
-          </div>
+          
 
           <div className="as-toggle-row as-clickable-row" onClick={handleExport} style={{ cursor: 'pointer' }}>
             <div className="as-toggle-info">

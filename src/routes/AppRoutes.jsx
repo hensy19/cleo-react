@@ -24,8 +24,12 @@ import ChangePassword from '../pages/dashboard/ChangePassword'
 import AdminLogin from '../pages/admin/AdminLogin'
 import AdminDashboard from '../pages/admin/AdminDashboard'
 import UserManagement from '../pages/admin/UserManagement'
-import AdminContent from '../pages/admin/AdminContent'
-import AdminSettings from '../pages/admin/AdminSettings'
+import ContentManagement from '../pages/admin/ContentManagement'
+import AdminRoles from '../pages/admin/AdminRoles'
+import AdminSettingsGeneral from '../pages/admin/AdminSettingsGeneral'
+import AdminSettingsPrivacy from '../pages/admin/AdminSettingsPrivacy'
+import AdminSettingsContent from '../pages/admin/AdminSettingsContent'
+import AdminSettingsData from '../pages/admin/AdminSettingsData'
 import AdminProfile from '../pages/admin/AdminProfile'
 
 // Route helpers
@@ -59,9 +63,13 @@ export default function AppRoutes() {
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
       <Route path="/admin/users" element={<UserManagement />} />
-      <Route path="/admin/content" element={<AdminContent />} />
-      <Route path="/admin/roles" element={<AdminContent />} />
-      <Route path="/admin/settings" element={<AdminSettings />} />
+      <Route path="/admin/content" element={<ContentManagement />} />
+      <Route path="/admin/roles" element={<AdminRoles />} />
+      <Route path="/admin/settings" element={<AdminSettingsGeneral />} />
+      <Route path="/admin/settings/general" element={<AdminSettingsGeneral />} />
+      <Route path="/admin/settings/privacy" element={<AdminSettingsPrivacy />} />
+      <Route path="/admin/settings/content" element={<AdminSettingsContent />} />
+      <Route path="/admin/settings/data" element={<AdminSettingsData />} />
       <Route path="/admin/profile" element={<AdminProfile />} />
 
       {/* Fallback Route */}

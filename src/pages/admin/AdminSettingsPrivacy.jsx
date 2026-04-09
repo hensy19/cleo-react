@@ -42,20 +42,7 @@ export default function AdminSettingsPrivacy() {
         
         <form className="as-form" onSubmit={handleSave}>
           
-          <div className="as-toggle-row">
-            <div className="as-toggle-info">
-              <span className="as-toggle-title">Maintenance Mode</span>
-              <span className="as-toggle-subtitle">Disable site access for maintenance</span>
-            </div>
-            <label className="as-switch">
-              <input 
-                type="checkbox" 
-                checked={maintenanceMode}
-                onChange={(e) => setMaintenanceMode(e.target.checked)} 
-              />
-              <span className="as-slider"></span>
-            </label>
-          </div>
+        
 
           <div className="as-toggle-row">
             <div className="as-toggle-info">

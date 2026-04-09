@@ -1,13 +1,15 @@
+/* Footer Styles */
 .footer {
-  background-color: #FFFFFF;
-  border-top: 1px solid #E2E8F0;
-  padding: 3rem 0;
+  background-color: #0A3055;
+  color: #fff;
+  padding: 3rem 0 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .footer-container {
   width: 100%;
-  margin: 0;
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 0 4rem;
   display: flex;
   justify-content: space-between;
@@ -16,41 +18,86 @@
   gap: 3rem;
 }
 
-.footer-left {
-  max-width: 300px;
+.footer-section h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #fff;
 }
 
-.footer-logo {
-  height: 35px;
-  margin-bottom: 0.5rem;
-  display: block;
+.footer-section h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #fff;
 }
 
-.footer-description {
-  color: #5B7A95;
-  font-size: 0.8rem;
-  line-height: 1.5;
+.footer-section p {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  line-height: 1.6;
   margin: 0;
 }
 
-.footer-right {
-  display: flex;
-  gap: 4rem;
-}
-
-.footer-column {
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.footer-column a {
-  color: #5B7A95;
+.footer-section ul li a {
+  color: #94a3b8;
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   transition: color 0.2s ease;
 }
 
-.footer-column a:hover {
-  color: #0A4269;
+.footer-section ul li a:hover {
+  color: #fff;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.social-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.social-links a:hover {
+  color: #fff;
+}
+
+.footer-bottom {
+  margin-top: 2.5rem;
+  padding: 1.25rem 4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    padding: 0 2rem;
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    padding: 1rem 2rem;
+  }
 }

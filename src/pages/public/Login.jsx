@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
@@ -45,8 +44,6 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <Navbar />
-
       <div className="login-wrapper">
         <div className="login-visual">
           <img src={signinImage} alt="Sign In Illustration" className="signin-image" />
@@ -55,13 +52,13 @@ export default function Login() {
         <div className="login-container">
           <div className="login-card">
             <div className="login-header">
-              <h1>Welcome Back</h1>
-              <p>Sign in to your CLEO account</p>
+              <h1>Hello Again!</h1>
+              <p>Welcome back you have been missed!</p>
             </div>
 
             <form onSubmit={handleSubmit} className="login-form">
               <Input
-                label="Email"
+                label="Email Address"
                 type="email"
                 placeholder="you@example.com"
                 value={email}
@@ -111,7 +108,7 @@ export default function Login() {
         </div>
       </div>
 
-      <Footer />
+    
     </div>
   )
 }

@@ -1,10 +1,26 @@
 :root {
-  --primary-color: #4A90E2;
+  --primary-color: #0A4269;
   --secondary-color: #C9E1F2;
   --bg-color: #F7FAFC;
   --text-color: #355C7D;
+  --text-muted: #64748B;
   --white: #FFFFFF;
-  
+
+  /* Card */
+  --card-blue-border: #E2E8F0;
+  --light-blue-bg: #EFF6FF;
+
+  /* Progress */
+  --progress-bar-bg: #E2E8F0;
+  --progress-bar-fill: #3B82F6;
+
+  /* Tags */
+  --tag-purple-bg: #F3E8FF;
+  --tag-purple-text: #7C3AED;
+
+  /* Tips */
+  --tip-purple-bg: #6C63FF;
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
