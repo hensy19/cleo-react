@@ -1,49 +1,61 @@
 .calendar-grid-container {
   background-color: white;
-  border-radius: 1.25rem;
+  border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #E0E0E0;
+  border: 1px solid #E8E8E8;
 }
 
 .calendar-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 2px solid #F0F0F0;
+  border-bottom: 1px solid #F0F0F0;
 }
 
 .calendar-header h2 {
-  color: var(--text-color);
-  font-size: 1.8rem;
+  color: #1565C0;
+  font-size: 1.5rem;
   margin: 0;
   font-weight: 700;
+  flex: 1;
+  text-align: center;
+}
+
+.calendar-nav-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #1565C0;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.calendar-nav-btn:hover {
+  color: #0D47A1;
+  transform: scale(1.2);
 }
 
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0;
-  margin-bottom: 1rem;
-  background: linear-gradient(90deg, #F8F9FA 0%, #F8F9FA 100%);
-  border-radius: 0.5rem;
-  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background: white;
 }
 
 .weekday {
   text-align: center;
   font-weight: 700;
-  color: #4A90E2;
-  font-size: 0.9rem;
+  color: #1565C0;
+  font-size: 0.95rem;
   padding: 1rem 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background-color: #F8F9FA;
-  border-right: 1px solid #F0F0F0;
-}
-
-.weekday:last-child {
-  border-right: none;
+  text-transform: capitalize;
+  letter-spacing: 0;
 }
 
 .calendar-grid {
@@ -55,84 +67,70 @@
 
 .calendar-legend {
   display: flex;
+  align-items: center;
   gap: 2.5rem;
-  justify-content: center;
-  padding-top: 1.5rem;
-  border-top: 1px solid #E0E0E0;
+  justify-content: flex-start;
+  padding: 1.25rem 1.5rem;
+  border: 1.5px solid #E0E0E0;
+  border-radius: 12px;
+  background: white;
   flex-wrap: wrap;
-  background: linear-gradient(90deg, rgba(235, 244, 255, 0.3) 0%, rgba(240, 230, 255, 0.3) 100%);
-  padding-left: 2rem;
-  padding-right: 2rem;
-  border-radius: 0.75rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+}
+
+.legend-label {
+  font-weight: 700;
+  color: #333;
+  font-size: 0.9rem;
+  min-width: fit-content;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-color);
+  color: #555;
 }
 
 .legend-box {
-  width: 24px;
-  height: 24px;
-  border-radius: 0.4rem;
-  border: 2px solid #E0E0E0;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid;
   flex-shrink: 0;
 }
 
 .legend-box.period-day {
-  background-color: #E74C3C;
-  border-color: #E74C3C;
-}
-
-.legend-box.predicted-day {
-  background: linear-gradient(135deg, #C9E1F2 0%, #A8E6CF 100%);
-  border-color: #A8E6CF;
-}
-
-.legend-box.follicular-day {
-  background-color: #3498DB;
-  border-color: #3498DB;
+  background-color: #F5C8D1;
+  border-color: #E8A9B8;
 }
 
 .legend-box.ovulation-day {
-  background-color: #F39C12;
-  border-color: #F39C12;
+  background-color: #D4A5E6;
+  border-color: #B88FD6;
 }
 
-/* Additional Legend Items */
-.legend-item-follicular::before {
-  content: '';
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  background-color: #3498DB;
-  border-radius: 0.4rem;
-  margin-right: 0.75rem;
+.legend-box.fertile-window {
+  background-color: #F5B8E8;
+  border-color: #E99DD9;
 }
 
-.legend-item-ovulation::before {
-  content: '';
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  background-color: #F39C12;
-  border-radius: 0.4rem;
-  margin-right: 0.75rem;
+.legend-box.today {
+  background-color: #B3D9F2;
+  border-color: #1565C0;
+  border-width: 2px;
 }
 
-/* ===== Responsive Design ===== */
+/* Responsive Design */
 @media (max-width: 1024px) {
   .calendar-grid-container {
     padding: 1.5rem;
   }
 
   .calendar-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .calendar-grid {
@@ -143,26 +141,25 @@
 @media (max-width: 768px) {
   .calendar-grid-container {
     padding: 1rem;
-    border-radius: 1rem;
+    border-radius: 12px;
   }
 
   .calendar-header h2 {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
   }
 
-  .calendar-header {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
+  .calendar-nav-btn {
+    font-size: 1.2rem;
+    padding: 0.25rem 0.75rem;
   }
 
   .calendar-weekdays {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .weekday {
     padding: 0.75rem 0.25rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .calendar-grid {
@@ -173,31 +170,19 @@
   .calendar-legend {
     gap: 1.5rem;
     padding: 1rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    justify-content: center;
   }
 
   .legend-box {
-    width: 20px;
-    height: 20px;
-    border-width: 1.5px;
+    width: 18px;
+    height: 18px;
   }
 
-  .legend-item {
-    gap: 0.5rem;
+  .legend-label {
+    font-size: 0.85rem;
   }
 }
-
-@media (max-width: 480px) {
-  .calendar-grid-container {
-    padding: 0.75rem;
-  }
-
-  .calendar-header h2 {
-    font-size: 1.1rem;
-  }
-
-  .weekday {
-    padding: 0.5rem 0.1rem;
     font-size: 0.7rem;
   }
 

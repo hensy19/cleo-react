@@ -1,104 +1,158 @@
 .day-cell {
   aspect-ratio: 1;
-  border: 2px solid #E0E0E0;
-  border-radius: 0.6rem;
-  background-color: white;
+  border: 2px solid #E8E8E8;
+  border-radius: 12px;
+  background-color: #B3D9F2;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
+  padding: 0.25rem;
   position: relative;
-  font-weight: 600;
-  color: var(--text-color);
+  font-weight: 700;
+  color: #0D47A1;
   min-height: 60px;
   min-width: 60px;
+  font-size: 1rem;
 }
 
 .day-cell:not(.other-month):hover {
-  background-color: #F0F8FF;
-  border-color: #4A90E2;
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Other Month Days */
 .day-cell.other-month {
-  color: #CCC;
-  background-color: #F9F9F9;
+  color: #BDBDBD;
+  background-color: #FAFAFA;
   cursor: default;
-  border-color: #F0F0F0;
-  opacity: 0.5;
+  border-color: #E8E8E8;
+  opacity: 0.6;
+  font-weight: 600;
 }
 
 .day-cell.other-month:hover {
   transform: none;
   box-shadow: none;
-  background-color: #F9F9F9;
+  background-color: #FAFAFA;
 }
 
 /* ===== Period Day ===== */
 .day-cell.period-day {
-  background-color: #E74C3C;
-  color: white;
-  border-color: #C0392B;
+  background-color: #F5C8D1;
+  color: #C2185B;
+  border-color: #E8A9B8;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.25);
 }
 
 .day-cell.period-day:hover {
-  background-color: #C0392B;
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
-  border-color: #A93226;
+  background-color: #F0B5C1;
+  box-shadow: 0 4px 12px rgba(194, 24, 91, 0.15);
 }
 
-/* ===== Predicted Day ===== */
+/* ===== Fertile Window (Predicted Day) ===== */
 .day-cell.predicted-day {
-  background: linear-gradient(135deg, #C9E1F2 0%, #A8E6CF 100%);
-  border-color: #A8E6CF;
-  color: var(--text-color);
-  font-weight: 600;
+  background-color: #F5B8E8;
+  color: #AD1457;
+  border-color: #E99DD9;
+  font-weight: 700;
 }
 
 .day-cell.predicted-day:hover {
-  background: linear-gradient(135deg, #B0D4E0 0%, #90D9B8 100%);
-  border-color: #90D9B8;
-  box-shadow: 0 4px 12px rgba(168, 230, 207, 0.4);
-}
-
-/* ===== Follicular Day ===== */
-.day-cell.follicular-day {
-  background-color: #E3F2FD;
-  color: #1976D2;
-  border-color: #90CAF9;
-  font-weight: 600;
-}
-
-.day-cell.follicular-day:hover {
-  background-color: #BBDEFB;
-  border-color: #64B5F6;
-  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+  background-color: #F0A5E0;
+  box-shadow: 0 4px 12px rgba(173, 20, 87, 0.15);
 }
 
 /* ===== Ovulation Day ===== */
 .day-cell.ovulation-day {
-  background-color: #FFF3E0;
-  color: #E65100;
-  border-color: #FFB74D;
+  background-color: #D4A5E6;
+  color: #6A1B9A;
+  border-color: #B88FD6;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);
 }
 
 .day-cell.ovulation-day:hover {
-  background-color: #FFE0B2;
-  border-color: #FF9800;
-  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.35);
+  background-color: #C894DC;
+  box-shadow: 0 4px 12px rgba(106, 27, 154, 0.15);
+}
+
+/* ===== Follicular Day ===== */
+.day-cell.follicular-day {
+  background-color: #B3D9F2;
+  color: #0D47A1;
+  border-color: #90CAF9;
+  font-weight: 700;
+}
+
+.day-cell.follicular-day:hover {
+  background-color: #A0CFEF;
+  box-shadow: 0 4px 12px rgba(13, 71, 161, 0.15);
+}
+
+/* ===== Today ===== */
+.day-cell.today {
+  background-color: #B3D9F2;
+  color: #0D47A1;
+  border: 2.5px solid #1565C0;
+  font-weight: 700;
+}
+
+.day-cell.today:hover {
+  background-color: #A0CFEF;
 }
 
 /* Day Number */
 .day-number {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* Indicators */
+.period-indicator,
+.ovulation-indicator,
+.follicular-indicator,
+.predicted-indicator {
+  font-size: 0.6rem;
+  margin-top: -0.2rem;
+  display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .day-cell {
+    min-height: 50px;
+    min-width: 50px;
+    font-size: 0.9rem;
+  }
+  
+  .day-number {
+    font-size: 0.9rem;
+  }
+  
+  .period-indicator,
+  .ovulation-indicator,
+  .follicular-indicator,
+  .predicted-indicator {
+    font-size: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .day-cell {
+    min-height: 40px;
+    min-width: 40px;
+    border-radius: 8px;
+    padding: 0.2rem;
+    font-size: 0.8rem;
+  }
+  
+  .day-number {
+    font-size: 0.8rem;
+  }
+}.day-number {
   font-size: 1rem;
   font-weight: 700;
   line-height: 1;

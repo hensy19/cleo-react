@@ -242,6 +242,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .modal-header h3 { color: #10517F; margin: 0; font-size: 1.4rem; }
@@ -249,10 +250,25 @@
 .modal-close {
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #64748B;
   cursor: pointer;
   line-height: 1;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.modal-close:hover {
+  background-color: #F1F5F9;
+  color: #10517F;
+  transform: rotate(90deg);
 }
 
 .modal-body { padding: 2rem; }

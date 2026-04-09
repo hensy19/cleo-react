@@ -7,6 +7,7 @@ export default function DayCell({
   isPredictedDay = false,
   isFollicularDay = false,
   isOvulationDay = false,
+  isToday = false,
   onClick
 }) {
   return (
@@ -17,6 +18,7 @@ export default function DayCell({
         ${isPredictedDay ? 'predicted-day' : ''}
         ${isFollicularDay ? 'follicular-day' : ''}
         ${isOvulationDay ? 'ovulation-day' : ''}
+        ${isToday ? 'today' : ''}
       `}
       onClick={onClick}
     >

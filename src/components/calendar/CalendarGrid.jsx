@@ -90,7 +90,13 @@ export default function CalendarGrid({
   return (
     <div className="calendar-grid-container">
       <div className="calendar-header">
+        <button className="calendar-nav-btn" onClick={() => {/* previous month */}}>
+          <span>&lt;</span>
+        </button>
         <h2>{monthNames[month]} {year}</h2>
+        <button className="calendar-nav-btn" onClick={() => {/* next month */}}>
+          <span>&gt;</span>
+        </button>
       </div>
 
       <div className="calendar-weekdays">
@@ -110,6 +116,8 @@ export default function CalendarGrid({
           const isPredictedDay = predictedDays.includes(dateString)
           const isFollicularDay = follicularDays.includes(dateString)
           const isOvulationDay = ovulationDays.includes(dateString)
+          const today = new Date()
+          const isToday = dateString === today.toISOString().split('T')[0]
 
           return (
             <DayCell
@@ -120,6 +128,7 @@ export default function CalendarGrid({
               isPredictedDay={isPredictedDay}
               isFollicularDay={isFollicularDay}
               isOvulationDay={isOvulationDay}
+              isToday={isToday}
               onClick={() => onDayClick?.(dayObj.date)}
             />
           )
@@ -127,13 +136,22 @@ export default function CalendarGrid({
       </div>
 
       <div className="calendar-legend">
+        <div className="legend-label">Legend</div>
         <div className="legend-item">
           <div className="legend-box period-day"></div>
-          <span>Period Day</span>
+          <span>Period Days</span>
         </div>
         <div className="legend-item">
-          <div className="legend-box predicted-day"></div>
-          <span>Predicted Day</span>
+          <div className="legend-box ovulation-day"></div>
+          <span>Ovulation</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-box fertile-window"></div>
+          <span>Fertile Window</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-box today"></div>
+          <span>Today</span>
         </div>
       </div>
     </div>
