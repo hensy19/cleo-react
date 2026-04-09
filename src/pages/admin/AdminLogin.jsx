@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
+import { Eye, EyeOff } from 'lucide-react'
 import './AdminLogin.css'
 
 export default function AdminLogin() {
@@ -58,24 +58,24 @@ export default function AdminLogin() {
               required
             />
 
-            <div className="password-field">
-              <Input
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                error={errors.password}
-                required
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? '🙈' : '👁️'}
-              </button>
-            </div>
+            <Input
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password}
+              required
+              suffix={
+                <button
+                  type="button"
+                  className="password-toggle-inline"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                </button>
+              }
+            />
 
             <Button
               variant="primary"
@@ -87,11 +87,8 @@ export default function AdminLogin() {
               {isLoading ? 'Signing In...' : 'Admin Sign In'}
             </Button>
           </form>
-
-
         </div>
       </div>
-
     </div>
   )
 }

@@ -21,6 +21,11 @@ import Notes from '../pages/dashboard/Notes'
 import ChangePassword from '../pages/dashboard/ChangePassword'
 import Reminders from '../pages/dashboard/Reminders'
 
+// Resource Pages
+import About from '../pages/resources/About'
+import PrivacyPolicy from '../pages/resources/PrivacyPolicy'
+import TermsOfService from '../pages/resources/TermsOfService'
+
 // Admin Pages
 import AdminLogin from '../pages/admin/AdminLogin'
 import AdminDashboard from '../pages/admin/AdminDashboard'
@@ -60,6 +65,11 @@ export default function AppRoutes() {
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
       <Route path="/reminders" element={<ProtectedRoute><Reminders /></ProtectedRoute>} />
+
+      {/* Resource Routes */}
+      <Route path="/about" element={<About />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
 
       {/* Admin Routes */}
       <Route path="/admin/login" element={<AdminLogin />} />

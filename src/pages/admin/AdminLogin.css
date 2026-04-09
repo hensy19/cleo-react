@@ -46,23 +46,20 @@
   gap: 1rem;
 }
 
-.password-field {
-  position: relative;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 1rem;
-  top: 2.7rem;
+.password-toggle-inline {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  transition: opacity 0.3s ease;
+  color: #64748B;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
 }
 
-.password-toggle:hover {
-  opacity: 0.7;
+.password-toggle-inline:hover {
+  color: var(--primary-color);
 }
 
 .button-full {

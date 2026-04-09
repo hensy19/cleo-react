@@ -16,6 +16,22 @@
   margin-left: 0.25rem;
 }
 
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-suffix {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
 .input-field {
   padding: 0.75rem 1rem;
   border: 2px solid #e0e0e0;
@@ -25,6 +41,7 @@
   background-color: white;
   color: var(--text-color);
   font-family: inherit;
+  width: 100%; /* Ensure full width */
 }
 
 .input-field:focus {

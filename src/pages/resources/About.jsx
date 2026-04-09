@@ -1,0 +1,79 @@
+import { Heart, Shield, Star, Users, Target, Rocket } from 'lucide-react'
+import DashboardLayout from '../../components/layout/DashboardLayout'
+import './Resources.css'
+
+export default function About() {
+  return (
+    <DashboardLayout>
+      <div className="resources-page">
+        <div className="resource-card-main">
+          <div className="resources-header" style={{ textAlign: 'left', alignItems: 'flex-start', marginBottom: '4rem' }}>
+
+            <h1>About Cleo</h1>
+            <p style={{ maxWidth: '1000px' }}>Empowering millions to understand their bodies with precision, care, and advanced data science.</p>
+          </div>
+
+          <section className="resource-section">
+            <h2><Target size={24} /> Our Mission</h2>
+            <p className="intro-lead">Cleo was built on a simple yet powerful idea: that every person deserves to have a deep, data-driven understanding of their reproductive health.</p>
+            <p>We combine modern technology with intuitive design to help you track cycles, symptoms, and moods effortlessly. Our platform is designed to be more than just a tracker; it's a companion that learns with you, providing insights that matter for your daily well-being and long-term health planning.</p>
+
+            <div className="mission-stats">
+              <div className="mission-item">
+                <div className="mission-icon red">
+                  <Heart size={24} />
+                </div>
+                <h3>Health First</h3>
+                <p>Prioritizing your well-being with personalized insights.</p>
+              </div>
+              <div className="mission-item">
+                <div className="mission-icon blue">
+                  <Shield size={24} />
+                </div>
+                <h3>Privacy Focused</h3>
+                <p>Your data is yours. We use bank-grade encryption to keep it safe.</p>
+              </div>
+              <div className="mission-item">
+                <div className="mission-icon gold">
+                  <Star size={24} />
+                </div>
+                <h3>Premium Design</h3>
+                <p>A beautiful, clutter-free experience for your daily tracking.</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="resource-section">
+            <h2>Why Cleo?</h2>
+            <p>Unlike traditional trackers, Cleo focuses on the "Why" behind your symptoms. By identifying patterns in your cycle, we help you prepare for what's next, whether it's managing PMS or optimizing your fertility window.</p>
+            <ul>
+              <li>Smart predictions that learn from your unique hormonal profile.</li>
+              <li>Daily health goals for hydration, sleep, and mental well-being.</li>
+              <li>Comprehensive symptom and mood logging with over 50 data points.</li>
+              <li>Secure data backups and multi-device synchronization.</li>
+              <li>AI-powered insights that surface trends and potential health concerns.</li>
+              <li>Integration with wearable devices for more accurate baseline data.</li>
+            </ul>
+          </section>
+
+          {/* Moved inside the main content box */}
+          <div className="resource-bottom-grid" style={{ marginTop: '5rem', marginBottom: '0' }}>
+            <div className="sidebar-stat-card">
+              <Users size={20} />
+              <h3>Global Community</h3>
+              <p>Join thousands of users who are reclaiming their health journey with Cleo's advanced tracking and supportive ecosystem.</p>
+            </div>
+            <div className="contact-card">
+              <h3>Need Help?</h3>
+              <p>Our dedicated support team is available 24/7 to help you with any questions or technical issues you might encounter.</p>
+              <button className="contact-btn" onClick={() => window.location.href = 'mailto:support@cleo.app'}>Email Support</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
+  )
+}
+
+
+

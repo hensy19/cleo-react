@@ -4,6 +4,7 @@ import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import signupImage from '../../assets/images/signup.svg'
+import { Eye, EyeOff } from 'lucide-react'
 import './Signup.css'
 
 export default function Signup() {
@@ -97,50 +98,50 @@ export default function Signup() {
                 required
               />
 
-              <div className="password-field">
-                <Input
-                  label="Password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  error={errors.password}
-                  required
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? '🙈' : '👁️'}
-                </button>
-              </div>
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                error={errors.password}
+                required
+                suffix={
+                  <button
+                    type="button"
+                    className="password-toggle-inline"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
+                }
+              />
 
-              <div className="password-field">
-                <Input
-                  label="Confirm Password"
-                  type={showConfirm ? 'text' : 'password'}
-                  placeholder="Confirm your password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  error={errors.confirmPassword}
-                  required
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowConfirm(!showConfirm)}
-                >
-                  {showConfirm ? '🙈' : '👁️'}
-                </button>
-              </div>
+              <Input
+                label="Confirm Password"
+                type={showConfirm ? 'text' : 'password'}
+                placeholder="Confirm your password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                error={errors.confirmPassword}
+                required
+                suffix={
+                  <button
+                    type="button"
+                    className="password-toggle-inline"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                  >
+                    {showConfirm ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
+                }
+              />
 
               <div className="terms">
                 <input type="checkbox" id="terms" name="terms" required />
                 <label htmlFor="terms">
-                  I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>
+                  I agree to the <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>
                 </label>
               </div>
 

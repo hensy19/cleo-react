@@ -54,12 +54,14 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                {isHomePage && (
+                {isHomePage ? (
                   <>
                     <a href="#home" className="nav-link" onClick={handleNavClick}>Home</a>
                     <a href="#features" className="nav-link" onClick={handleNavClick}>Features</a>
-                    <a href="#about" className="nav-link" onClick={handleNavClick}>About</a>
+                    <Link to="/about" className="nav-link" onClick={handleNavClick}>About</Link>
                   </>
+                ) : (
+                  <Link to="/about" className="nav-link" onClick={handleNavClick}>About</Link>
                 )}
                 <Link to="/login" className="nav-link" onClick={handleNavClick}>Login</Link>
               </>

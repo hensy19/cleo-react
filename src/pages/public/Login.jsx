@@ -4,6 +4,7 @@ import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import signinImage from '../../assets/images/signin.svg'
+import { Eye, EyeOff } from 'lucide-react'
 import './Login.css'
 
 export default function Login() {
@@ -67,24 +68,24 @@ export default function Login() {
                 required
               />
 
-              <div className="password-field">
-                <Input
-                  label="Password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  error={errors.password}
-                  required
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? '🙈' : '👁️'}
-                </button>
-              </div>
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={errors.password}
+                required
+                suffix={
+                  <button
+                    type="button"
+                    className="password-toggle-inline"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
+                }
+              />
 
               <div className="login-options">
                 <a href="#forgot-password" className="forgot-password">Forgot Password?</a>
