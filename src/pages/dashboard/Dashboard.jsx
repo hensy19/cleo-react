@@ -55,14 +55,16 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <div className="dashboard-container">
-        {/* Main Content Area */}
-        <div className="dashboard-main">
-          {/* Welcome Section */}
-          <div className="dashboard-welcome">
-            <h1>Welcome back, {user.name || 'Hensy'}!</h1>
-            <p className="welcome-subtitle">There's no better treatment than self-care.</p>
-          </div>
+      <div className="dashboard-page-container">
+        {/* Welcome Section */}
+        <div className="dashboard-welcome">
+          <h1>Welcome back, {user.name || 'Hensy'}!</h1>
+          <p className="welcome-subtitle">There's no better treatment than self-care.</p>
+        </div>
+
+        <div className="dashboard-container">
+          {/* Main Content Area */}
+          <div className="dashboard-main">
 
           {/* Summary Row */}
           <div className="summary-row">
@@ -183,9 +185,10 @@ export default function Dashboard() {
           <Card className="reminders-card">
             <h3>Reminders</h3>
             <p>Get notified before your period starts</p>
-            <Button variant="secondary" className="manage-btn">Manage Reminders</Button>
+            <Button variant="secondary" className="manage-btn" onClick={() => navigate('/reminders')}>Manage Reminders</Button>
           </Card>
         </aside>
+      </div>
       </div>
     </DashboardLayout>
   )
