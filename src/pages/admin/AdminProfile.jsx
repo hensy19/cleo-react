@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  Shield,
+  Lock,
+  CheckCircle,
+  Edit3,
+  LogOut,
+  Camera,
+  X
+} from 'lucide-react'
 import AdminLayout from '../../components/layout/AdminLayout'
 import './AdminProfile.css'
 
@@ -8,6 +21,9 @@ export default function AdminProfile() {
 
   const [isEditing, setIsEditing] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [showPassModal, setShowPassModal] = useState(false)
+  const [passForm, setPassForm] = useState({ current: '', next: '', confirm: '' })
+  const [passSaved, setPassSaved] = useState(false)
 
   const [profile, setProfile] = useState(() => {
     const stored = localStorage.getItem('adminInfo')
@@ -70,116 +86,237 @@ export default function AdminProfile() {
     navigate('/admin/login')
   }
 
+  const handlePassChange = (e) => {
+    e.preventDefault()
+    if (passForm.next !== passForm.confirm) {
+      alert("Passwords do not match!")
+      return
+    }
+    // Simulate API call
+    setPassSaved(true)
+    setTimeout(() => {
+      setPassSaved(false)
+      setShowPassModal(false)
+      setPassForm({ current: '', next: '', confirm: '' })
+    }, 2000)
+  }
+
   return (
     <AdminLayout activePage="profile">
-      {/* Page Title */}
-      <h1 className="ap-title">My Profile</h1>
-
-      {/* Avatar / Name Banner */}
-      <div className="ap-banner-card">
-        <div className="ap-avatar-wrap">
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#7BAFD4" strokeWidth="1.5">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-        <div>
-          <div className="ap-banner-name">{profile.firstName} {profile.lastName}</div>
-          <div className="ap-banner-role">{profile.role}</div>
-        </div>
-      </div>
-
-      {/* Personal Information Card */}
-      <div className="ap-info-card">
-        <div className="ap-info-top">
-          <h2 className="ap-info-title">Personal Information</h2>
-          {!isEditing && (
-            <button className="ap-edit-btn" onClick={handleEdit} title="Edit">
-              <svg width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
-            </button>
-          )}
+      <div className="ap-wrapper">
+        {/* Page Title */}
+        <div className="ap-title-section">
+          <h1 className="ap-title">Administrator Profile</h1>
+          <p className="ap-subtitle">Manage your account settings and personal information</p>
         </div>
 
-        <form onSubmit={handleSave}>
-          {/* Row 1: First Name | Last Name | Date of Birth */}
-          <div className="ap-grid-row">
-            <div className="ap-field">
-              <label>First Name</label>
-              <input
-                type="text"
-                value={isEditing ? editProfile.firstName : profile.firstName}
-                onChange={e => setEditProfile({ ...editProfile, firstName: e.target.value })}
-                readOnly={!isEditing}
-                className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
-              />
-            </div>
-            <div className="ap-field">
-              <label>Last Name</label>
-              <input
-                type="text"
-                value={isEditing ? editProfile.lastName : profile.lastName}
-                onChange={e => setEditProfile({ ...editProfile, lastName: e.target.value })}
-                readOnly={!isEditing}
-                className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
-              />
-            </div>
-            <div className="ap-field">
-              <label>Date of Birth</label>
-              <input
-                type="text"
-                value={isEditing ? editProfile.dob : profile.dob}
-                onChange={e => setEditProfile({ ...editProfile, dob: e.target.value })}
-                placeholder="DD/MM/YYYY"
-                readOnly={!isEditing}
-                className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
-              />
+        <div className="ap-content-grid">
+          {/* Left Column: Avatar & Summary */}
+          <div className="ap-left-col">
+            <div className="ap-profile-aside">
+              <div className="ap-banner-card">
+                <div className="ap-cover-gradient"></div>
+                <div className="ap-banner-main">
+                  <div className="ap-avatar-container">
+                    <div className="ap-avatar-wrap">
+                      <User size={40} color="var(--primary-color)" />
+                    </div>
+                    {isEditing && (
+                      <button className="ap-change-avatar" title="Change Photo">
+                        <Camera size={16} />
+                      </button>
+                    )}
+                  </div>
+                  <div className="ap-banner-info">
+                    <div className="ap-banner-name">{profile.firstName} {profile.lastName}</div>
+                    <div className="ap-banner-role">System Administrator</div>
+                    <div className="ap-status-badge">
+                      <span className="status-dot"></span> Active
+                    </div>
+                  </div>
+                </div>
+
+                <div className="ap-banner-footer">
+                  <div className="ap-stat">
+                    <span className="ap-stat-label">Joined</span>
+                    <span className="ap-stat-val">Jan 2026</span>
+                  </div>
+                </div>
+              </div>
+
+              <button className="ap-logout-btn" onClick={handleLogout}>
+                <LogOut size={18} />
+                <span>Sign Out of Account</span>
+              </button>
             </div>
           </div>
 
-          {/* Row 2: Email | Phone */}
-          <div className="ap-grid-row ap-grid-row-2">
-            <div className="ap-field">
-              <label>Email Address</label>
-              <input
-                type="email"
-                value={isEditing ? editProfile.email : profile.email}
-                onChange={e => setEditProfile({ ...editProfile, email: e.target.value })}
-                readOnly={!isEditing}
-                className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
-              />
+          {/* Right Column: Form Modules */}
+          <div className="ap-right-col">
+            {/* Personal Information Card */}
+            <div className="ap-module-card">
+              <div className="ap-module-header">
+                <div className="ap-header-left">
+                  <User size={20} />
+                  <h2 className="ap-module-title">Personal Information</h2>
+                </div>
+                {!isEditing && (
+                  <button className="ap-edit-trigger" onClick={handleEdit}>
+                    <Edit3 size={16} />
+                    <span>Edit Profile</span>
+                  </button>
+                )}
+              </div>
+
+              <form onSubmit={handleSave} className="ap-form">
+                <div className="ap-form-grid">
+                  <div className="ap-field">
+                    <label><User size={14} /> First Name</label>
+                    <input
+                      type="text"
+                      value={isEditing ? editProfile.firstName : profile.firstName}
+                      onChange={e => setEditProfile({ ...editProfile, firstName: e.target.value })}
+                      readOnly={!isEditing}
+                      className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
+                    />
+                  </div>
+                  <div className="ap-field">
+                    <label><User size={14} /> Last Name</label>
+                    <input
+                      type="text"
+                      value={isEditing ? editProfile.lastName : profile.lastName}
+                      onChange={e => setEditProfile({ ...editProfile, lastName: e.target.value })}
+                      readOnly={!isEditing}
+                      className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
+                    />
+                  </div>
+                  <div className="ap-field">
+                    <label><Calendar size={14} /> Date of Birth</label>
+                    <input
+                      type="text"
+                      value={isEditing ? editProfile.dob : profile.dob}
+                      onChange={e => setEditProfile({ ...editProfile, dob: e.target.value })}
+                      placeholder="DD/MM/YYYY"
+                      readOnly={!isEditing}
+                      className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
+                    />
+                  </div>
+                  <div className="ap-field full-width">
+                    <label><Mail size={14} /> Email Address</label>
+                    <input
+                      type="email"
+                      value={isEditing ? editProfile.email : profile.email}
+                      onChange={e => setEditProfile({ ...editProfile, email: e.target.value })}
+                      readOnly={!isEditing}
+                      className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
+                    />
+                  </div>
+                  <div className="ap-field full-width">
+                    <label><Phone size={14} /> Phone Number</label>
+                    <input
+                      type="tel"
+                      value={isEditing ? editProfile.phone : profile.phone}
+                      onChange={e => setEditProfile({ ...editProfile, phone: e.target.value })}
+                      readOnly={!isEditing}
+                      className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
+                    />
+                  </div>
+                </div>
+
+                {isEditing && (
+                  <div className="ap-form-actions">
+                    <button type="button" className="ap-cancel-button" onClick={handleCancel}>Discard</button>
+                    <button type="submit" className="ap-save-button">Update Profile</button>
+                  </div>
+                )}
+              </form>
             </div>
-            <div className="ap-field">
-              <label>Phone number</label>
-              <input
-                type="tel"
-                value={isEditing ? editProfile.phone : profile.phone}
-                onChange={e => setEditProfile({ ...editProfile, phone: e.target.value })}
-                readOnly={!isEditing}
-                className={!isEditing ? 'ap-input-readonly' : 'ap-input-active'}
-              />
+
+            {/* Security Section (Placeholder) */}
+            <div className="ap-module-card ap-security-module">
+              <div className="ap-module-header">
+                <div className="ap-header-left">
+                  <Shield size={20} />
+                  <h2 className="ap-module-title">Security & Password</h2>
+                </div>
+              </div>
+              <div className="ap-security-content">
+                <div className="ap-security-info">
+                  <div className="ap-security-item">
+                    <Lock size={16} />
+                    <div className="ap-item-text">
+                      <div className="ap-item-label">Password</div>
+                      <div className="ap-item-sub">Last changed 3 months ago</div>
+                    </div>
+                    <button
+                      className="ap-security-action"
+                      onClick={() => setShowPassModal(true)}
+                    >
+                      Change
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          {isEditing && (
-            <div className="ap-edit-actions">
-              <button type="button" className="ap-btn-cancel" onClick={handleCancel}>Cancel</button>
-              <button type="submit" className="ap-btn-save">Save Changes</button>
-            </div>
-          )}
-        </form>
+        </div>
 
         {saved && (
-          <div className="ap-toast">✓ Profile saved successfully</div>
+          <div className="ap-save-toast">
+            <CheckCircle size={16} />
+            <span>Profile updated successfully!</span>
+          </div>
+        )}
+
+        {/* Change Password Modal */}
+        {showPassModal && (
+          <div className="ap-modal-overlay">
+            <div className="ap-modal">
+              <div className="ap-modal-header">
+                <h3>Change Password</h3>
+                <button
+                  className="ap-modal-close"
+                  onClick={() => setShowPassModal(false)}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <form onSubmit={handlePassChange} className="ap-modal-form">
+                <div className="ap-field">
+                  <label>Current Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={passForm.current}
+                    onChange={e => setPassForm({ ...passForm, current: e.target.value })}
+                  />
+                </div>
+                <div className="ap-field">
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={passForm.next}
+                    onChange={e => setPassForm({ ...passForm, next: e.target.value })}
+                  />
+                </div>
+                <div className="ap-field">
+                  <label>Confirm New Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={passForm.confirm}
+                    onChange={e => setPassForm({ ...passForm, confirm: e.target.value })}
+                  />
+                </div>
+                <button type="submit" className="ap-modal-save" disabled={passSaved}>
+                  {passSaved ? 'Updating...' : 'Update Password'}
+                </button>
+              </form>
+            </div>
+          </div>
         )}
       </div>
-
-      {/* Logout Button */}
-      <button className="ap-logout-btn" onClick={handleLogout}>
-        Logout
-      </button>
     </AdminLayout>
   )
 }

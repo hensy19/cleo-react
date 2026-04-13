@@ -338,7 +338,11 @@
 
 .chart-area-mockup {
   width: 100%;
-  height: 200px;
+  height: 220px;
+}
+
+.chart-svg {
+  overflow: visible;
 }
 
 .quick-stats-card h2 {

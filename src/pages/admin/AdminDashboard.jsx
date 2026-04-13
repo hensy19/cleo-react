@@ -81,7 +81,7 @@ export default function AdminDashboard() {
             </div>
             {/* SVG Mockup of the Chart */}
             <div className="chart-area-mockup">
-               <svg viewBox="0 0 400 150" className="chart-svg" preserveAspectRatio="none">
+               <svg viewBox="0 0 400 170" className="chart-svg" preserveAspectRatio="none">
                  {/* Grid Lines */}
                  <path d="M40 20 L380 20" stroke="#F0F0F0" strokeWidth="1" />
                  <path d="M40 50 L380 50" stroke="#F0F0F0" strokeWidth="1" />
@@ -93,12 +93,12 @@ export default function AdminDashboard() {
                  <text x="30" y="84" fontSize="10" fill="#999" textAnchor="end">1,500</text>
                  <text x="30" y="114" fontSize="10" fill="#999" textAnchor="end">1,000</text>
                  {/* X Axis Labels */}
-                 <text x="50" y="135" fontSize="10" fill="#999">Jan</text>
-                 <text x="100" y="135" fontSize="10" fill="#999">Feb</text>
-                 <text x="150" y="135" fontSize="10" fill="#999">Mar</text>
-                 <text x="200" y="135" fontSize="10" fill="#999">Apr</text>
-                 <text x="250" y="135" fontSize="10" fill="#999">May</text>
-                 <text x="300" y="135" fontSize="10" fill="#999">Jun</text>
+                 <text x="50" y="155" fontSize="10" fill="#999">Jan</text>
+                 <text x="100" y="155" fontSize="10" fill="#999">Feb</text>
+                 <text x="150" y="155" fontSize="10" fill="#999">Mar</text>
+                 <text x="200" y="155" fontSize="10" fill="#999">Apr</text>
+                 <text x="250" y="155" fontSize="10" fill="#999">May</text>
+                 <text x="300" y="155" fontSize="10" fill="#999">Jun</text>
 
                  {/* The Line */}
                  <path d="M50 110 L100 95 L150 80 L200 55 L250 45 L300 25" fill="none" stroke="#6C5CE7" strokeWidth="3" />

@@ -363,9 +363,9 @@ export default function CalendarPage() {
                     onClick={() => handleDayClick(dayObj)}
                     disabled={!dayObj.currentMonth}
                   >
-                    {isSelectionMode && dayObj.currentMonth && (
-                      <div className={`selection-drop ${isTempSelected ? 'filled' : ''}`}>
-                        <svg viewBox="0 0 24 24" width="14" height="14">
+                    {dayObj.currentMonth && (isSelectionMode || isPeriod) && (
+                      <div className={`selection-drop ${(isTempSelected || isPeriod) ? 'filled' : ''}`}>
+                        <svg viewBox="0 0 24 24" width="20" height="20">
                           <path d="M12 2.5C12 2.5 6 10 6 15.5C6 18.5 8.5 21 12 21C15.5 21 18 18.5 18 15.5C18 10 12 2.5 12 2.5Z" />
                         </svg>
                       </div>

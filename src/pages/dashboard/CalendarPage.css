@@ -228,11 +228,14 @@
 /* Selection Drop Icon in Cell */
 .selection-drop {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 8px;
+  right: 8px;
   z-index: 2;
   color: #CBD5E1; /* Default outline color */
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .selection-drop svg {
