@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-  Smile, 
-  Frown, 
-  Angry, 
-  CloudRain, 
-  Zap, 
-  Heart, 
-  CloudMoon, 
-  Meh, 
-  ChevronLeft 
+import {
+  Smile,
+  Frown,
+  Angry,
+  CloudRain,
+  Zap,
+  Heart,
+  CloudMoon,
+  Meh,
+  AlertCircle,
+  Moon,
+  Thermometer,
+  Utensils,
+  ChevronLeft
 } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import './Mood.css'
@@ -29,7 +33,11 @@ export default function Mood() {
     { id: 'energetic', icon: <Zap size={32} />, label: 'Energetic' },
     { id: 'peaceful', icon: <Heart size={32} />, label: 'Peaceful' },
     { id: 'tired', icon: <CloudMoon size={32} />, label: 'Tired' },
-    { id: 'neutral', icon: <Meh size={32} />, label: 'Neutral' }
+    { id: 'neutral', icon: <Meh size={32} />, label: 'Neutral' },
+    { id: 'anxious', icon: <AlertCircle size={32} />, label: 'Anxious' },
+    { id: 'sleepy', icon: <Moon size={32} />, label: 'Sleepy' },
+    { id: 'sick', icon: <Thermometer size={32} />, label: 'Sick' },
+    { id: 'hungry', icon: <Utensils size={32} />, label: 'Hungry' }
   ]
 
   useEffect(() => {
@@ -44,11 +52,11 @@ export default function Mood() {
 
     setIsLoading(true)
     const selected = moods.find(m => m.id === selectedMood)
-    
+
     setTimeout(() => {
       const now = new Date()
       const formattedDate = now.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
-      
+
       const newEntry = {
         id: Date.now(),
         moodId: selected.id,
@@ -59,7 +67,7 @@ export default function Mood() {
       const updated = [newEntry, ...moodEntries]
       setMoodEntries(updated)
       localStorage.setItem('moodEntries', JSON.stringify(updated))
-      
+
       // Select a relevant tip
       const tipsMapping = {
         'tired': { title: 'Sleep Quality', content: 'Aim for 7-8 hours of quality sleep. Poor sleep can worsen PMS symptoms and irregular cycles.', color: 'purple' },
@@ -67,13 +75,13 @@ export default function Mood() {
         'sad': { title: 'Exercise Benefits', content: 'Gentle yoga or walking can help reduce cramps and improve mood during your period.', color: 'blue' },
         'energetic': { title: 'Strength Training', content: 'Regular strength training can help reduce period pain and regulate hormones.', color: 'blue' }
       }
-      
-      setSuggestedTip(tipsMapping[selected.id] || { 
-        title: 'Stay Hydrated', 
+
+      setSuggestedTip(tipsMapping[selected.id] || {
+        title: 'Stay Hydrated',
         content: 'Drinking plenty of water helps reduce bloating and fatigue throughout your cycle.',
         color: 'green'
       })
-      
+
       setIsLoading(false)
     }, 800)
   }
@@ -101,7 +109,7 @@ export default function Mood() {
                   <h3>How are you feeling today?</h3>
                   <p>Select your current mood</p>
                 </div>
-                
+
                 <div className="mood-icons-row">
                   {moods.map(mood => (
                     <button
@@ -116,8 +124,8 @@ export default function Mood() {
                 </div>
 
                 <div className="selection-footer">
-                  <button 
-                    className="save-mood-pill-btn" 
+                  <button
+                    className="save-mood-pill-btn"
                     onClick={handleSaveMood}
                     disabled={!selectedMood || isLoading}
                   >
@@ -141,7 +149,7 @@ export default function Mood() {
                     </div>
                   </div>
                 ))}
-                
+
                 {moodEntries.length === 0 && (
                   <div className="empty-history-placeholder">
                     <p>No mood entries yet. Select a mood above to start tracking!</p>
@@ -156,7 +164,7 @@ export default function Mood() {
               <div className="success-badge">Recommended for You</div>
               <h2>Great job logging your mood!</h2>
               <p className="suggestion-intro">Based on how you're feeling, we thought this might help:</p>
-              
+
               <div className="modern-tip-card suggestion-card">
                 <div className={`tip-card-header ${suggestedTip.color}`}>
                   <div className="tip-icon-bubble">
@@ -184,7 +192,7 @@ export default function Mood() {
         <div className="mood-insight-box">
           <h4>Pattern Insight</h4>
           <p>
-            You tend to feel more energetic and happy during the follicular phase of your cycle. 
+            You tend to feel more energetic and happy during the follicular phase of your cycle.
             Consider planning important activities during this time!
           </p>
         </div>

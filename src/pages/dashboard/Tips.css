@@ -1,6 +1,10 @@
 .tips-page {
-  padding: 2rem 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: var(--dynamic-padding-left);
+  padding-right: var(--dynamic-padding-right);
   width: 100%;
+  box-sizing: border-box;
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -14,15 +18,15 @@
 }
 
 .tips-header h1 {
-  color: #10517F;
-  font-size: 2.5rem;
-  font-weight: 800;
+  color: var(--primary-color);
+  font-size: var(--font-h1);
+  font-weight: var(--weight-bold);
   margin: 0 0 0.5rem 0;
 }
 
 .tips-header p {
-  color: #355C7D;
-  font-size: 1.1rem;
+  color: var(--text-color);
+  font-size: var(--font-base);
   opacity: 0.7;
   margin: 0;
 }
@@ -62,9 +66,9 @@
 }
 
 .filter-button.active {
-  background: #10517F;
+  background: var(--primary-color);
   color: white;
-  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 /* Tips Grid */
@@ -76,10 +80,10 @@
 
 .modern-tip-card {
   background: white;
-  border-radius: 1.5rem;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-  border: 1px solid #E8F2F9;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--card-blue-border);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -124,20 +128,20 @@
 }
 
 .tip-card-content {
-  padding: 2rem;
+  padding: 1.25rem;
   flex: 1;
 }
 
 .tip-card-content h3 {
   color: #10517F;
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0 0 0.75rem 0;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-semibold);
+  margin: 0 0 0.5rem 0;
 }
 
 .tip-card-content p {
   color: #355C7D;
-  font-size: 0.95rem;
+  font-size: var(--font-sm);
   line-height: 1.6;
   margin: 0 0 1rem 0;
   opacity: 0.9;
@@ -161,9 +165,9 @@
 
 .no-tips {
   text-align: center;
-  padding: 4rem;
+  padding: 2rem;
   color: #355C7D;
-  font-size: 1.2rem;
+  font-size: var(--font-base);
 }
 
 /* Modern Tip Modal Styles */
@@ -210,8 +214,8 @@
 .tip-modal-header-modern h2 {
   margin: 0;
   color: #10517F;
-  font-size: 1.75rem;
-  font-weight: 800;
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
 }
 
 .tip-modal-body-modern {
@@ -221,14 +225,14 @@
 
 .tip-modal-body-modern p {
   margin-bottom: 1rem;
-  font-size: 1.05rem;
+  font-size: var(--font-base);
 }
 
 .tip-modal-body-modern h4 {
   color: #10517F;
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 2rem 0 1rem 0;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-semibold);
+  margin: 1.5rem 0 0.5rem 0;
 }
 
 .tip-modal-body-modern ul {
@@ -252,7 +256,7 @@
 }
 
 .close-tip-btn {
-  background: #10517F;
+  background: var(--primary-color);
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -260,11 +264,11 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .close-tip-btn:hover {
-  background: #0D3F63;
+  opacity: 0.9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(16, 81, 127, 0.3);
+  box-shadow: var(--shadow-lg);
 }

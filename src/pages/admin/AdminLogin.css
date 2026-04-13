@@ -14,10 +14,10 @@
 }
 
 .admin-login-card {
-  background-color: white;
-  border-radius: 1.5rem;
-  padding: 3rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 450px;
 }
@@ -29,7 +29,8 @@
 
 .admin-login-header h1 {
   color: var(--primary-color);
-  font-size: 2rem;
+  font-size: var(--font-h1);
+  font-weight: var(--weight-bold);
   margin: 0 0 0.5rem 0;
 }
 
@@ -37,7 +38,7 @@
   color: var(--text-color);
   opacity: 0.8;
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--font-base);
 }
 
 .admin-login-form {

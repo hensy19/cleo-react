@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import './CalendarPage.css'
 
@@ -15,10 +16,22 @@ export default function CalendarPage() {
   const [modalData, setModalData] = useState(null)
   const [periodDays, setPeriodDays] = useState([])
   const [quickNote, setQuickNote] = useState('')
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
+  const [tempSelectedDates, setTempSelectedDates] = useState([])
+  const [selectedFlow, setSelectedFlow] = useState('Medium')
+  const [predictions, setPredictions] = useState({
+    ovulation: [],
+    fertile: [],
+    nextPeriod: []
+  })
+  const [userInfo, setUserInfo] = useState(null)
 
-  // Load period days from localStorage
+  // Load initial data
   useEffect(() => {
     const logs = JSON.parse(localStorage.getItem('periodLogs') || '[]')
+    const user = JSON.parse(localStorage.getItem('userInfo') || '{}')
+    setUserInfo(user)
+
     const days = []
     logs.forEach(log => {
       if (log.startDate) {
@@ -33,6 +46,65 @@ export default function CalendarPage() {
     })
     setPeriodDays(days)
   }, [])
+
+  // Recalculate predictions whenever period days change
+  useEffect(() => {
+    if (periodDays.length === 0 && !userInfo?.lastPeriodDate) return
+
+    const cycleLength = userInfo?.cycleLength || 28
+    const periodLength = userInfo?.periodLength || 5
+
+    // Combine manual logs and temp selections to find the latest "start"
+    const allDays = [...periodDays, ...tempSelectedDates].sort()
+    
+    let latestStartStr = userInfo?.lastPeriodDate || null
+
+    if (allDays.length > 0) {
+      // Find the start date of the latest contiguous block of period days
+      // For simplicity, we take the absolute latest day and look back to find its start
+      const latestDay = new Date(allDays[allDays.length - 1])
+      let current = new Date(latestDay)
+      
+      // Look back through allDays to find the earliest day of this block
+      while (allDays.includes(formatDate(current))) {
+        latestStartStr = formatDate(current)
+        current.setDate(current.getDate() - 1)
+      }
+    }
+
+    if (latestStartStr) {
+      const start = new Date(latestStartStr)
+      
+      // Calculate Ovulation (Day 14)
+      const ovDate = new Date(start)
+      ovDate.setDate(ovDate.getDate() + Math.floor(cycleLength / 2))
+      const ovulation = [formatDate(ovDate)]
+
+      // Calculate Fertile Window (Day 9 to Day 14)
+      const fertile = []
+      for (let i = -5; i <= 0; i++) {
+        const d = new Date(ovDate)
+        d.setDate(d.getDate() + i)
+        fertile.push(formatDate(d))
+      }
+
+      // Calculate Next Period (Day 28)
+      const nextPeriod = []
+      const nextStart = new Date(start)
+      nextStart.setDate(nextStart.getDate() + cycleLength)
+      for (let i = 0; i < periodLength; i++) {
+        const d = new Date(nextStart)
+        d.setDate(d.getDate() + i)
+        nextPeriod.push(formatDate(d))
+      }
+
+      setPredictions({ ovulation, fertile, nextPeriod })
+    }
+  }, [periodDays, tempSelectedDates, userInfo])
+
+  function formatDate(date) {
+    return date.toISOString().split('T')[0]
+  }
 
   // Build calendar days
   const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay()
@@ -89,6 +161,16 @@ export default function CalendarPage() {
   function handleDayClick(dayObj) {
     if (!dayObj.currentMonth) return
     const dateStr = dayObj.dateStr
+
+    if (isSelectionMode) {
+      setTempSelectedDates(prev =>
+        prev.includes(dateStr)
+          ? prev.filter(d => d !== dateStr)
+          : [...prev, dateStr]
+      )
+      return
+    }
+
     setSelectedDate(dateStr)
     setQuickNote('')
 
@@ -167,6 +249,37 @@ export default function CalendarPage() {
     else setCurrentMonth(m => m + 1)
   }
 
+  const handleSavePeriod = () => {
+    if (tempSelectedDates.length === 0) return
+
+    const logs = JSON.parse(localStorage.getItem('periodLogs') || '[]')
+    
+    tempSelectedDates.forEach(date => {
+      // Check if already exists to avoid duplicates
+      if (!periodDays.includes(date)) {
+        logs.push({
+          id: Date.now() + Math.random(),
+          startDate: date,
+          periodLength: 1,
+          flow: selectedFlow,
+          type: 'manual'
+        })
+      }
+    })
+
+    localStorage.setItem('periodLogs', JSON.stringify(logs))
+    setPeriodDays(prev => [...new Set([...prev, ...tempSelectedDates])])
+    setTempSelectedDates([])
+    setIsSelectionMode(false)
+  }
+
+  const FLOW_OPTIONS = [
+    { id: 'Light', label: 'Light', icon: '🩸' },
+    { id: 'Medium', label: 'Medium', icon: '🩸' },
+    { id: 'Heavy', label: 'Heavy', icon: '🩸' },
+    { id: 'Super Heavy', label: 'Super', icon: '🩸' }
+  ]
+
   const MOOD_EMOJIS = { happy: '😊', calm: '😌', tired: '😴', sad: '😢', energetic: '⚡', angry: '😠', anxious: '😰', peaceful: '💜', neutral: '😐', crying: '😭' }
   const SYMPTOM_EMOJIS = { cramps: '🤕', bloating: '💨', headache: '🧠', fatigue: '⚡', anxiety: '💗', mood: '🎭', energy: '🏃', appetite: '🍽️' }
 
@@ -176,13 +289,27 @@ export default function CalendarPage() {
         {/* Header */}
         <div className="cal-header">
           <div className="cal-header-left">
-            <Link to="/dashboard" className="cal-back">&larr;</Link>
-            <div>
-              <h1 className="cal-title">Cycle Calendar</h1>
-              <p className="cal-subtitle">Track and manage your cycle</p>
-            </div>
+            <button className="back-btn" onClick={() => navigate('/dashboard')}>
+              <ChevronLeft size={20} />
+              <div className="title-group">
+                <h1 className="cal-title">Cycle Calendar</h1>
+                <p className="cal-subtitle">Track and manage your cycle</p>
+              </div>
+            </button>
           </div>
           <div className="cal-header-actions">
+            <button
+              className={`cal-mode-toggle ${isSelectionMode ? 'active' : ''}`}
+              onClick={() => {
+                setIsSelectionMode(!isSelectionMode)
+                setTempSelectedDates([])
+              }}
+              title="Track Period"
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" fill={isSelectionMode ? "#EF4444" : "none"} stroke={isSelectionMode ? "none" : "currentColor"} strokeWidth="2">
+                <path d="M12 2.5C12 2.5 6 10 6 15.5C6 18.5 8.5 21 12 21C15.5 21 18 18.5 18 15.5C18 10 12 2.5 12 2.5Z" />
+              </svg>
+            </button>
             <button className="cal-btn cal-btn-primary" onClick={() => navigate('/log-period')}>Log Period</button>
             <button className="cal-btn cal-btn-secondary" onClick={() => navigate('/history')}>View History</button>
           </div>
@@ -205,18 +332,46 @@ export default function CalendarPage() {
               {calendarDays.map((dayObj, idx) => {
                 const isToday = dayObj.dateStr === todayStr
                 const isPeriod = periodDays.includes(dayObj.dateStr)
+                const isTempSelected = tempSelectedDates.includes(dayObj.dateStr)
+
+                // Predictions
+                const isOvulation = predictions.ovulation.includes(dayObj.dateStr)
+                const isFertile = predictions.fertile.includes(dayObj.dateStr)
+                const isPredicted = predictions.nextPeriod.includes(dayObj.dateStr)
+
                 const indicators = dayObj.currentMonth ? getDateIndicators(dayObj.dateStr) : []
                 const isSelected = dayObj.dateStr === selectedDate
+
+                let statusClasses = ''
+                if (isToday) statusClasses += ' cal-day-today'
+                if (isPeriod) statusClasses += ' cal-day-period'
+                if (isSelected) statusClasses += ' cal-day-selected'
+                if (isTempSelected) statusClasses += ' cal-day-temp-selected'
+                if (isSelectionMode) statusClasses += ' selection-mode'
+                
+                // Prediction classes (only if not a current/temp period day)
+                if (!isPeriod && !isTempSelected) {
+                  if (isOvulation) statusClasses += ' cal-day-ovulation'
+                  else if (isFertile) statusClasses += ' cal-day-fertile'
+                  else if (isPredicted) statusClasses += ' cal-day-predicted'
+                }
 
                 return (
                   <button
                     key={idx}
-                    className={`cal-day ${!dayObj.currentMonth ? 'cal-day-other' : ''} ${isToday ? 'cal-day-today' : ''} ${isPeriod ? 'cal-day-period' : ''} ${isSelected ? 'cal-day-selected' : ''}`}
+                    className={`cal-day ${!dayObj.currentMonth ? 'cal-day-other' : ''}${statusClasses}`}
                     onClick={() => handleDayClick(dayObj)}
                     disabled={!dayObj.currentMonth}
                   >
+                    {isSelectionMode && dayObj.currentMonth && (
+                      <div className={`selection-drop ${isTempSelected ? 'filled' : ''}`}>
+                        <svg viewBox="0 0 24 24" width="14" height="14">
+                          <path d="M12 2.5C12 2.5 6 10 6 15.5C6 18.5 8.5 21 12 21C15.5 21 18 18.5 18 15.5C18 10 12 2.5 12 2.5Z" />
+                        </svg>
+                      </div>
+                    )}
                     <span className="cal-day-num">{dayObj.day}</span>
-                    {indicators.length > 0 && (
+                    {indicators.length > 0 && !isSelectionMode && (
                       <div className="cal-day-dots">
                         {indicators.includes('period') && <span className="dot dot-period"></span>}
                         {indicators.includes('mood') && <span className="dot dot-mood"></span>}
@@ -229,16 +384,64 @@ export default function CalendarPage() {
               })}
             </div>
 
-            {/* Legend */}
+            {/* Cycle Prediction Legend */}
             <div className="cal-legend">
-              <div className="cal-legend-item"><span className="dot dot-period"></span> Period</div>
-              <div className="cal-legend-item"><span className="dot dot-mood"></span> Mood</div>
-              <div className="cal-legend-item"><span className="dot dot-symptom"></span> Symptoms</div>
-              <div className="cal-legend-item"><span className="dot dot-note"></span> Notes</div>
-              <div className="cal-legend-item"><span className="cal-today-box"></span> Today</div>
+              <div className="cal-legend-item">
+                <span className="legend-indicator period"></span>
+                <span className="legend-label">Period Days</span>
+              </div>
+              <div className="cal-legend-item">
+                <span className="legend-indicator fertile"></span>
+                <span className="legend-label">Fertile Window</span>
+              </div>
+              <div className="cal-legend-item">
+                <span className="legend-indicator ovulation"></span>
+                <span className="legend-label">Ovulation Day</span>
+              </div>
+              <div className="cal-legend-item">
+                <span className="legend-indicator predicted"></span>
+                <span className="legend-label">Predicted Period</span>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Period Selection Bottom Panel */}
+        {isSelectionMode && (
+          <div className="period-selection-panel">
+            <div className="panel-content">
+              <div className="panel-header">
+                <h3>Your period flow</h3>
+                <span className="selected-count">{tempSelectedDates.length} days selected</span>
+              </div>
+              
+              <div className="flow-selector">
+                {FLOW_OPTIONS.map(flow => (
+                  <button
+                    key={flow.id}
+                    className={`flow-opt ${selectedFlow === flow.id ? 'active' : ''}`}
+                    onClick={() => setSelectedFlow(flow.id)}
+                  >
+                    <div className="flow-icon-wrap">
+                      <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2.5C12 2.5 6 10 6 15.5C6 18.5 8.5 21 12 21C15.5 21 18 18.5 18 15.5C18 10 12 2.5 12 2.5Z" />
+                      </svg>
+                    </div>
+                    <span>{flow.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              <button 
+                className="save-period-btn" 
+                onClick={handleSavePeriod}
+                disabled={tempSelectedDates.length === 0}
+              >
+                Save all
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Day Detail Modal */}
         {modalData && (

@@ -39,7 +39,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="navbar-center">
+        <div className="navbar-right">
           <div className="navbar-menu">
             {isLoggedIn ? (
               <>
@@ -67,9 +67,7 @@ export default function Navbar() {
               </>
             )}
           </div>
-        </div>
 
-        <div className="navbar-right">
           {isLoggedIn ? (
             <div className="nav-profile-wrapper">
               <div 

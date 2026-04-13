@@ -1,8 +1,12 @@
 .symptom-logger-page {
-  padding: 2rem 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: var(--dynamic-padding-left);
+  padding-right: var(--dynamic-padding-right);
   width: 100%;
+  box-sizing: border-box;
   min-height: calc(100vh - 80px);
-  background-color: #EAF2F8;
+  background-color: var(--bg-color);
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -21,9 +25,9 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: #10517F;
-  font-size: 2.5rem;
-  font-weight: 800;
+  color: var(--primary-color);
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
   cursor: pointer;
   padding: 0;
   margin-bottom: 0.5rem;
@@ -35,8 +39,8 @@
 }
 
 .symptom-logger-subtitle {
-  color: #355C7D;
-  font-size: 1.1rem;
+  color: var(--text-color);
+  font-size: var(--font-base);
   opacity: 0.7;
   margin-left: 3.5rem;
 }
@@ -50,17 +54,17 @@
 
 .symptom-card {
   background: white;
-  border-radius: 1rem;
-  padding: 2.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
   border: 1px solid #E8F2F9;
 }
 
 .symptom-card h3 {
-  color: #10517F;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
+  color: var(--primary-color);
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
+  margin-bottom: 1.5rem;
   opacity: 0.8;
 }
 
@@ -74,8 +78,8 @@
 .symptom-item-btn {
   background: white;
   border: 1px solid #E2E8F0;
-  border-radius: 1rem;
-  padding: 2rem 1rem;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,8 +109,8 @@
 }
 
 .symptom-label-text {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
   color: #355C7D;
 }
 
@@ -116,22 +120,23 @@
 }
 
 .save-symptoms-pill-btn {
-  background-color: #10517F;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.8rem 2.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--font-base);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .save-symptoms-pill-btn:hover:not(:disabled) {
-  background-color: #0d3e62;
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(16, 81, 127, 0.3);
+  background-color: var(--primary-color);
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .save-symptoms-pill-btn:disabled {
@@ -141,14 +146,14 @@
 
 .symptoms-textarea-modern {
   width: 100%;
-  padding: 1.5rem;
+  padding: 1rem;
   background-color: #E2E8F0;
   border: none;
-  border-radius: 0.75rem;
-  font-size: 1rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-base);
   color: #355C7D;
   resize: vertical;
-  min-height: 120px;
+  min-height: 100px;
   transition: background-color 0.3s;
 }
 
@@ -164,8 +169,8 @@
 /* Suggestion Overlay Styles */
 .symptom-suggestion-overlay {
   background: white;
-  border-radius: 1.5rem;
-  padding: 4rem;
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
   text-align: center;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
   margin-bottom: 2rem;
@@ -193,14 +198,15 @@
 
 .symptom-suggestion-overlay h2 {
   color: #10517F;
-  font-size: 2.2rem;
+  font-size: var(--font-h1);
   margin-bottom: 0.5rem;
 }
 
 .symptom-suggestion-overlay p {
   color: #355C7D;
   opacity: 0.7;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  font-size: var(--font-base);
 }
 
 .suggested-care-card {
@@ -244,20 +250,20 @@
 }
 
 .tip-card-content {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .tip-card-content h3 {
   color: #10517F;
-  margin-bottom: 0.75rem;
-  font-size: 1.2rem;
-  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
 }
 
 .tip-card-content p {
   color: #355C7D;
   line-height: 1.5;
-  font-size: 0.95rem;
+  font-size: var(--font-sm);
   opacity: 0.8;
 }
 
@@ -271,10 +277,10 @@
   background-color: #10517F;
   color: white;
   border: none;
-  padding: 1rem 2.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: var(--weight-bold);
+  font-size: var(--font-base);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -289,10 +295,10 @@
   background-color: #F8FAFC;
   color: #10517F;
   border: 1px solid #E8F2F9;
-  padding: 1rem 2.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: var(--weight-bold);
+  font-size: var(--font-base);
   cursor: pointer;
   transition: all 0.3s ease;
 }

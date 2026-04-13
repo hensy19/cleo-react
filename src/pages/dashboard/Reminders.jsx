@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
 import Button from '../../components/common/Button'
@@ -29,8 +31,13 @@ export default function Reminders() {
     <DashboardLayout>
       <div className="reminders-page-container">
         <div className="reminders-header">
-          <h1>Manage Reminders</h1>
-          <p>Customize when and how you want Cleo to notify you</p>
+          <button className="back-btn" onClick={() => navigate('/dashboard')}>
+            <ChevronLeft size={20} />
+            <div className="title-group">
+              <h1>Manage Reminders</h1>
+              <p>Customize when and how you want Cleo to notify you</p>
+            </div>
+          </button>
         </div>
 
         <div className="reminders-content">

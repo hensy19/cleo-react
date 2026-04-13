@@ -1,9 +1,10 @@
 .card {
-  background-color: white;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-blue-border);
+  transition: var(--transition-base);
 }
 
 .card-default {
@@ -11,12 +12,12 @@
 }
 
 .card-bordered {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--card-blue-border);
   box-shadow: none;
 }
 
 .card-elevated {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-md);
 }
 
 .card-hover {
@@ -24,8 +25,9 @@
 }
 
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
 }
 
 @media (max-width: 768px) {

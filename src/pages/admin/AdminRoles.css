@@ -8,15 +8,15 @@
 }
 
 .ar-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1A1A1A;
+  font-size: var(--font-h1);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0 0 0.25rem 0;
 }
 
 .ar-subtitle {
-  font-size: 0.85rem;
-  color: #6B7280;
+  font-size: var(--font-base);
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -24,19 +24,22 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #DCECF5;
-  color: #10517F;
+  background-color: var(--primary-color);
+  color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 40px;
   padding: 0.6rem 1.25rem;
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--font-sm);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 
 .ar-btn-new:hover {
-  background-color: #C5D9ED;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Stats Row */
@@ -57,28 +60,28 @@
 }
 
 .ar-stat-icon {
-  color: #10517F;
+  color: var(--primary-color);
 }
 
 .ar-stat-num {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #10517F;
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
 }
 
 .ar-stat-lbl {
-  font-size: 0.85rem;
-  color: #4B5563;
-  font-weight: 600;
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  font-weight: var(--weight-semibold);
 }
 
 /* Table Area */
 .ar-table-card {
-  background-color: #FFFFFF;
-  border-radius: 16px;
-  border: 1px solid #EBEBEB;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-blue-border);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .ar-table-header {
@@ -87,15 +90,15 @@
 }
 
 .ar-table-header h2 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1A1A1A;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0 0 0.25rem 0;
 }
 
 .ar-table-header p {
-  font-size: 0.85rem;
-  color: #6B7280;
+  font-size: var(--font-sm);
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -113,11 +116,11 @@
 
 .ar-table th {
   text-align: left;
-  padding: 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #10517F;
-  background-color: #C5D9ED; /* The header row has a blue background spanning full width */
+  padding: 1rem 1.25rem;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--primary-color);
+  background-color: var(--light-blue-bg);
   border: none;
 }
 
@@ -126,7 +129,7 @@
 
 .ar-table td {
   padding: 1rem;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--card-blue-border);
   vertical-align: middle;
 }
 
@@ -215,11 +218,11 @@
 }
 
 .ar-modal-content {
-  background-color: #FFFFFF;
-  border-radius: 12px;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-xl);
   animation: slideUp 0.3s ease-out;
 }
 
@@ -232,9 +235,9 @@
 }
 
 .ar-modal-header h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1A1A1A;
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0;
 }
 
@@ -318,16 +321,20 @@
 }
 
 .ar-btn-save {
-  padding: 0.5rem 1.25rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  font-size: var(--font-base);
+  font-weight: var(--weight-semibold);
   cursor: pointer;
-  background-color: #10517F;
+  background-color: var(--primary-color);
   border: none;
-  color: #FFFFFF;
+  color: white;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 
 .ar-btn-save:hover {
-  background-color: #0b3d61;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }

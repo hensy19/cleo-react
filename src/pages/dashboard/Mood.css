@@ -1,6 +1,10 @@
 .mood-board-page {
-  padding: 2rem 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: var(--dynamic-padding-left);
+  padding-right: var(--dynamic-padding-right);
   width: 100%;
+  box-sizing: border-box;
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -19,9 +23,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #10517F;
-  font-size: 2.2rem;
-  font-weight: 800;
+  color: var(--primary-color);
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
   cursor: pointer;
   padding: 0;
   margin-bottom: 0.5rem;
@@ -33,19 +37,19 @@
 }
 
 .mood-board-header p {
-  color: #355C7D;
-  font-size: 1.1rem;
+  color: var(--text-color);
+  font-size: var(--font-base);
   opacity: 0.7;
   margin: 0;
 }
 
 .mood-selection-card {
   background: white;
-  border-radius: 1.5rem;
-  padding: 3rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  margin-bottom: 3rem;
-  border: 1px solid #E8F2F9;
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2rem;
+  border: 1px solid var(--card-blue-border);
 }
 
 .selection-header {
@@ -53,16 +57,16 @@
 }
 
 .selection-header h3 {
-  color: #10517F;
-  font-size: 1.3rem;
-  font-weight: 700;
+  color: var(--primary-color);
+  font-size: var(--font-h3);
+  font-weight: var(--weight-semibold);
   margin-bottom: 0.5rem;
 }
 
 .selection-header p {
   color: #355C7D;
   opacity: 0.6;
-  font-size: 0.95rem;
+  font-size: var(--font-sm);
 }
 
 .mood-icons-row {
@@ -75,8 +79,8 @@
 .mood-square-btn {
   background: white;
   border: 1px solid #E2E8F0;
-  border-radius: 1rem;
-  padding: 1.5rem 1rem;
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -102,8 +106,8 @@
 }
 
 .mood-label-text {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
   color: #355C7D;
 }
 
@@ -113,22 +117,22 @@
 }
 
 .save-mood-pill-btn {
-  background-color: #10517F;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.8rem 2.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--font-base);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .save-mood-pill-btn:hover:not(:disabled) {
-  background-color: #0d3e62;
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(16, 81, 127, 0.3);
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .save-mood-pill-btn:disabled {
@@ -138,9 +142,9 @@
 
 .mood-history-section h3 {
   color: #10517F;
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  font-weight: 700;
+  font-size: var(--font-h3);
+  margin-bottom: 1.5rem;
+  font-weight: var(--weight-bold);
 }
 
 .mood-history-list {
@@ -153,11 +157,11 @@
 .mood-history-item {
   background: white;
   border: 1px solid #E8F2F9;
-  border-radius: 1rem;
-  padding: 1.2rem 2rem;
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   transition: transform 0.2s;
 }
 
@@ -166,8 +170,8 @@
 }
 
 .history-icon-circle {
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   background-color: #F8FAFC;
   border-radius: 50%;
   display: flex;
@@ -185,45 +189,45 @@
 
 .history-mood-name {
   color: #10517F;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: var(--weight-bold);
+  font-size: var(--font-base);
 }
 
 .history-mood-date {
   color: #8E9AAF;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
 }
 
 .mood-insight-box {
   background-color: #EAF2F8;
-  border-radius: 1.5rem;
-  padding: 2.5rem;
-  margin-top: 2rem;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .mood-insight-box h4 {
   color: #10517F;
-  font-size: 1.2rem;
-  font-weight: 800;
-  margin-bottom: 0.75rem;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
+  margin-bottom: 0.5rem;
 }
 
 .mood-insight-box p {
   color: #355C7D;
   line-height: 1.6;
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--font-base);
   opacity: 0.9;
 }
 
 /* Suggestion Overlay Styles */
 .mood-suggestion-overlay {
   background: white;
-  border-radius: 1.5rem;
-  padding: 4rem;
+  border-radius: var(--radius-xl);
+  padding: 2rem;
   text-align: center;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-lg);
   margin-bottom: 2rem;
   animation: slideUp 0.6s ease-out;
 }
@@ -248,15 +252,15 @@
 
 .mood-suggestion-overlay h2 {
   color: #10517F;
-  font-size: 2rem;
+  font-size: var(--font-h1);
   margin-bottom: 1rem;
 }
 
 .suggestion-intro {
   color: #355C7D;
   opacity: 0.7;
-  margin-bottom: 3rem;
-  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-size: var(--font-base);
 }
 
 .suggestion-card {

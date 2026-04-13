@@ -39,13 +39,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.9);
-  z-index: 999;
-  gap: 1rem;
+  background-color: rgba(16, 81, 127, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 9991;
+  gap: 1.5rem;
 }
 
 .loader-fullscreen p {
-  color: var(--primary-color);
-  font-size: 1rem;
-  font-weight: 600;
+  color: white;
+  font-size: var(--font-base);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.5px;
 }

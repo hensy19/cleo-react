@@ -5,12 +5,12 @@ import './AdminSettings.css'
 
 export default function AdminSettingsPrivacy() {
   const navigate = useNavigate()
-  
+
   const [maintenanceMode, setMaintenanceMode] = useState(false)
   const [allowRegistration, setAllowRegistration] = useState(true)
   const [sessionTimeout, setSessionTimeout] = useState(true)
   const [sessionDuration, setSessionDuration] = useState('20 minutes')
-  
+
   const [reqLength, setReqLength] = useState(true)
   const [reqUppercase, setReqUppercase] = useState(true)
 
@@ -28,9 +28,6 @@ export default function AdminSettingsPrivacy() {
 
   return (
     <AdminLayout activePage="settings-privacy">
-      <div className="as-header-container">
-        <div className="as-route-info">Admin settings {'>'} privacy</div>
-      </div>
 
       <div className="as-system-card">
         <h1>System Settings</h1>
@@ -39,10 +36,10 @@ export default function AdminSettingsPrivacy() {
 
       <div className="as-content-card">
         <h2>Privacy and security</h2>
-        
+
         <form className="as-form" onSubmit={handleSave}>
-          
-        
+
+
 
           <div className="as-toggle-row">
             <div className="as-toggle-info">
@@ -50,10 +47,10 @@ export default function AdminSettingsPrivacy() {
               <span className="as-toggle-subtitle">Enable user sign-ups</span>
             </div>
             <label className="as-switch">
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 checked={allowRegistration}
-                onChange={(e) => setAllowRegistration(e.target.checked)} 
+                onChange={(e) => setAllowRegistration(e.target.checked)}
               />
               <span className="as-slider"></span>
             </label>
@@ -65,10 +62,10 @@ export default function AdminSettingsPrivacy() {
               <span className="as-toggle-subtitle">Auto logout after inactivity</span>
             </div>
             <label className="as-switch">
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 checked={sessionTimeout}
-                onChange={(e) => setSessionTimeout(e.target.checked)} 
+                onChange={(e) => setSessionTimeout(e.target.checked)}
               />
               <span className="as-slider"></span>
             </label>
@@ -90,16 +87,16 @@ export default function AdminSettingsPrivacy() {
             <label>Password requirements</label>
             <div className="as-checkbox-group">
               <label className="as-checkbox-lbl">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={reqLength}
                   onChange={(e) => setReqLength(e.target.checked)}
                 />
                 Minimum 8 characters
               </label>
               <label className="as-checkbox-lbl">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={reqUppercase}
                   onChange={(e) => setReqUppercase(e.target.checked)}
                 />

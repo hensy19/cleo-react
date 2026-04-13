@@ -39,9 +39,7 @@ export default function AdminSettingsGeneral() {
 
   return (
     <AdminLayout activePage="settings-general">
-      <div className="as-header-container">
-        <div className="as-route-info">Admin settings {'>'} general</div>
-      </div>
+
 
       <div className="as-system-card">
         <h1>System Settings</h1>

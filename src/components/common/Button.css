@@ -1,11 +1,11 @@
 .button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 40px;
+  font-size: var(--font-base);
+  font-weight: var(--weight-semibold);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -22,23 +22,26 @@
 .button-primary {
   background-color: var(--primary-color);
   color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .button-primary:hover:not(:disabled) {
-  background-color: #0a3a57;
+  opacity: 0.9;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 /* Secondary Variant */
 .button-secondary {
   background-color: var(--secondary-color);
   color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .button-secondary:hover:not(:disabled) {
-  background-color: #b5d5e8;
+  background-color: var(--white);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Outline Variant */
@@ -55,13 +58,15 @@
 
 /* Danger Variant */
 .button-danger {
-  background-color: #e74c3c;
+  background-color: #FF4D6A;
   color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .button-danger:hover:not(:disabled) {
-  background-color: #c0392b;
+  opacity: 0.9;
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* White/Light Variant */

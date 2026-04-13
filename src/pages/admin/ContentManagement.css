@@ -8,15 +8,15 @@
 }
 
 .cm-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1A1A1A;
+  font-size: var(--font-h1);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0 0 0.25rem 0;
 }
 
 .cm-subtitle {
-  font-size: 0.85rem;
-  color: #6B7280;
+  font-size: var(--font-base);
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -24,19 +24,22 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #DCECF5;
-  color: #10517F;
+  background-color: var(--primary-color);
+  color: white;
   border: none;
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  font-size: 0.85rem;
+  border-radius: 40px;
+  padding: 0.5rem 1.25rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--font-sm);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 
 .cm-btn-new:hover {
-  background-color: #C5D9ED;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Stats Row */
@@ -48,16 +51,18 @@
 }
 
 .cm-stat-card {
-  background-color: #DCECF5; /* Light blue matching image */
-  border-radius: 12px;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  border: 1px solid var(--card-blue-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .cm-stat-icon {
-  color: #6B7280;
+  color: var(--text-muted);
 }
 
 .cm-stat-info {
@@ -67,9 +72,9 @@
 }
 
 .cm-stat-num {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1A1A1A;
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
 }
 
 .cm-stat-lbl {
@@ -83,12 +88,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #F8F9FA;
-  border-radius: 24px;
-  border: 1px solid #EBEBEB;
+  background-color: var(--white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--card-blue-border);
   padding: 0.5rem 1.25rem;
   margin-bottom: 2rem;
   position: relative;
+  box-shadow: var(--shadow-sm);
 }
 
 .cm-search-box {
@@ -163,10 +169,11 @@
 
 /* Table Area */
 .cm-table-wrapper {
-  background-color: #FFFFFF;
-  border-radius: 12px;
-  border: 1px solid #EBEBEB;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-blue-border);
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .cm-table-header-title {
@@ -175,15 +182,15 @@
 }
 
 .cm-table-header-title h2 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1A1A1A;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0 0 0.25rem 0;
 }
 
 .cm-table-header-title p {
-  font-size: 0.8rem;
-  color: #6B7280;
+  font-size: var(--font-sm);
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -194,17 +201,17 @@
 
 .cm-table th {
   text-align: left;
-  padding: 1rem 1.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #10517F;
-  background-color: #DCECF5; /* Header matching the stat cards */
-  border-bottom: 1px solid #EBEBEB;
+  padding: 1rem 1.25rem;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--primary-color);
+  background-color: var(--light-blue-bg);
+  border-bottom: 1px solid var(--card-blue-border);
 }
 
 .cm-table td {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #F3F4F6;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--card-blue-border);
   vertical-align: middle;
 }
 
@@ -303,11 +310,11 @@
 }
 
 .cm-modal-content {
-  background-color: #FFFFFF;
-  border-radius: 12px;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-xl);
   animation: slideUp 0.3s ease-out;
 }
 
@@ -325,9 +332,9 @@
 }
 
 .cm-modal-header h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1A1A1A;
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0;
 }
 
@@ -426,16 +433,20 @@
 }
 
 .cm-btn-save {
-  padding: 0.5rem 1.25rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  font-size: var(--font-base);
+  font-weight: var(--weight-semibold);
   cursor: pointer;
-  background-color: #3B82F6;
+  background-color: var(--primary-color);
   border: none;
-  color: #FFFFFF;
+  color: white;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 
 .cm-btn-save:hover {
-  background-color: #2563EB;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }

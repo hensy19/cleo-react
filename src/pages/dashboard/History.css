@@ -1,6 +1,10 @@
 .history-container {
   width: 100%;
-  padding: 2rem;
+  box-sizing: border-box;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: var(--dynamic-padding-left);
+  padding-right: var(--dynamic-padding-right);
   background-color: var(--bg-color);
   min-height: 100vh;
   display: flex;
@@ -8,16 +12,55 @@
   gap: 2rem;
 }
 
-.history-header h1 {
-  font-size: 2rem;
+.history-header {
+  margin-bottom: 2rem;
+}
+
+.history-header-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Standard Back Button Pattern */
+.back-btn {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0;
+  cursor: pointer;
   color: var(--primary-color);
-  margin-bottom: 0.25rem;
-  font-weight: 700;
+  text-align: left;
+  transition: transform 0.2s;
+}
+
+.back-btn:hover {
+  transform: translateX(-4px);
+}
+
+.back-btn svg {
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-header h1 {
+  font-size: var(--font-h1);
+  color: var(--primary-color);
+  margin: 0;
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
 }
 
 .history-subtitle {
   color: var(--text-muted);
-  font-size: 1rem;
+  font-size: var(--font-base);
+  margin: 0;
 }
 
 /* Stats Row */
@@ -28,10 +71,10 @@
 }
 
 .history-stat-card {
-  padding: 1.5rem;
-  background: white;
+  padding: 1.25rem;
+  background: var(--white);
   border: 1px solid var(--card-blue-border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
 
@@ -44,9 +87,9 @@
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: var(--font-h2);
   color: var(--primary-color);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .text-blue {
@@ -58,7 +101,7 @@
   padding: 0;
   overflow: hidden;
   border: 1px solid var(--card-blue-border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 }
 
 .history-table {
@@ -136,11 +179,11 @@
 
 /* Cycle Insights Footer */
 .cycle-insights-footer {
-  background-color: #10517F;
-  color: white;
-  padding: 2rem;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 1.5rem;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 }
 
 .insights-header {
@@ -155,9 +198,10 @@
 }
 
 .insights-header h3 {
-  font-size: 1.25rem;
-  color: white;
+  font-size: var(--font-h3);
+  color: var(--white);
   margin: 0;
+  font-weight: var(--weight-semibold);
 }
 
 .insights-grid {

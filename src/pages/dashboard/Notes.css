@@ -1,6 +1,10 @@
 .notes-page {
-  padding: 2rem 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: var(--dynamic-padding-left);
+  padding-right: var(--dynamic-padding-right);
   width: 100%;
+  box-sizing: border-box;
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -22,9 +26,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #10517F;
-  font-size: 2.2rem;
-  font-weight: 800;
+  color: var(--primary-color);
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
   cursor: pointer;
   padding: 0;
   margin-bottom: 0.5rem;
@@ -36,31 +40,32 @@
 }
 
 .header-left p {
-  color: #355C7D;
-  font-size: 1.1rem;
+  color: var(--text-color);
+  font-size: var(--font-base);
   opacity: 0.7;
   margin: 0;
 }
 
 .add-note-main-btn {
-  background-color: #10517F;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.8rem 2rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 600;
+  font-size: var(--font-base);
+  font-weight: var(--weight-semibold);
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.2);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
 }
 
 .add-note-main-btn:hover {
-  background-color: #0d3e62;
+  opacity: 0.9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 81, 127, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Notes Grid */
@@ -73,14 +78,14 @@
 
 .hifi-note-card {
   background: white;
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border: 1px solid #E8F2F9;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-blue-border);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  min-height: 200px;
+  min-height: 150px;
 }
 
 .hifi-note-card:hover {
@@ -97,8 +102,8 @@
 
 .note-date-tag {
   color: #8E9AAF;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
 }
 
 .note-card-actions {
@@ -124,15 +129,15 @@
 .icon-action-btn.delete:hover { background-color: #FEE2E2; color: #DC2626; }
 
 .note-card-body h3 {
-  color: #10517F;
-  font-size: 1.2rem;
-  margin: 0 0 1rem 0;
-  font-weight: 700;
+  color: var(--primary-color);
+  font-size: var(--font-h3);
+  margin: 0 0 0.5rem 0;
+  font-weight: var(--weight-bold);
 }
 
 .note-card-body p {
   color: #355C7D;
-  font-size: 0.95rem;
+  font-size: var(--font-base);
   line-height: 1.6;
   margin: 0;
   opacity: 0.9;
@@ -147,8 +152,8 @@
 .notes-empty-placeholder {
   grid-column: span 3;
   border: 2px dashed #D0DFEE;
-  border-radius: 1.5rem;
-  padding: 5rem;
+  border-radius: var(--radius-lg);
+  padding: 2rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -170,16 +175,16 @@
 /* Tips Section */
 .note-taking-tips {
   background-color: #EAF2F8;
-  border-radius: 1.5rem;
-  padding: 3rem;
-  margin-top: 2rem;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .note-taking-tips h3 {
   color: #10517F;
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem;
-  font-weight: 800;
+  font-size: var(--font-h3);
+  margin-bottom: 1rem;
+  font-weight: var(--weight-bold);
 }
 
 .note-taking-tips ul {
@@ -191,9 +196,9 @@
 .note-taking-tips li {
   position: relative;
   padding-left: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   color: #10517F;
-  font-size: 1.05rem;
+  font-size: var(--font-base);
   line-height: 1.5;
 }
 
@@ -225,8 +230,8 @@
   background: white;
   width: 100%;
   max-width: 600px;
-  border-radius: 1.5rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
   animation: slideUp 0.3s ease;
 }
@@ -245,7 +250,7 @@
   position: relative;
 }
 
-.modal-header h3 { color: #10517F; margin: 0; font-size: 1.4rem; }
+.modal-header h3 { color: #10517F; margin: 0; font-size: var(--font-h2); }
 
 .modal-close {
   background: none;
@@ -271,18 +276,18 @@
   transform: rotate(90deg);
 }
 
-.modal-body { padding: 2rem; }
+.modal-body { padding: 1.5rem; }
 
 .modal-field { margin-bottom: 1.5rem; }
 .modal-field label { display: block; color: #10517F; font-weight: 600; margin-bottom: 0.5rem; }
 
 .modal-field input, .modal-field textarea {
   width: 100%;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid #D0DFEE;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-sm);
   font-family: inherit;
-  font-size: 1rem;
+  font-size: var(--font-base);
   transition: border-color 0.2s;
 }
 
@@ -302,9 +307,10 @@
   background-color: #10517F;
   color: white;
   border: none;
-  padding: 0.8rem 2.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 600;
+  font-size: var(--font-base);
+  font-weight: var(--weight-semibold);
   cursor: pointer;
   transition: background-color 0.2s;
 }

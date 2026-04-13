@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
 import Modal from '../../components/common/Modal'
@@ -77,8 +78,13 @@ export default function History() {
         {/* Header section */}
         <div className="history-header">
           <div className="history-header-left">
-            <h1>Period History</h1>
-            <p className="history-subtitle">View and manage your cycle records</p>
+            <button className="back-btn" onClick={() => navigate('/dashboard')}>
+              <ChevronLeft size={20} />
+              <div className="title-group">
+                <h1>Period History</h1>
+                <p className="history-subtitle">View and manage your cycle records</p>
+              </div>
+            </button>
           </div>
         </div>
 

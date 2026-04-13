@@ -12,7 +12,7 @@
 }
 
 .required {
-  color: #e74c3c;
+  color: #FF4D6A;
   margin-left: 0.25rem;
 }
 
@@ -34,11 +34,11 @@
 
 .input-field {
   padding: 0.75rem 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 0.5rem;
+  border: 1px solid var(--card-blue-border);
+  border-radius: var(--radius-sm);
   font-size: 1rem;
   transition: all 0.3s ease;
-  background-color: white;
+  background-color: var(--white);
   color: var(--text-color);
   font-family: inherit;
   width: 100%; /* Ensure full width */
@@ -57,7 +57,7 @@
 }
 
 .input-field.error {
-  border-color: #e74c3c;
+  border-color: #FF4D6A;
 }
 
 .input-field.error:focus {
@@ -65,7 +65,7 @@
 }
 
 .input-error {
-  color: #e74c3c;
+  color: #FF4D6A;
   font-size: 0.85rem;
   margin-top: -0.3rem;
 }

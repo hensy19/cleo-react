@@ -1,8 +1,12 @@
 .log-period-page {
-  padding: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: var(--dynamic-padding-left);
+  padding-right: var(--dynamic-padding-right);
   width: 100%;
+  box-sizing: border-box;
   min-height: calc(100vh - 80px);
-  background-color: #EAF2F8;
+  background-color: var(--bg-color);
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -21,9 +25,9 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: #10517F;
-  font-size: 2.5rem;
-  font-weight: 800;
+  color: var(--primary-color);
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
   cursor: pointer;
   padding: 0;
   margin-bottom: 0.5rem;
@@ -35,8 +39,8 @@
 }
 
 .log-period-subtitle {
-  color: #355C7D;
-  font-size: 1.1rem;
+  color: var(--text-color);
+  font-size: var(--font-base);
   opacity: 0.7;
   margin-left: 3rem;
 }
@@ -51,9 +55,9 @@
   background: white;
   width: 100%;
   max-width: 700px;
-  border-radius: 2rem;
-  padding: 4rem;
-  box-shadow: 0 10px 40px rgba(16, 81, 127, 0.08);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
   border: 1px solid #E8F2F9;
 }
 
@@ -71,16 +75,16 @@
 
 .form-section label {
   color: #10517F;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: var(--weight-bold);
+  font-size: var(--font-base);
 }
 
 .input-field input {
   width: 100%;
-  padding: 1.2rem 1.5rem;
+  padding: 1rem;
   border: 1px solid #D0DFEE;
-  border-radius: 1rem;
-  font-size: 1.1rem;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-base);
   color: #355C7D;
   background-color: #F8FAFC;
   transition: all 0.2s;
@@ -128,7 +132,7 @@
 }
 
 .flow-radio-item input:checked ~ .radio-circle {
-  border-color: #10517F;
+  border-color: var(--primary-color);
 }
 
 .flow-radio-item input:checked ~ .radio-circle::after {
@@ -139,14 +143,14 @@
   transform: translate(-50%, -50%);
   width: 12px;
   height: 12px;
-  background-color: #10517F;
+  background-color: var(--primary-color);
   border-radius: 50%;
 }
 
 .flow-radio-item span {
-  font-size: 1.05rem;
+  font-size: var(--font-base);
   color: #355C7D;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .log-period-actions {
@@ -157,38 +161,40 @@
 }
 
 .lp-back-btn {
-  background-color: #EAF2F8;
-  color: #10517F;
-  border: none;
-  padding: 0.9rem 2.5rem;
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--card-blue-border);
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: var(--weight-bold);
+  font-size: var(--font-base);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .lp-back-btn:hover {
-  background-color: #D0DFEE;
+  background-color: var(--white);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .lp-continue-btn {
-  background-color: #10517F;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.9rem 3rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: var(--weight-bold);
+  font-size: var(--font-base);
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(16, 81, 127, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .lp-continue-btn:hover:not(:disabled) {
-  background-color: #0d3e62;
+  opacity: 0.9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 81, 127, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .lp-continue-btn:disabled {

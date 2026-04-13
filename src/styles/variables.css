@@ -21,6 +21,26 @@
   /* Tips */
   --tip-purple-bg: #6C63FF;
 
+  /* Layout */
+  --max-width-container: 1200px;
+  --max-width-half: 600px;
+  --dynamic-padding: max(2rem, calc(50% - 600px + 2rem));
+  --dynamic-padding-left: max(1.5rem, calc(50% - 600px - 5.5rem));
+  --dynamic-padding-right: max(1.5rem, calc(50% - 600px - 5rem));
+
+  /* Typography */
+  --font-h1: 28px;
+  --font-h2: 22px;
+  --font-h3: 18px;
+  --font-base: 15px;
+  --font-sm: 14px;
+
+  /* Font Weights */
+  --weight-bold: 700;
+  --weight-semibold: 600;
+  --weight-medium: 500;
+  --weight-normal: 400;
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -124,9 +144,53 @@ code {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--max-width-container);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
+}
+
+/* Global Typography Sets */
+.global-h1 {
+  font-size: var(--font-h1);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.global-h2 {
+  font-size: var(--font-h2);
+  font-weight: var(--weight-semibold);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.global-h3 {
+  font-size: var(--font-h3);
+  font-weight: var(--weight-medium);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.global-text {
+  font-size: var(--font-base);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.global-text-muted {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+}
+
+/* Global Card Component */
+.global-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--card-blue-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
 }
 
 .hidden {

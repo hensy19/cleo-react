@@ -1,9 +1,11 @@
 .profile-page-modern {
-  padding: 1.5rem 3rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: var(--dynamic-padding-left);
+  padding-right: var(--dynamic-padding-right);
   width: 100%;
-  max-width: 1400px;
+  box-sizing: border-box;
   height: calc(100vh - 80px); /* Fits exactly on screen under Navbar */
-  margin: 0 auto;
   animation: fadeIn 0.5s ease-out;
   display: flex;
   flex-direction: column;
@@ -22,14 +24,14 @@
 
 .profile-header-modern h1 {
   color: var(--primary-color);
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: var(--font-h1);
+  font-weight: var(--weight-bold);
   margin-bottom: 0.2rem;
 }
 
 .profile-header-modern p {
   color: var(--text-muted);
-  font-size: 1rem;
+  font-size: var(--font-base);
 }
 
 .profile-grid-layout {
@@ -183,11 +185,11 @@
 }
 
 .profile-main-card {
-  background: white;
-  border-radius: 1.25rem;
+  background: var(--white);
+  border-radius: var(--radius-lg);
   overflow-y: auto;
   overflow-x: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--card-blue-border);
 }
 
@@ -249,13 +251,13 @@
 }
 
 .banner-info h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
   margin: 0;
 }
 
 .banner-info p {
-  font-size: 0.9rem;
+  font-size: var(--font-base);
   opacity: 0.9;
   margin: 0;
 }
@@ -285,14 +287,14 @@
 
 .stat-label {
   color: var(--text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
 }
 
 .stat-value {
   color: var(--primary-color);
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: var(--font-h2);
+  font-weight: var(--weight-bold);
 }
 
 .delete-account-card {
@@ -312,8 +314,8 @@
 
 .delete-header h3 {
   color: #991B1B;
-  font-size: 1.25rem;
-  font-weight: 800;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
   margin: 0;
 }
 
@@ -399,8 +401,8 @@
 
 .form-section-divider h3 {
   color: var(--primary-color);
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
   padding-bottom: 0.5rem;
   border-bottom: 2px solid var(--card-blue-border);
   margin: 0;

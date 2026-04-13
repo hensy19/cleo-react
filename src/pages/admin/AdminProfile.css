@@ -1,9 +1,9 @@
 /* AdminProfile.css — matches the profile page mockup exactly */
 
 .ap-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #111827;
+  font-size: var(--font-h1);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0 0 1.5rem 0;
 }
 
@@ -12,11 +12,12 @@
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
+  background: var(--white);
+  border: 1px solid var(--card-blue-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .ap-avatar-wrap {
@@ -31,26 +32,27 @@
 }
 
 .ap-banner-name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #111827;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin-bottom: 0.2rem;
 }
 
 .ap-banner-role {
-  font-size: 0.9rem;
-  color: #6B7280;
-  font-weight: 400;
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  font-weight: var(--weight-normal);
 }
 
 /* ─── Information Card ─── */
 .ap-info-card {
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 1.75rem;
+  background: var(--white);
+  border: 1px solid var(--card-blue-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   position: relative;
+  box-shadow: var(--shadow-sm);
 }
 
 .ap-info-top {
@@ -61,9 +63,9 @@
 }
 
 .ap-info-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #111827;
+  font-size: var(--font-h3);
+  font-weight: var(--weight-bold);
+  color: var(--primary-color);
   margin: 0;
 }
 
@@ -102,20 +104,20 @@
 }
 
 .ap-field label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #3B82F6;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--primary-color);
   letter-spacing: 0.01em;
 }
 
 .ap-input-readonly,
 .ap-input-active {
-  padding: 0.55rem 0.85rem;
+  padding: 0.6rem 0.75rem;
   border: 1px solid #E5E7EB;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  color: #374151;
-  background: #FFFFFF;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-base);
+  color: var(--text-color);
+  background: var(--white);
   outline: none;
   font-family: inherit;
   width: 100%;
@@ -160,18 +162,20 @@
 
 .ap-btn-save {
   padding: 0.45rem 1.25rem;
-  border-radius: 8px;
+  border-radius: 40px;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  background: #3B82F6;
+  background: var(--primary-color);
   border: none;
   color: #FFFFFF;
   font-family: inherit;
+  transition: all 0.2s;
 }
 
 .ap-btn-save:hover {
-  background: #2563EB;
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 /* ─── Save Toast ─── */
@@ -201,15 +205,18 @@
   background: #FF4D6A;
   color: #FFFFFF;
   border: none;
-  border-radius: 20px;
+  border-radius: 40px;
   padding: 0.55rem 1.75rem;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 
 .ap-logout-btn:hover {
-  background: #E53E5E;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
