@@ -88,7 +88,7 @@ export default function Login() {
               />
 
               <div className="login-options">
-                <a href="#forgot-password" className="forgot-password">Forgot Password?</a>
+                <Link to="/forgot-password" title="reset password" style={{textDecoration: 'none', color: 'var(--primary-color)', fontWeight: '600', fontSize: '0.9rem'}} className="forgot-password">Forgot Password?</Link>
               </div>
 
               <Button

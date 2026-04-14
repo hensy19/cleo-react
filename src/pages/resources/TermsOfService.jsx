@@ -1,11 +1,19 @@
-import { FileText, Scale, AlertCircle, CheckCircle, ShieldAlert, Users, Handshake } from 'lucide-react'
-import DashboardLayout from '../../components/layout/DashboardLayout'
+import { FileText, Scale, AlertCircle, CheckCircle, ShieldAlert, Users, Handshake, ArrowLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import Navbar from '../../components/layout/Navbar'
+import Footer from '../../components/layout/Footer'
 import './Resources.css'
 
 export default function TermsOfService() {
+  const navigate = useNavigate()
+  
   return (
-    <DashboardLayout>
+    <div className="public-resources-layout">
+      <Navbar />
       <div className="resources-page">
+        <button className="back-btn-minimal" onClick={() => navigate('/')}>
+          <ArrowLeft size={18} /> Back to Home
+        </button>
         <div className="resource-card-main">
           <div className="resources-header" style={{ textAlign: 'left', alignItems: 'flex-start', marginBottom: '4rem' }}>
 
@@ -58,7 +66,8 @@ export default function TermsOfService() {
 
         </div>
       </div>
-    </DashboardLayout>
+      <Footer />
+    </div>
   )
 }
 

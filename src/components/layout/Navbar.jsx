@@ -58,12 +58,15 @@ export default function Navbar() {
                   <>
                     <a href="#home" className="nav-link" onClick={handleNavClick}>Home</a>
                     <a href="#features" className="nav-link" onClick={handleNavClick}>Features</a>
-                    <Link to="/about" className="nav-link" onClick={handleNavClick}>About</Link>
                   </>
                 ) : (
-                  <Link to="/about" className="nav-link" onClick={handleNavClick}>About</Link>
+                  <>
+                    <Link to="/" className="nav-link" onClick={handleNavClick}>Home</Link>
+                    <a href="/#features" className="nav-link" onClick={handleNavClick}>Features</a>
+                  </>
                 )}
-                <Link to="/login" className="nav-link" onClick={handleNavClick}>Login</Link>
+                <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} onClick={handleNavClick}>About</Link>
+                <Link to="/login" className={`nav-link ${location.pathname === '/login' ? 'active' : ''}`} onClick={handleNavClick}>Login</Link>
               </>
             )}
           </div>
