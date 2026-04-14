@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 import Home from '../pages/public/Home'
 import Login from '../pages/public/Login'
 import Signup from '../pages/public/Signup'
+import ForgotPassword from '../pages/public/ForgotPassword'
 
 // Onboarding
 import OnboardingPage from '../pages/OnboardingPage'
@@ -49,6 +50,7 @@ export default function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Onboarding */}
       <Route path="/onboarding" element={<OnboardingPage />} />
