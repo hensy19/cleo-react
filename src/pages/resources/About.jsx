@@ -1,22 +1,14 @@
-import { Heart, Shield, Star, Users, Target, ArrowLeft } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import Navbar from '../../components/layout/Navbar'
-import Footer from '../../components/layout/Footer'
+import { Heart, Shield, Star, Users, Target, Rocket } from 'lucide-react'
+import DashboardLayout from '../../components/layout/DashboardLayout'
 import './Resources.css'
 
 export default function About() {
-  const navigate = useNavigate()
-  
   return (
-    <div className="public-resources-layout">
-      <Navbar />
+    <DashboardLayout>
       <div className="resources-page">
-        <button className="back-btn-minimal" onClick={() => navigate('/')}>
-          <ArrowLeft size={18} /> Back to Home
-        </button>
-        
         <div className="resource-card-main">
           <div className="resources-header" style={{ textAlign: 'left', alignItems: 'flex-start', marginBottom: '4rem' }}>
+
             <h1>About Cleo</h1>
             <p style={{ maxWidth: '1000px' }}>Empowering millions to understand their bodies with precision, care, and advanced data science.</p>
           </div>
@@ -64,6 +56,7 @@ export default function About() {
             </ul>
           </section>
 
+          {/* Moved inside the main content box */}
           <div className="resource-bottom-grid" style={{ marginTop: '5rem', marginBottom: '0' }}>
             <div className="sidebar-stat-card">
               <Users size={20} />
@@ -78,8 +71,7 @@ export default function About() {
           </div>
         </div>
       </div>
-      <Footer />
-    </div>
+    </DashboardLayout>
   )
 }
 
