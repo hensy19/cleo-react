@@ -1,0 +1,23 @@
+.notification-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.notification-modal-content p {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.notification-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.notification-modal-actions button {
+  min-width: 100px;
+}

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminLayout from '../../components/layout/AdminLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './AdminSettings.css'
 
 export default function AdminSettingsPrivacy() {
   const navigate = useNavigate()
+  const { showToast } = useNotifications()
 
   const [maintenanceMode, setMaintenanceMode] = useState(false)
   const [allowRegistration, setAllowRegistration] = useState(true)
@@ -23,7 +25,7 @@ export default function AdminSettingsPrivacy() {
 
   const handleSave = (e) => {
     e.preventDefault()
-    alert('Privacy & Security settings saved successfully!')
+    showToast('Privacy & Security settings saved successfully!')
   }
 
   return (

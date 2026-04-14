@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminLayout from '../../components/layout/AdminLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './ContentManagement.css'
 
 // Mock Tip Data matching the image contents
@@ -27,6 +28,7 @@ const CATEGORY_OPTIONS = [
 
 export default function ContentManagement() {
   const navigate = useNavigate()
+  const { showModal, showToast } = useNotifications()
   
   // States
   const [tips, setTips] = useState(MOCK_TIPS)
@@ -70,9 +72,16 @@ export default function ContentManagement() {
 
   // Handlers
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this tip?")) {
-      setTips(tips.filter(t => t.id !== id))
-    }
+    showModal({
+      title: 'Delete Tip',
+      message: 'Are you sure you want to delete this tip? This article will be permanently removed.',
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        setTips(tips.filter(t => t.id !== id))
+        showToast('Tip deleted successfully!')
+      }
+    })
   }
 
   const openModal = (tip, mode) => {
@@ -90,9 +99,11 @@ export default function ContentManagement() {
     e.preventDefault()
     if (modalMode === 'edit') {
       setTips(tips.map(t => t.id === currentTip.id ? currentTip : t))
+      showToast('Tip updated successfully!')
     } else if (modalMode === 'new') {
       const newTip = { ...currentTip, id: Date.now() }
       setTips([newTip, ...tips])
+      showToast('Tip created successfully!')
     }
     closeModal()
   }

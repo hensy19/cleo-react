@@ -14,10 +14,12 @@ import {
   X
 } from 'lucide-react'
 import AdminLayout from '../../components/layout/AdminLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './AdminProfile.css'
 
 export default function AdminProfile() {
   const navigate = useNavigate()
+  const { showToast } = useNotifications()
 
   const [isEditing, setIsEditing] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -76,8 +78,7 @@ export default function AdminProfile() {
       name: `${editProfile.firstName} ${editProfile.lastName}`
     }))
     setIsEditing(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    showToast('Profile updated successfully!')
   }
 
   const handleLogout = () => {
@@ -89,7 +90,7 @@ export default function AdminProfile() {
   const handlePassChange = (e) => {
     e.preventDefault()
     if (passForm.next !== passForm.confirm) {
-      alert("Passwords do not match!")
+      showToast("Passwords do not match!", 'error')
       return
     }
     // Simulate API call
@@ -98,6 +99,7 @@ export default function AdminProfile() {
       setPassSaved(false)
       setShowPassModal(false)
       setPassForm({ current: '', next: '', confirm: '' })
+      showToast('Password updated successfully!')
     }, 2000)
   }
 
@@ -261,12 +263,6 @@ export default function AdminProfile() {
           </div>
         </div>
 
-        {saved && (
-          <div className="ap-save-toast">
-            <CheckCircle size={16} />
-            <span>Profile updated successfully!</span>
-          </div>
-        )}
 
         {/* Change Password Modal */}
         {showPassModal && (

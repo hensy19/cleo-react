@@ -4,9 +4,12 @@ import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
 import Button from '../../components/common/Button'
+import { useNotifications } from '../../context/NotificationContext'
 import './Reminders.css'
 
 export default function Reminders() {
+  const navigate = useNavigate()
+  const { showToast } = useNotifications()
   const [reminders, setReminders] = useState({
     periodApproaching: true,
     ovulationApproaching: true,
@@ -24,7 +27,7 @@ export default function Reminders() {
   const handleSave = () => {
     // Save to local storage or API
     console.log('Saved reminders:', { reminders, reminderTime, daysBeforePeriod })
-    alert('Reminder settings saved successfully!')
+    showToast('Reminder settings saved successfully!')
   }
 
   return (

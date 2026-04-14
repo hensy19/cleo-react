@@ -165,6 +165,42 @@
   font-size: 0.9rem;
 }
 
+/* Status Pills */
+.u-status-pill {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-weight: 500;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.status-active {
+  background-color: #DEF7EC;
+  color: #03543F;
+}
+
+.status-blocked {
+  background-color: #FDE8E8;
+  color: #9B1C1C;
+}
+
+.block-btn {
+  color: #FFA8B6;
+}
+
+.block-btn:hover {
+  color: #FF4757;
+}
+
+.block-btn.is-blocked {
+  color: #31C48D;
+}
+
+.block-btn.is-blocked:hover {
+  color: #059669;
+}
+
 /* Pagination */
 .u-pagination {
   display: flex;
