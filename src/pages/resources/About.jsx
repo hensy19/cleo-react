@@ -1,7 +1,6 @@
-import { Heart, Shield, Star, Users, Target, ArrowLeft } from 'lucide-react'
+import { Heart, Shield, Star, Users, Target, ArrowLeft, Rocket } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../../components/layout/Navbar'
-import Footer from '../../components/layout/Footer'
+import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useLanguage } from '../../context/LanguageContext'
 import './Resources.css'
 
@@ -10,8 +9,7 @@ export default function About() {
   const { t } = useLanguage()
   
   return (
-    <div className="public-resources-layout">
-      <Navbar />
+    <DashboardLayout>
       <div className="resources-page">
         <button className="back-btn-minimal" onClick={() => navigate('/')}>
           <ArrowLeft size={18} /> {t('backToHome')}
@@ -80,10 +78,6 @@ export default function About() {
           </div>
         </div>
       </div>
-      <Footer />
-    </div>
+    </DashboardLayout>
   )
 }
-
-
-
