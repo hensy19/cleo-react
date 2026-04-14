@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminLayout from '../../components/layout/AdminLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './AdminSettings.css'
 
 export default function AdminSettingsContent() {
   const navigate = useNavigate()
+  const { showToast } = useNotifications()
 
   const [defaultCycleLength, setDefaultCycleLength] = useState('28 days')
   const [enableOvulation, setEnableOvulation] = useState(false)
@@ -20,7 +22,7 @@ export default function AdminSettingsContent() {
 
   const handleSave = (e) => {
     e.preventDefault()
-    alert('Content controls saved successfully!')
+    showToast('Content controls saved successfully!')
   }
 
   return (

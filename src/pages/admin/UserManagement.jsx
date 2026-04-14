@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminLayout from '../../components/layout/AdminLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './UserManagement.css'
 
 // Mock user data matching the layout image
@@ -12,7 +13,8 @@ const MOCK_USERS = [
     initials: "KM",
     joinDate: "Jan 15, 2024",
     lastActive: "2 mins ago",
-    cyclesLogged: 8
+    cyclesLogged: 8,
+    status: 'active'
   },
   {
     id: 2,
@@ -21,7 +23,8 @@ const MOCK_USERS = [
     initials: "RR",
     joinDate: "Feb 3, 2024",
     lastActive: "1 hour ago",
-    cyclesLogged: 5
+    cyclesLogged: 5,
+    status: 'active'
   },
   {
     id: 3,
@@ -30,7 +33,8 @@ const MOCK_USERS = [
     initials: "OB",
     joinDate: "Dec 20, 2023",
     lastActive: "3 hour ago",
-    cyclesLogged: 12
+    cyclesLogged: 12,
+    status: 'active'
   },
   {
     id: 4,
@@ -39,7 +43,8 @@ const MOCK_USERS = [
     initials: "SD",
     joinDate: "Mar 8, 2024",
     lastActive: "5 hours ago",
-    cyclesLogged: 5
+    cyclesLogged: 5,
+    status: 'active'
   },
   {
     id: 5,
@@ -48,7 +53,8 @@ const MOCK_USERS = [
     initials: "AM",
     joinDate: "Nov 12, 2023",
     lastActive: "2 days ago",
-    cyclesLogged: 9
+    cyclesLogged: 9,
+    status: 'blocked'
   },
   {
     id: 6,
@@ -57,7 +63,8 @@ const MOCK_USERS = [
     initials: "IG",
     joinDate: "Jan 28, 2024",
     lastActive: "1 week ago",
-    cyclesLogged: 7
+    cyclesLogged: 7,
+    status: 'active'
   }
 ]
 
@@ -65,6 +72,7 @@ export default function UserManagement() {
   const [users, setUsers] = useState(MOCK_USERS)
   const [searchTerm, setSearchTerm] = useState('')
   const navigate = useNavigate()
+  const { showModal, showToast } = useNotifications()
 
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken')
@@ -75,14 +83,36 @@ export default function UserManagement() {
   }, [navigate])
 
   const handleDeleteUser = (id) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      setUsers(users.filter(user => user.id !== id))
-    }
+    showModal({
+      title: 'Delete User',
+      message: 'Are you sure you want to delete this user? This will permanently remove their data.',
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        setUsers(users.filter(user => user.id !== id))
+        showToast('User deleted successfully!')
+      }
+    })
   }
 
   const handleBlockUser = (id) => {
-    // Usually this would update the user status
-    alert('User has been blocked/unblocked')
+    const user = users.find(u => u.id === id)
+    const isBlocked = user.status === 'blocked'
+    
+    showModal({
+      title: isBlocked ? 'Unblock User' : 'Block User',
+      message: isBlocked 
+        ? `Are you sure you want to unblock ${user.name}? They will regain access to their account.`
+        : `Are you sure you want to block ${user.name}? They will lose access to their account immediately.`,
+      confirmText: isBlocked ? 'Unblock' : 'Block',
+      type: isBlocked ? 'primary' : 'danger',
+      onConfirm: () => {
+        setUsers(users.map(u => 
+          u.id === id ? { ...u, status: isBlocked ? 'active' : 'blocked' } : u
+        ))
+        showToast(`User ${isBlocked ? 'unblocked' : 'blocked'} successfully!`)
+      }
+    })
   }
 
   const filteredUsers = users.filter(user =>
@@ -120,6 +150,7 @@ export default function UserManagement() {
                 <th>Join Date</th>
                 <th>Last Active</th>
                 <th>Cycles Logged</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -140,15 +171,20 @@ export default function UserManagement() {
                     <td className="u-text-base">{user.lastActive}</td>
                     <td className="u-text-bold">{user.cyclesLogged}</td>
                     <td>
+                      <span className={`u-status-pill ${user.status === 'active' ? 'status-active' : 'status-blocked'}`}>
+                        {user.status === 'active' ? 'Active' : 'Blocked'}
+                      </span>
+                    </td>
+                    <td>
                       <div className="u-actions">
                         <button 
-                          className="btn-action block-btn" 
+                          className={`btn-action block-btn ${user.status === 'blocked' ? 'is-blocked' : ''}`} 
                           onClick={() => handleBlockUser(user.id)}
-                          title="Block User"
+                          title={user.status === 'blocked' ? "Unblock User" : "Block User"}
                         >
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="9" stroke="#FFA8B6" strokeWidth="1.5" />
-                            <path d="M7 17L17 7" stroke="#FFA8B6" strokeWidth="1.5" />
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+                            <path d="M7 17L17 7" stroke="currentColor" strokeWidth="1.5" />
                           </svg>
                         </button>
                         <button 

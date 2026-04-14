@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, Edit3, ChevronLeft, Notebook } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './Notes.css'
 
 export default function Notes() {
@@ -10,6 +11,8 @@ export default function Notes() {
   
   const [noteTitle, setNoteTitle] = useState('')
   const [noteContent, setNoteContent] = useState('')
+
+  const { showModal, showToast } = useNotifications()
 
   useEffect(() => {
     const stored = localStorage.getItem('userNotes')
@@ -46,6 +49,7 @@ export default function Notes() {
       )
       setNotes(updatedNotes)
       localStorage.setItem('userNotes', JSON.stringify(updatedNotes))
+      showToast('Note updated successfully!')
     } else {
       const newNote = {
         id: Date.now(),
@@ -56,17 +60,25 @@ export default function Notes() {
       const updatedNotes = [newNote, ...notes]
       setNotes(updatedNotes)
       localStorage.setItem('userNotes', JSON.stringify(updatedNotes))
+      showToast('Note saved successfully!')
     }
     
     setIsModalOpen(false)
   }
 
   const handleDeleteNote = (id) => {
-    if (window.confirm('Are you sure you want to delete this note?')) {
-      const updated = notes.filter(note => note.id !== id)
-      setNotes(updated)
-      localStorage.setItem('userNotes', JSON.stringify(updated))
-    }
+    showModal({
+      title: 'Delete Note',
+      message: 'Are you sure you want to delete this note? This action cannot be undone.',
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        const updated = notes.filter(note => note.id !== id)
+        setNotes(updated)
+        localStorage.setItem('userNotes', JSON.stringify(updated))
+        showToast('Note deleted successfully!')
+      }
+    })
   }
 
   return (

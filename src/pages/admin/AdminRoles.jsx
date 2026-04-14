@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminLayout from '../../components/layout/AdminLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './AdminRoles.css'
 
 const MOCK_ADMINS = [
@@ -10,6 +11,7 @@ const MOCK_ADMINS = [
 
 export default function AdminRoles() {
   const navigate = useNavigate()
+  const { showModal, showToast } = useNotifications()
   
   const [admins, setAdmins] = useState(MOCK_ADMINS)
   const [searchTerm, setSearchTerm] = useState('')
@@ -32,18 +34,36 @@ export default function AdminRoles() {
   )
 
   const handleBlockToggle = (id) => {
-    setAdmins(admins.map(a => {
-      if (a.id === id) {
-        return { ...a, status: a.status === 'active' ? 'inactive' : 'active' }
+    const admin = admins.find(a => a.id === id)
+    const action = admin.status === 'active' ? 'deactivate' : 'activate'
+    
+    showModal({
+      title: `${action.charAt(0).toUpperCase() + action.slice(1)} Admin`,
+      message: `Are you sure you want to ${action} this admin account?`,
+      confirmText: action.charAt(0).toUpperCase() + action.slice(1),
+      onConfirm: () => {
+        setAdmins(admins.map(a => {
+          if (a.id === id) {
+            return { ...a, status: a.status === 'active' ? 'inactive' : 'active' }
+          }
+          return a
+        }))
+        showToast(`Admin ${action}d successfully!`)
       }
-      return a
-    }))
+    })
   }
 
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to permanently delete this admin?")) {
-      setAdmins(admins.filter(a => a.id !== id))
-    }
+    showModal({
+      title: 'Delete Admin',
+      message: 'Are you sure you want to permanently delete this admin? This action cannot be undone.',
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        setAdmins(admins.filter(a => a.id !== id))
+        showToast('Admin deleted successfully!')
+      }
+    })
   }
 
   const openModal = (admin, mode) => {
@@ -61,9 +81,11 @@ export default function AdminRoles() {
     e.preventDefault()
     if (modalMode === 'edit') {
       setAdmins(admins.map(a => a.id === currentAdmin.id ? currentAdmin : a))
+      showToast('Admin updated successfully!')
     } else if (modalMode === 'add') {
       const newAdmin = { ...currentAdmin, id: Date.now() }
       setAdmins([...admins, newAdmin])
+      showToast('Admin created successfully!')
     }
     closeModal()
   }

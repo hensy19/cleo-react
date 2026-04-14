@@ -15,10 +15,12 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './Profile.css'
 
 export default function Profile() {
   const navigate = useNavigate()
+  const { showModal, showToast } = useNotifications()
   const [user, setUser] = useState({
     name: 'Hensy Patel',
     email: 'hensypatel@gmail.com',
@@ -89,7 +91,7 @@ export default function Profile() {
 
   const handleUpdateProfile = () => {
     localStorage.setItem('userInfo', JSON.stringify(user))
-    alert('Profile updated successfully!')
+    showToast('Profile updated successfully!')
   }
 
   useEffect(() => {
@@ -421,7 +423,7 @@ export default function Profile() {
               <button className="modal-cancel-btn" onClick={() => setShowDeleteModal(false)}>Cancel</button>
               <button className="modal-reset-btn" onClick={() => {
                 // Handle actual deletion logic here
-                alert("Account deleted successfully (Demo)");
+                showToast("Account deleted successfully! Goodbye.", 'info');
                 handleLogout();
               }}>Yes, Delete Everything</button>
             </div>

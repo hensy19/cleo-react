@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminLayout from '../../components/layout/AdminLayout'
+import { useNotifications } from '../../context/NotificationContext'
 import './AdminSettings.css'
 import logoImg from '../../assets/images/logo.png'
 
 export default function AdminSettingsGeneral() {
   const navigate = useNavigate()
+  const { showToast } = useNotifications()
 
   // Local state for the general settings inputs
   const [siteName, setSiteName] = useState('Cleo')
@@ -34,7 +36,7 @@ export default function AdminSettingsGeneral() {
 
   const handleSave = (e) => {
     e.preventDefault()
-    alert('General settings saved successfully!')
+    showToast('General settings saved successfully!')
   }
 
   return (
