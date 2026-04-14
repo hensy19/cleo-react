@@ -9,6 +9,31 @@
   scrollbar-width: thin;
 }
 
+.back-btn-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.6rem 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 2.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: fit-content;
+  border: 1px solid transparent;
+}
+
+.back-btn-minimal:hover {
+  background: var(--light-blue-bg);
+  color: var(--primary-color);
+  border-color: rgba(37, 138, 209, 0.2);
+  transform: translateX(-6px);
+}
+
 .resources-page::-webkit-scrollbar {
   width: 6px;
 }

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Eye, EyeOff, ShieldCheck, X, Scale, FileText } from 'lucide-react'
+import signupImage from '../../assets/images/signup.svg'
 import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
-import signupImage from '../../assets/images/signup.svg'
-import { Eye, EyeOff } from 'lucide-react'
 import './Signup.css'
 
 export default function Signup() {
@@ -12,19 +12,28 @@ export default function Signup() {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    acceptTerms: false
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [showPolicyModal, setShowPolicyModal] = useState(false)
+  const [policyType, setPolicyType] = useState('privacy') // 'privacy' | 'terms'
   const navigate = useNavigate()
 
+  const openPolicy = (e, type) => {
+    e.preventDefault()
+    setPolicyType(type)
+    setShowPolicyModal(true)
+  }
+
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }))
   }
 
@@ -139,9 +148,16 @@ export default function Signup() {
               />
 
               <div className="terms">
-                <input type="checkbox" id="terms" name="terms" required />
-                <label htmlFor="terms">
-                  I agree to the <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>
+                <input 
+                  type="checkbox" 
+                  id="acceptTerms" 
+                  name="acceptTerms" 
+                  checked={formData.acceptTerms}
+                  onChange={handleChange}
+                  required 
+                />
+                <label htmlFor="acceptTerms">
+                  I agree to the <a href="#terms" onClick={(e) => openPolicy(e, 'terms')}>Terms of Service</a> and <a href="#privacy" onClick={(e) => openPolicy(e, 'privacy')}>Privacy Policy</a>
                 </label>
               </div>
 
@@ -163,6 +179,79 @@ export default function Signup() {
         </div>
       </div>
 
+      {showPolicyModal && (
+        <div className="policy-modal-overlay">
+          <div className="policy-modal-card">
+            <button className="close-modal-btn" onClick={() => setShowPolicyModal(false)}>
+              <X size={20} />
+            </button>
+            
+            <div className="modal-policy-header">
+              {policyType === 'privacy' ? (
+                <>
+                  <ShieldCheck size={40} className="modal-icon blue" />
+                  <h2>Privacy Policy</h2>
+                </>
+              ) : (
+                <>
+                  <Scale size={40} className="modal-icon gold" />
+                  <h2>Terms of Service</h2>
+                </>
+              )}
+            </div>
+
+            <div className="modal-policy-content">
+              {policyType === 'privacy' ? (
+                <div className="policy-text-block">
+                  <p className="intro-lead">At Cleo, your privacy is our foundation. We recognize that health data is extremely sensitive, and we are committed to providing the highest level of protection.</p>
+                  
+                  <h3><ShieldCheck size={18} /> Our Commitment</h3>
+                  <p>All data is encrypted in transit and at rest using AES-256 standards. We never sell your personal or health data to advertisers.</p>
+                  
+                  <h3>1. Information We Collect</h3>
+                  <ul>
+                    <li><strong>Profile Data:</strong> Name, Email, and Date of Birth.</li>
+                    <li><strong>Cycle Data:</strong> Period dates, flow, and duration for predictions.</li>
+                    <li><strong>Health Logs:</strong> Symptoms, moods, and health goals.</li>
+                  </ul>
+
+                  <h3>2. Your Data Rights</h3>
+                  <div className="modal-warning-box">
+                    <strong>Permanent Deletion Policy:</strong> Deleting your account will permanently erase all data from our primary servers and backups instantly.
+                  </div>
+                </div>
+              ) : (
+                <div className="policy-text-block">
+                  <div className="modal-warning-box medical">
+                    <strong>Medical Disclaimer:</strong> Cleo is NOT a medical device and should not be used for birth control or diagnosis. Always consult a doctor.
+                  </div>
+
+                  <h3>1. Agreement to Terms</h3>
+                  <p>By using Cleo, you agree to be bound by these legal terms. If you do not agree, you must discontinue use immediately.</p>
+                  
+                  <h3>2. User Representations</h3>
+                  <p>You represent that your registration info is accurate and that you are at least 13 years of age (or legal age in your region).</p>
+
+                  <h3>3. Intellectual Property</h3>
+                  <p>All source code, databases, and website designs are proprietary property of Cleo and protected by copyright laws.</p>
+
+                  <h3>4. Limitation of Liability</h3>
+                  <p>In no event will we be liable for any direct or indirect damages arising from your use of the platform.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="modal-policy-footer">
+              <button className="confirm-policy-btn" onClick={() => {
+                setFormData({...formData, acceptTerms: true});
+                setShowPolicyModal(false);
+              }}>
+                I Understand & Agree
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
