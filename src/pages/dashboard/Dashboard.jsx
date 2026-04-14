@@ -17,6 +17,7 @@ import {
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
 import Button from '../../components/common/Button'
+import { useLanguage } from '../../context/LanguageContext'
 import './Dashboard.css'
 
 export default function Dashboard() {
@@ -24,6 +25,7 @@ export default function Dashboard() {
   const [toast, setToast] = useState({ show: false, message: '' })
   const [user, setUser] = useState(null)
   const [cycleData, setCycleData] = useState(null)
+  const { t } = useLanguage()
   const navigate = useNavigate()
 
   const moods = [
@@ -137,8 +139,8 @@ export default function Dashboard() {
       <div className="dashboard-page-container">
         {/* Welcome Section */}
         <div className="dashboard-welcome">
-          <h1>Welcome back, {user.name || 'Hensy'}!</h1>
-          <p className="welcome-subtitle">There's no better treatment than self-care.</p>
+          <h1>{t('welcome')}, {user.name || 'Hensy'}!</h1>
+          <p className="welcome-subtitle">{t('selfCare')}</p>
         </div>
 
         <div className="dashboard-container">
@@ -153,7 +155,7 @@ export default function Dashboard() {
                 onClick={() => navigate('/calendar')}
               >
                 <div className="card-header">
-                  <span className="card-label">First Period</span>
+                  <span className="card-label">{t('firstPeriod')}</span>
                   <div className="card-icon-small">📅</div>
                 </div>
                 <h2 className="card-value">{cycleData?.firstPeriod.date}</h2>
@@ -169,12 +171,12 @@ export default function Dashboard() {
                 onClick={() => navigate('/calendar')}
               >
                 <div className="card-header">
-                  <span className="card-label">Ovulation Day</span>
+                  <span className="card-label">{t('ovulationDay')}</span>
                   <div className="card-icon-small card-icon-heart">💜</div>
                 </div>
                 <h2 className="card-value">{cycleData?.ovulation.date}</h2>
-                <p className="card-subtext">in {cycleData?.ovulation.daysUntil} days</p>
-                <span className="status-tag tag-purple">You are at your peak</span>
+                <p className="card-subtext">{t('inDays')} {cycleData?.ovulation.daysUntil} {t('days')}</p>
+                <span className="status-tag tag-purple">{t('peakStatus')}</span>
               </Card>
 
               <Card
@@ -182,11 +184,11 @@ export default function Dashboard() {
                 hover={true}
                 onClick={() => navigate('/history')}
               >
-                <span className="card-label">Current Cycle Day</span>
+                <span className="card-label">{t('currentCycleDay')}</span>
                 <div className="cycle-progress-container">
                   <div className="cycle-info">
                     <span className="cycle-day">{cycleData?.currentCycle.day}</span>
-                    <span className="cycle-total">of {cycleData?.currentCycle.totalDays} days</span>
+                    <span className="cycle-total">{t('of')} {cycleData?.currentCycle.totalDays} {t('days')}</span>
                   </div>
                   <div className="circular-progress">
                     {/* SVG circular progress can be added here or just styled div */}
@@ -200,14 +202,14 @@ export default function Dashboard() {
             <Card className="quick-actions-card">
               <div className="section-header">
                 <div className="section-icon">🔘</div>
-                <h3>Quick Actions</h3>
+                <h3>{t('quickActions')}</h3>
               </div>
               <div className="actions-buttons">
                 <Button onClick={() => navigate('/log-period')} className="action-btn btn-primary">
-                  <span className="btn-icon">+</span> Log Period
+                  <span className="btn-icon">+</span> {t('logPeriod')}
                 </Button>
                 <Button onClick={() => navigate('/notes')} className="action-btn btn-secondary">
-                  Add Note
+                  {t('addNote')}
                 </Button>
               </div>
             </Card>
@@ -215,8 +217,8 @@ export default function Dashboard() {
             {/* Mood Section */}
             <Card className="mood-section-card">
               <div className="card-header-with-link">
-                <h3>How are you feeling today?</h3>
-                <button className="view-more-link" onClick={() => navigate('/mood')}>View Mood Analytics</button>
+                <h3>{t('howFeeling')}</h3>
+                <button className="view-more-link" onClick={() => navigate('/mood')}>{t('viewMood')}</button>
               </div>
               <div className="mood-buttons">
                 {moods.map(mood => (
@@ -243,7 +245,7 @@ export default function Dashboard() {
             <Card className="insights-card">
               <div className="section-header">
                 <div className="section-icon">📈</div>
-                <h3>Cycle Insights</h3>
+                <h3>{t('cycleInsights')}</h3>
               </div>
               <div className="insights-list">
                 {cycleData?.insights.map(insight => (
@@ -263,7 +265,7 @@ export default function Dashboard() {
           <aside className="dashboard-sidebar">
             {/* Recent Notes */}
             <Card className="recent-notes-card">
-              <h3>Recent Notes</h3>
+              <h3>{t('recentNotes')}</h3>
               <div className="notes-list">
                 {cycleData?.recentNotes.map(note => (
                   <div key={note.id} className="note-item">
@@ -272,26 +274,26 @@ export default function Dashboard() {
                   </div>
                 ))}
               </div>
-              <button className="view-all-link" onClick={() => navigate('/notes')}>View All Notes</button>
+              <button className="view-all-link" onClick={() => navigate('/notes')}>{t('viewAllNotes')}</button>
             </Card>
 
             {/* Today's Health Tip */}
             <Card className="health-tip-card">
               <div className="tip-header">
                 <span className="tip-icon">💡</span>
-                <h3>Today's Health Tip</h3>
+                <h3>{t('healthTip')}</h3>
               </div>
               <p className="tip-content">
                 Stay hydrated! drinking plenty of water can help reduce bloating and PMS symptoms during your cycle.
               </p>
-              <Button variant="secondary" className="tip-btn" onClick={() => navigate('/tips')}>More Tips</Button>
+              <Button variant="secondary" className="tip-btn" onClick={() => navigate('/tips')}>{t('moreTips')}</Button>
             </Card>
 
             {/* Reminders */}
             <Card className="reminders-card">
-              <h3>Reminders</h3>
+              <h3>{t('reminders')}</h3>
               <p>Get notified before your period starts</p>
-              <Button variant="secondary" className="manage-btn" onClick={() => navigate('/reminders')}>Manage Reminders</Button>
+              <Button variant="secondary" className="manage-btn" onClick={() => navigate('/reminders')}>{t('manageReminders')}</Button>
             </Card>
           </aside>
         </div>

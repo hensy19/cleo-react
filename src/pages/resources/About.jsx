@@ -2,27 +2,29 @@ import { Heart, Shield, Star, Users, Target, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
+import { useLanguage } from '../../context/LanguageContext'
 import './Resources.css'
 
 export default function About() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
   
   return (
     <div className="public-resources-layout">
       <Navbar />
       <div className="resources-page">
         <button className="back-btn-minimal" onClick={() => navigate('/')}>
-          <ArrowLeft size={18} /> Back to Home
+          <ArrowLeft size={18} /> {t('backToHome')}
         </button>
         
         <div className="resource-card-main">
           <div className="resources-header" style={{ textAlign: 'left', alignItems: 'flex-start', marginBottom: '4rem' }}>
-            <h1>About Cleo</h1>
-            <p style={{ maxWidth: '1000px' }}>Empowering millions to understand their bodies with precision, care, and advanced data science.</p>
+            <h1>{t('aboutTitle')}</h1>
+            <p style={{ maxWidth: '1000px' }}>{t('aboutSubtitle')}</p>
           </div>
 
           <section className="resource-section">
-            <h2><Target size={24} /> Our Mission</h2>
+            <h2><Target size={24} /> {t('ourMission')}</h2>
             <p className="intro-lead">Cleo was built on a simple yet powerful idea: that every person deserves to have a deep, data-driven understanding of their reproductive health.</p>
             <p>We combine modern technology with intuitive design to help you track cycles, symptoms, and moods effortlessly. Our platform is designed to be more than just a tracker; it's a companion that learns with you, providing insights that matter for your daily well-being and long-term health planning.</p>
 
@@ -71,9 +73,9 @@ export default function About() {
               <p>Join thousands of users who are reclaiming their health journey with Cleo's advanced tracking and supportive ecosystem.</p>
             </div>
             <div className="contact-card">
-              <h3>Need Help?</h3>
+              <h3>{t('needHelp')}</h3>
               <p>Our dedicated support team is available 24/7 to help you with any questions or technical issues you might encounter.</p>
-              <button className="contact-btn" onClick={() => window.location.href = 'mailto:support@cleo.app'}>Email Support</button>
+              <button className="contact-btn" onClick={() => window.location.href = 'mailto:support@cleo.app'}>{t('emailSupport')}</button>
             </div>
           </div>
         </div>

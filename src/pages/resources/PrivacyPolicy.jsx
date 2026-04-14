@@ -2,17 +2,19 @@ import { ShieldCheck, Lock, Eye, Server, UserCheck, Trash2, Users, ArrowLeft } f
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
+import { useLanguage } from '../../context/LanguageContext'
 import './Resources.css'
 
 export default function PrivacyPolicy() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
   
   return (
     <div className="public-resources-layout">
       <Navbar />
       <div className="resources-page">
         <button className="back-btn-minimal" onClick={() => navigate('/')}>
-          <ArrowLeft size={18} /> Back to Home
+          <ArrowLeft size={18} /> {t('backToHome')}
         </button>
         <div className="resource-card-main">
           <div className="resources-header" style={{ textAlign: 'left', alignItems: 'flex-start', marginBottom: '4rem' }}>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Modal from '../../components/common/Modal'
+import { useLanguage } from '../../context/LanguageContext'
 import './Tips.css'
 import { Lightbulb, MessageSquare, Heart, Droplets, Zap } from 'lucide-react'
 
@@ -247,14 +248,15 @@ const TIPS_DATA = [
 ]
 
 export default function Tips() {
-  const categories = ['All Tips', 'Diet & Nutrition', 'Exercise', 'PMS Relief', 'Hygiene', 'Wellness']
+  const { t } = useLanguage()
+  const categories = [t('allTips'), t('dietNutrition'), t('exercise'), t('pmsRelief'), t('hygiene'), t('wellness')]
 
-  const [activeCategory, setActiveCategory] = useState('All Tips')
+  const [activeCategory, setActiveCategory] = useState(t('allTips'))
   const [selectedTip, setSelectedTip] = useState(null)
-  
-  const filteredTips = activeCategory === 'All Tips'
+
+  const filteredTips = activeCategory === t('allTips')
     ? TIPS_DATA
-    : TIPS_DATA.filter(tip => tip.category === activeCategory)
+    : TIPS_DATA.filter(tip => t(tip.category.toLowerCase().replace(/ & /g, '').replace(/ /g, '')) === activeCategory)
 
   const handleCardClick = (tip) => {
     setSelectedTip(tip)
@@ -268,8 +270,8 @@ export default function Tips() {
     <DashboardLayout>
       <div className="tips-page">
         <div className="tips-header">
-          <h1>Health & Self-Care Tips</h1>
-          <p>Expert advice for better menstrual health</p>
+          <h1>{t('tipsTitle')}</h1>
+          <p>{t('tipsSubtitle')}</p>
         </div>
 
         <div className="category-container">
@@ -288,8 +290,8 @@ export default function Tips() {
 
         <div className="tips-grid">
           {filteredTips.map(tip => (
-            <div 
-              key={tip.id} 
+            <div
+              key={tip.id}
               className="modern-tip-card clickable"
               onClick={() => handleCardClick(tip)}
             >
@@ -301,7 +303,7 @@ export default function Tips() {
               <div className="tip-card-content">
                 <h3>{tip.title}</h3>
                 <p>{tip.content}</p>
-                <div className="read-more-link">Read More &rarr;</div>
+                <div className="read-more-link">{t('readMore')} &rarr;</div>
               </div>
             </div>
           ))}
@@ -309,7 +311,7 @@ export default function Tips() {
 
         {filteredTips.length === 0 && (
           <div className="no-tips">
-            <p>No tips found in this category</p>
+            <p>{t('noTipsFound')}</p>
           </div>
         )}
 
@@ -330,14 +332,14 @@ export default function Tips() {
                   <h2>{selectedTip.title}</h2>
                 </div>
               </div>
-              
+
               <div className="tip-modal-body-modern">
                 {selectedTip.detailedContent}
               </div>
-              
+
               <div className="tip-modal-footer">
                 <button className="close-tip-btn" onClick={closeOutcomeModal}>
-                  Got it, thanks!
+                  {t('gotItThanks')}
                 </button>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Plus, Trash2, Edit3, ChevronLeft, Notebook } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useNotifications } from '../../context/NotificationContext'
+import { useLanguage } from '../../context/LanguageContext'
 import './Notes.css'
 
 export default function Notes() {
@@ -11,7 +12,7 @@ export default function Notes() {
   
   const [noteTitle, setNoteTitle] = useState('')
   const [noteContent, setNoteContent] = useState('')
-
+  const { t } = useLanguage()
   const { showModal, showToast } = useNotifications()
 
   useEffect(() => {
@@ -49,18 +50,18 @@ export default function Notes() {
       )
       setNotes(updatedNotes)
       localStorage.setItem('userNotes', JSON.stringify(updatedNotes))
-      showToast('Note updated successfully!')
+      showToast(t('noteUpdated'))
     } else {
       const newNote = {
         id: Date.now(),
-        title: noteTitle || 'Untitled Note',
+        title: noteTitle || t('untitledNote'),
         content: noteContent,
         date: formattedDate
       }
       const updatedNotes = [newNote, ...notes]
       setNotes(updatedNotes)
       localStorage.setItem('userNotes', JSON.stringify(updatedNotes))
-      showToast('Note saved successfully!')
+      showToast(t('noteSaved'))
     }
     
     setIsModalOpen(false)
@@ -68,15 +69,15 @@ export default function Notes() {
 
   const handleDeleteNote = (id) => {
     showModal({
-      title: 'Delete Note',
-      message: 'Are you sure you want to delete this note? This action cannot be undone.',
+      title: t('deleteNote'),
+      message: `${t('deleteNoteConfirm')} ${t('permanentAction')}`,
       type: 'danger',
-      confirmText: 'Delete',
+      confirmText: t('delete'),
       onConfirm: () => {
         const updated = notes.filter(note => note.id !== id)
         setNotes(updated)
         localStorage.setItem('userNotes', JSON.stringify(updated))
-        showToast('Note deleted successfully!')
+        showToast(t('noteDeleted'))
       }
     })
   }
@@ -88,13 +89,13 @@ export default function Notes() {
           <div className="header-left">
             <button className="back-btn" onClick={() => window.history.back()}>
               <ChevronLeft size={20} />
-              <span>My Notes</span>
+              <span>{t('myNotes')}</span>
             </button>
-            <p>Track symptoms, feelings, and important observations.</p>
+            <p>{t('trackSymptoms')}</p>
           </div>
           <button className="add-note-main-btn" onClick={openAddModal}>
             <Plus size={18} />
-            Add Note
+            {t('addNote')}
           </button>
         </div>
 
@@ -124,19 +125,19 @@ export default function Notes() {
               <div className="placeholder-icon">
                 <Notebook size={48} />
               </div>
-              <h3>Start Your First Note</h3>
-              <p>Click to add your symptoms or observations</p>
+              <h3>{t('startFirstNote')}</h3>
+              <p>{t('clickToAdd')}</p>
             </div>
           )}
         </div>
 
         <div className="note-taking-tips">
-          <h3>Note Taking Tips</h3>
+          <h3>{t('noteTips')}</h3>
           <ul>
-            <li>Track symptoms like cramps, headaches, or mood changes.</li>
-            <li>Note any interventions or supplements you take.</li>
-            <li>Record diet, exercise, or lifestyle changes to keep patterns in mind.</li>
-            <li>Document conversations with your healthcare provider.</li>
+            <li>{t('noteTip1')}</li>
+            <li>{t('noteTip2')}</li>
+            <li>{t('noteTip3')}</li>
+            <li>{t('noteTip4')}</li>
           </ul>
         </div>
 
@@ -145,23 +146,23 @@ export default function Notes() {
           <div className="note-modal-overlay">
             <div className="note-modal-content">
               <div className="modal-header">
-                <h3>{editingNote ? 'Edit Note' : 'Add New Note'}</h3>
+                <h3>{editingNote ? t('editNoteTitle') : t('addNewNote')}</h3>
                 <button className="modal-close" onClick={() => setIsModalOpen(false)}>&times;</button>
               </div>
               <div className="modal-body">
                 <div className="modal-field">
-                  <label>Title</label>
+                  <label>{t('title')}</label>
                   <input 
                     type="text" 
-                    placeholder="Enter note title..." 
+                    placeholder={t('enterTitle')} 
                     value={noteTitle}
                     onChange={(e) => setNoteTitle(e.target.value)}
                   />
                 </div>
                 <div className="modal-field">
-                  <label>Content</label>
+                  <label>{t('content')}</label>
                   <textarea 
-                    placeholder="Write your observation here..." 
+                    placeholder={t('writeObservation')} 
                     rows="8"
                     value={noteContent}
                     onChange={(e) => setNoteContent(e.target.value)}
@@ -169,7 +170,7 @@ export default function Notes() {
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="modal-save-btn" onClick={handleSaveNote}>Save</button>
+                <button className="modal-save-btn" onClick={handleSaveNote}>{t('save')}</button>
               </div>
             </div>
           </div>

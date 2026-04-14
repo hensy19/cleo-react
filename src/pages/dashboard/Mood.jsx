@@ -16,6 +16,7 @@ import {
   ChevronLeft
 } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { useLanguage } from '../../context/LanguageContext'
 import './Mood.css'
 
 export default function Mood() {
@@ -24,20 +25,21 @@ export default function Mood() {
   const [suggestedTip, setSuggestedTip] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const moods = [
-    { id: 'happy', icon: <Smile size={32} />, label: 'Happy' },
-    { id: 'sad', icon: <Frown size={32} />, label: 'Sad' },
-    { id: 'angry', icon: <Angry size={32} />, label: 'Angry' },
-    { id: 'crying', icon: <CloudRain size={32} />, label: 'Crying' },
-    { id: 'energetic', icon: <Zap size={32} />, label: 'Energetic' },
-    { id: 'peaceful', icon: <Heart size={32} />, label: 'Peaceful' },
-    { id: 'tired', icon: <CloudMoon size={32} />, label: 'Tired' },
-    { id: 'neutral', icon: <Meh size={32} />, label: 'Neutral' },
-    { id: 'anxious', icon: <AlertCircle size={32} />, label: 'Anxious' },
-    { id: 'sleepy', icon: <Moon size={32} />, label: 'Sleepy' },
-    { id: 'sick', icon: <Thermometer size={32} />, label: 'Sick' },
-    { id: 'hungry', icon: <Utensils size={32} />, label: 'Hungry' }
+    { id: 'happy', icon: <Smile size={32} />, label: t('happy') },
+    { id: 'sad', icon: <Frown size={32} />, label: t('sad') },
+    { id: 'angry', icon: <Angry size={32} />, label: t('angry') },
+    { id: 'crying', icon: <CloudRain size={32} />, label: t('crying') },
+    { id: 'energetic', icon: <Zap size={32} />, label: t('energetic') },
+    { id: 'peaceful', icon: <Heart size={32} />, label: t('peaceful') },
+    { id: 'tired', icon: <CloudMoon size={32} />, label: t('tired') },
+    { id: 'neutral', icon: <Meh size={32} />, label: t('neutral') },
+    { id: 'anxious', icon: <AlertCircle size={32} />, label: t('anxious') },
+    { id: 'sleepy', icon: <Moon size={32} />, label: t('sleepy') },
+    { id: 'sick', icon: <Thermometer size={32} />, label: t('sick') },
+    { id: 'hungry', icon: <Utensils size={32} />, label: t('hungry') }
   ]
 
   useEffect(() => {
@@ -96,9 +98,9 @@ export default function Mood() {
         <div className="mood-board-header">
           <button className="back-btn" onClick={() => navigate('/dashboard')}>
             <ChevronLeft size={20} />
-            <span>Visual Mood Board</span>
+            <span>{t('visualMoodBoard')}</span>
           </button>
-          <p>Track your daily mood throughout your cycle.</p>
+          <p>{t('trackDailyMood')}</p>
         </div>
 
         {!suggestedTip ? (
@@ -106,8 +108,8 @@ export default function Mood() {
             <div className="mood-selection-card">
               <div className="selection-inner">
                 <div className="selection-header">
-                  <h3>How are you feeling today?</h3>
-                  <p>Select your current mood</p>
+                  <h3>{t('howFeeling')}</h3>
+                  <p>{t('selectYourMood') || 'Select your current mood'}</p>
                 </div>
 
                 <div className="mood-icons-row">
@@ -129,14 +131,14 @@ export default function Mood() {
                     onClick={handleSaveMood}
                     disabled={!selectedMood || isLoading}
                   >
-                    {isLoading ? 'Saving...' : '+ Save Mood'}
+                    {isLoading ? t('saving') : `+ ${t('save')} ${t('mood')}`}
                   </button>
                 </div>
               </div>
             </div>
 
             <div className="mood-history-section">
-              <h3>Mood History</h3>
+              <h3>{t('moodHistory')}</h3>
               <div className="mood-history-list">
                 {moodEntries.map(entry => (
                   <div key={entry.id} className="mood-history-item">
@@ -152,7 +154,7 @@ export default function Mood() {
 
                 {moodEntries.length === 0 && (
                   <div className="empty-history-placeholder">
-                    <p>No mood entries yet. Select a mood above to start tracking!</p>
+                    <p>{t('noMoodEntries')}</p>
                   </div>
                 )}
               </div>
@@ -161,9 +163,9 @@ export default function Mood() {
         ) : (
           <div className="mood-suggestion-overlay">
             <div className="suggestion-card-container">
-              <div className="success-badge">Recommended for You</div>
-              <h2>Great job logging your mood!</h2>
-              <p className="suggestion-intro">Based on how you're feeling, we thought this might help:</p>
+              <div className="success-badge">{t('recommendedForYou')}</div>
+              <h2>{t('greatJobLogging')}</h2>
+              <p className="suggestion-intro">{t('suggestedHelp')}</p>
 
               <div className="modern-tip-card suggestion-card">
                 <div className={`tip-card-header ${suggestedTip.color}`}>
@@ -179,10 +181,10 @@ export default function Mood() {
 
               <div className="suggestion-actions">
                 <button className="finish-btn-modern" onClick={() => navigate('/dashboard')}>
-                  Finish & Go to Dashboard
+                  {t('finishAndGo')}
                 </button>
                 <button className="log-another-btn" onClick={() => setSuggestedTip(null)}>
-                  Log Another Mood
+                  {t('logAnother')}
                 </button>
               </div>
             </div>
@@ -190,11 +192,8 @@ export default function Mood() {
         )}
 
         <div className="mood-insight-box">
-          <h4>Pattern Insight</h4>
-          <p>
-            You tend to feel more energetic and happy during the follicular phase of your cycle.
-            Consider planning important activities during this time!
-          </p>
+          <h4>{t('patternInsight')}</h4>
+          <p>{t('insightText')}</p>
         </div>
       </div>
     </DashboardLayout>

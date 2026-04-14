@@ -5,6 +5,7 @@ import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import signinImage from '../../assets/images/signin.svg'
 import { Eye, EyeOff } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 import './Login.css'
 
 export default function Login() {
@@ -14,6 +15,7 @@ export default function Login() {
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const validateForm = () => {
     const newErrors = {}
@@ -53,13 +55,13 @@ export default function Login() {
         <div className="login-container">
           <div className="login-card">
             <div className="login-header">
-              <h1>Hello Again!</h1>
-              <p>Welcome back you have been missed!</p>
+              <h1>{t('helloAgain')}</h1>
+              <p>{t('welcomeBackMissed')}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="login-form">
               <Input
-                label="Email Address"
+                label={t('emailAddress')}
                 type="email"
                 placeholder="you@example.com"
                 value={email}
@@ -69,9 +71,9 @@ export default function Login() {
               />
 
               <Input
-                label="Password"
+                label={t('passwordLabel')}
                 type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
+                placeholder={t('enterPassword') || 'Enter your password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 error={errors.password}
@@ -88,7 +90,7 @@ export default function Login() {
               />
 
               <div className="login-options">
-                <Link to="/forgot-password" title="reset password" style={{textDecoration: 'none', color: 'var(--primary-color)', fontWeight: '600', fontSize: '0.9rem'}} className="forgot-password">Forgot Password?</Link>
+                <Link to="/forgot-password" title="reset password" style={{textDecoration: 'none', color: 'var(--primary-color)', fontWeight: '600', fontSize: '0.9rem'}} className="forgot-password">{t('forgotPassword')}</Link>
               </div>
 
               <Button
@@ -98,12 +100,12 @@ export default function Login() {
                 type="submit"
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing In...' : 'Sign In'}
+                {isLoading ? t('signingIn') : t('signIn')}
               </Button>
             </form>
 
             <div className="login-footer">
-              <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+              <p>{t('dontHaveAccount')} <Link to="/signup">{t('signup')}</Link></p>
             </div>
           </div>
         </div>

@@ -2,12 +2,15 @@ import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { User, Lock, LogOut } from 'lucide-react'
 import logo from '../../assets/images/logo.png'
+import { useLanguage } from '../../context/LanguageContext'
+import LanguageSwitcher from '../common/LanguageSwitcher'
 import './Navbar.css'
 
 export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const { t } = useLanguage()
   const isLoggedIn = localStorage.getItem('authToken')
   const isHomePage = location.pathname === '/'
 
@@ -43,14 +46,14 @@ export default function Navbar() {
           <div className="navbar-menu">
             {isLoggedIn ? (
               <>
-                <Link to="/dashboard" className={`nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`} onClick={handleNavClick}>Home</Link>
-                <Link to="/log-period" className={`nav-link ${location.pathname === '/log-period' ? 'active' : ''}`} onClick={handleNavClick}>Log Cycle</Link>
-                <Link to="/log-symptoms" className={`nav-link ${location.pathname === '/log-symptoms' ? 'active' : ''}`} onClick={handleNavClick}>Symptoms</Link>
-                <Link to="/mood" className={`nav-link ${location.pathname === '/mood' ? 'active' : ''}`} onClick={handleNavClick}>Mood</Link>
-                <Link to="/calendar" className={`nav-link ${location.pathname === '/calendar' ? 'active' : ''}`} onClick={handleNavClick}>Calendar</Link>
-                <Link to="/notes" className={`nav-link ${location.pathname === '/notes' ? 'active' : ''}`} onClick={handleNavClick}>Notes</Link>
-                <Link to="/history" className={`nav-link ${location.pathname === '/history' ? 'active' : ''}`} onClick={handleNavClick}>History</Link>
-                <Link to="/tips" className={`nav-link ${location.pathname === '/tips' ? 'active' : ''}`} onClick={handleNavClick}>Smart Tips</Link>
+                <Link to="/dashboard" className={`nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`} onClick={handleNavClick}>{t('home')}</Link>
+                <Link to="/log-period" className={`nav-link ${location.pathname === '/log-period' ? 'active' : ''}`} onClick={handleNavClick}>{t('logCycle')}</Link>
+                <Link to="/log-symptoms" className={`nav-link ${location.pathname === '/log-symptoms' ? 'active' : ''}`} onClick={handleNavClick}>{t('symptoms')}</Link>
+                <Link to="/mood" className={`nav-link ${location.pathname === '/mood' ? 'active' : ''}`} onClick={handleNavClick}>{t('mood')}</Link>
+                <Link to="/calendar" className={`nav-link ${location.pathname === '/calendar' ? 'active' : ''}`} onClick={handleNavClick}>{t('calendar')}</Link>
+                <Link to="/notes" className={`nav-link ${location.pathname === '/notes' ? 'active' : ''}`} onClick={handleNavClick}>{t('notes')}</Link>
+                <Link to="/history" className={`nav-link ${location.pathname === '/history' ? 'active' : ''}`} onClick={handleNavClick}>{t('history')}</Link>
+                <Link to="/tips" className={`nav-link ${location.pathname === '/tips' ? 'active' : ''}`} onClick={handleNavClick}>{t('tips')}</Link>
               </>
             ) : (
               <>
@@ -65,8 +68,8 @@ export default function Navbar() {
                     <a href="/#features" className="nav-link" onClick={handleNavClick}>Features</a>
                   </>
                 )}
-                <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} onClick={handleNavClick}>About</Link>
-                <Link to="/login" className={`nav-link ${location.pathname === '/login' ? 'active' : ''}`} onClick={handleNavClick}>Login</Link>
+                <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} onClick={handleNavClick}>{t('about')}</Link>
+                <Link to="/login" className={`nav-link ${location.pathname === '/login' ? 'active' : ''}`} onClick={handleNavClick}>{t('login')}</Link>
               </>
             )}
           </div>
@@ -87,22 +90,23 @@ export default function Navbar() {
                 <div className="profile-dropdown">
                   <Link to="/profile" className="dropdown-item" onClick={closeDropdown}>
                     <User size={18} />
-                    <span>Profile</span>
+                    <span>{t('profile')}</span>
                   </Link>
                   <Link to="/change-password" className="dropdown-item" onClick={closeDropdown}>
                     <Lock size={18} />
-                    <span>Change Password</span>
+                    <span>{t('changePassword')}</span>
                   </Link>
                   <button className="dropdown-item logout" onClick={handleLogout}>
                     <LogOut size={18} />
-                    <span>Logout</span>
+                    <span>{t('logout')}</span>
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <Link to="/signup" className="nav-signup-btn" onClick={handleNavClick}>Sign Up</Link>
+            <Link to="/signup" className="nav-signup-btn" onClick={handleNavClick}>{t('signup')}</Link>
           )}
+          <LanguageSwitcher />
         </div>
       </div>
     </nav>

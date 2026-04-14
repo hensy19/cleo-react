@@ -4,10 +4,12 @@ import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
 import Modal from '../../components/common/Modal'
+import { useLanguage } from '../../context/LanguageContext'
 import './History.css'
 
 export default function History() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const [periodHistory, setPeriodHistory] = useState([
     { id: 1, cycleNum: 6, startDate: 'Jan 31, 2026', endDate: 'Feb 5, 2026', length: '28 days', flow: 'Medium' },
     { id: 2, cycleNum: 5, startDate: 'Jan 3, 2026', endDate: 'Jan 8, 2026', length: '29 days', flow: 'Heavy' },
@@ -81,8 +83,8 @@ export default function History() {
             <button className="back-btn" onClick={() => navigate('/dashboard')}>
               <ChevronLeft size={20} />
               <div className="title-group">
-                <h1>Period History</h1>
-                <p className="history-subtitle">View and manage your cycle records</p>
+                <h1>{t('historyTitle')}</h1>
+                <p className="history-subtitle">{t('historySubtitle')}</p>
               </div>
             </button>
           </div>
@@ -91,19 +93,19 @@ export default function History() {
         {/* Summary Stats Row */}
         <div className="history-stats-row">
           <Card className="history-stat-card">
-            <span className="stat-label">Total Cycles</span>
+            <span className="stat-label">{t('totalCycles')}</span>
             <h2 className="stat-value">6</h2>
           </Card>
           <Card className="history-stat-card">
-            <span className="stat-label">Avg Cycle Length</span>
-            <h2 className="stat-value">28 days</h2>
+            <span className="stat-label">{t('avgCycleLengthValue')}</span>
+            <h2 className="stat-value">28 {t('periodLengthUnit')}</h2>
           </Card>
           <Card className="history-stat-card">
-            <span className="stat-label">Last Period</span>
+            <span className="stat-label">{t('lastPeriodDateLabel')}</span>
             <h2 className="stat-value text-blue">Jan 31, 2026</h2>
           </Card>
           <Card className="history-stat-card">
-            <span className="stat-label">Next Expected</span>
+            <span className="stat-label">{t('nextExpectedLabel')}</span>
             <h2 className="stat-value">Feb 28, 2026</h2>
           </Card>
         </div>
@@ -113,12 +115,12 @@ export default function History() {
           <table className="history-table">
             <thead>
               <tr>
-                <th>Cycle #</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Cycle Length</th>
-                <th>Flow</th>
-                <th>Actions</th>
+                <th>{t('cycleNumLabel')}</th>
+                <th>{t('startDateLabel')}</th>
+                <th>{t('endDateLabel')}</th>
+                <th>{t('cycleTracking')}</th>
+                <th>{t('flowLabel')}</th>
+                <th>{t('actionsLabel')}</th>
               </tr>
             </thead>
             <tbody>
@@ -147,24 +149,24 @@ export default function History() {
         <Card className="cycle-insights-footer">
           <div className="insights-header">
             <span className="insights-icon">📈</span>
-            <h3>Cycle Insights</h3>
+            <h3>{t('cyclePredictions')}</h3>
           </div>
           
           <div className="insights-grid">
             <div className="insight-stat">
-              <span className="insight-label">Regularity</span>
-              <h4 className="insight-value">Very Regular</h4>
-              <p className="insight-detail">1 day variation</p>
+              <span className="insight-label">{t('regularity')}</span>
+              <h4 className="insight-value">{t('veryRegular')}</h4>
+              <p className="insight-detail">1 {t('periodLengthUnit')} {t('variation')}</p>
             </div>
             <div className="insight-stat">
-              <span className="insight-label">Most Common Flow</span>
-              <h4 className="insight-value">Medium</h4>
-              <p className="insight-detail">66% of cycles</p>
+              <span className="insight-label">{t('mostCommonFlow')}</span>
+              <h4 className="insight-value">{t('medium')}</h4>
+              <p className="insight-detail">66% {t('ofCycles')}</p>
             </div>
             <div className="insight-stat">
-              <span className="insight-label">Prediction Accuracy</span>
+              <span className="insight-label">{t('predictionAccuracy')}</span>
               <h4 className="insight-value">95%</h4>
-              <p className="insight-detail">Based on 6 cycles</p>
+              <p className="insight-detail">{t('basedOn')} 6 {t('ofCycles')}</p>
             </div>
           </div>
         </Card>
@@ -173,12 +175,12 @@ export default function History() {
         <Modal
           isOpen={showEditModal}
           onClose={() => setShowEditModal(false)}
-          title="Edit Period Record"
+          title={t('editPeriodRecord')}
           size="medium"
         >
           <div className="modal-form">
             <div className="form-group">
-              <label>Start Date</label>
+              <label>{t('startDateLabel')}</label>
               <input
                 type="text"
                 value={editFormData.startDate}
@@ -187,7 +189,7 @@ export default function History() {
               />
             </div>
             <div className="form-group">
-              <label>End Date</label>
+              <label>{t('endDateLabel')}</label>
               <input
                 type="text"
                 value={editFormData.endDate}
@@ -205,20 +207,20 @@ export default function History() {
               />
             </div>
             <div className="form-group">
-              <label>Flow</label>
+              <label>{t('flowLabel')}</label>
               <select
                 value={editFormData.flow}
                 onChange={(e) => handleEditInputChange('flow', e.target.value)}
               >
-                <option value="">Select Flow</option>
-                <option value="Light">Light</option>
-                <option value="Medium">Medium</option>
-                <option value="Heavy">Heavy</option>
+                <option value="">{t('selectActivity')}</option>
+                <option value="Light">{t('light')}</option>
+                <option value="Medium">{t('medium')}</option>
+                <option value="Heavy">{t('heavy')}</option>
               </select>
             </div>
             <div className="modal-buttons">
-              <button className="btn-save" onClick={handleSaveEdit}>Save Changes</button>
-              <button className="btn-cancel" onClick={() => setShowEditModal(false)}>Cancel</button>
+              <button className="btn-save" onClick={handleSaveEdit}>{t('saveChanges')}</button>
+              <button className="btn-cancel" onClick={() => setShowEditModal(false)}>{t('cancel')}</button>
             </div>
           </div>
         </Modal>
@@ -227,20 +229,20 @@ export default function History() {
         <Modal
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
-          title="Delete Period Record"
+          title={t('deletePeriodRecord')}
           size="small"
         >
           <div className="delete-confirmation">
-            <p>Are you sure you want to delete this period record?</p>
+            <p>{t('confirmDeletePeriod')}</p>
             {selectedPeriod && (
               <p className="period-info">
                 <strong>Cycle #{selectedPeriod.cycleNum}</strong> • {selectedPeriod.startDate} to {selectedPeriod.endDate}
               </p>
             )}
-            <p className="warning-text">This action cannot be undone.</p>
+            <p className="warning-text">{t('cannotBeUndone')}</p>
             <div className="modal-buttons">
-              <button className="btn-delete" onClick={handleConfirmDelete}>Delete</button>
-              <button className="btn-cancel" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+              <button className="btn-delete" onClick={handleConfirmDelete}>{t('delete')}</button>
+              <button className="btn-cancel" onClick={() => setShowDeleteModal(false)}>{t('cancel')}</button>
             </div>
           </div>
         </Modal>

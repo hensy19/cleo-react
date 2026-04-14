@@ -12,6 +12,7 @@ import {
   Utensils 
 } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { useLanguage } from '../../context/LanguageContext'
 import './LogSymptoms.css'
 
 export default function LogSymptoms() {
@@ -20,16 +21,17 @@ export default function LogSymptoms() {
   const [notes, setNotes] = useState('')
   const [suggestedTip, setSuggestedTip] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const { t } = useLanguage()
 
   const symptoms = [
-    { id: 'cramps', icon: <Thermometer size={24} />, label: 'Cramps' },
-    { id: 'bloating', icon: <Wind size={24} />, label: 'Bloating' },
-    { id: 'headache', icon: <Brain size={24} />, label: 'Headache' },
-    { id: 'fatigue', icon: <Zap size={24} />, label: 'Fatigue' },
-    { id: 'anxiety', icon: <Heart size={24} />, label: 'Anxiety' },
-    { id: 'mood', icon: <Smile size={24} />, label: 'Mood Swings' },
-    { id: 'energy', icon: <Activity size={24} />, label: 'High Energy' },
-    { id: 'appetite', icon: <Utensils size={24} />, label: 'Increased Appetite' }
+    { id: 'cramps', icon: <Thermometer size={24} />, label: t('cramps') },
+    { id: 'bloating', icon: <Wind size={24} />, label: t('bloating') },
+    { id: 'headache', icon: <Brain size={24} />, label: t('headache') },
+    { id: 'fatigue', icon: <Zap size={24} />, label: t('fatigue') },
+    { id: 'anxiety', icon: <Heart size={24} />, label: t('anxiety') },
+    { id: 'mood', icon: <Smile size={24} />, label: t('moodSwings') },
+    { id: 'energy', icon: <Activity size={24} />, label: t('highEnergy') },
+    { id: 'appetite', icon: <Utensils size={24} />, label: t('increasedAppetite') }
   ]
 
   const toggleSymptom = (id) => {
@@ -81,16 +83,16 @@ export default function LogSymptoms() {
         <div className="symptom-logger-header">
           <button className="back-arrow-btn" onClick={() => navigate('/dashboard')}>
             <ChevronLeft size={32} />
-            <span>Symptom Logger</span>
+            <span>{t('symptomLogger')}</span>
           </button>
-          <p className="symptom-logger-subtitle">Track your physical and emotional symptoms</p>
+          <p className="symptom-logger-subtitle">{t('trackPhysicalEmotional')}</p>
         </div>
 
         {!suggestedTip ? (
           <div className="symptom-cards-container">
             {/* Main Selection Card */}
             <div className="symptom-card selection-card">
-              <h3>Select Your Symptoms</h3>
+              <h3>{t('selectYourSymptoms')}</h3>
               
               <div className="symptoms-grid-modern">
                 {symptoms.map(symptom => (
@@ -111,16 +113,16 @@ export default function LogSymptoms() {
                   onClick={handleSubmit}
                   disabled={selectedSymptoms.length === 0 || isLoading}
                 >
-                  {isLoading ? 'Saving...' : 'Save Symptoms'}
+                  {isLoading ? t('saving') : t('saveSymptoms')}
                 </button>
               </div>
             </div>
 
             {/* Additional Notes Card */}
             <div className="symptom-card notes-card">
-              <h3>Additional Notes</h3>
+              <h3>{t('additionalNotes')}</h3>
               <textarea
-                placeholder="Add Additional symptoms about how you are feeling today..."
+                placeholder={t('writeAdditional')}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 className="symptoms-textarea-modern"
@@ -132,8 +134,8 @@ export default function LogSymptoms() {
           <div className="symptom-suggestion-overlay">
             <div className="suggestion-animation-wrapper">
               <div className="success-lottie-placeholder">✓</div>
-              <h2>Symptoms Recorded!</h2>
-              <p>Based on your log, we recommend this care tip:</p>
+              <h2>{t('symptomsRecorded')}</h2>
+              <p>{t('recommendCareTip')}</p>
               
               <div className="modern-tip-card suggested-care-card">
                 <div className={`tip-card-header ${suggestedTip.color}`}>
@@ -149,10 +151,10 @@ export default function LogSymptoms() {
 
               <div className="suggestion-footer-actions">
                 <button className="finish-symptoms-btn" onClick={() => navigate('/dashboard')}>
-                  Finish & Return to Dashboard
+                  {t('finishReturn')}
                 </button>
                 <button className="edit-log-btn" onClick={() => setSuggestedTip(null)}>
-                  Edit Log
+                  {t('editLog')}
                 </button>
               </div>
             </div>

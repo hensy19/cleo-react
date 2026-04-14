@@ -2,17 +2,19 @@ import { FileText, Scale, AlertCircle, CheckCircle, ShieldAlert, Users, Handshak
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
+import { useLanguage } from '../../context/LanguageContext'
 import './Resources.css'
 
 export default function TermsOfService() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
   
   return (
     <div className="public-resources-layout">
       <Navbar />
       <div className="resources-page">
         <button className="back-btn-minimal" onClick={() => navigate('/')}>
-          <ArrowLeft size={18} /> Back to Home
+          <ArrowLeft size={18} /> {t('backToHome')}
         </button>
         <div className="resource-card-main">
           <div className="resources-header" style={{ textAlign: 'left', alignItems: 'flex-start', marginBottom: '4rem' }}>
@@ -26,8 +28,8 @@ export default function TermsOfService() {
             <div className="warning-box">
               <ShieldAlert size={32} />
               <div>
-                <strong>Medical Disclaimer</strong>
-                <p>Cleo is a tracking and informational tool. It is <strong>NOT</strong> a medical device and should not be used as a form of birth control or for diagnosing medical conditions. Always consult a healthcare professional for specific medical advice.</p>
+                <strong>{t('medicalDisclaimer')}</strong>
+                <p>{t('medicalDisclaimerText')}</p>
               </div>
             </div>
 

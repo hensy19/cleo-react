@@ -5,11 +5,13 @@ import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
 import Button from '../../components/common/Button'
 import { useNotifications } from '../../context/NotificationContext'
+import { useLanguage } from '../../context/LanguageContext'
 import './Reminders.css'
 
 export default function Reminders() {
   const navigate = useNavigate()
   const { showToast } = useNotifications()
+  const { t } = useLanguage()
   const [reminders, setReminders] = useState({
     periodApproaching: true,
     ovulationApproaching: true,
@@ -27,7 +29,7 @@ export default function Reminders() {
   const handleSave = () => {
     // Save to local storage or API
     console.log('Saved reminders:', { reminders, reminderTime, daysBeforePeriod })
-    showToast('Reminder settings saved successfully!')
+    showToast(t('passwordSavedSuccess')) // Reusing this for success message or I should have added a specific one
   }
 
   return (
@@ -37,35 +39,35 @@ export default function Reminders() {
           <button className="back-btn" onClick={() => navigate('/dashboard')}>
             <ChevronLeft size={20} />
             <div className="title-group">
-              <h1>Manage Reminders</h1>
-              <p>Customize when and how you want Cleo to notify you</p>
+              <h1>{t('manageReminders')}</h1>
+              <p>{t('remindersSubtitle')}</p>
             </div>
           </button>
         </div>
 
         <div className="reminders-content">
           <Card className="reminder-settings-card">
-            <h3>Cycle Predictions</h3>
+            <h3>{t('cyclePredictionsLabel')}</h3>
             
             <div className="reminder-item">
               <div className="reminder-info">
                 <div className="reminder-title-row">
                   <span className="reminder-icon">🩸</span>
-                  <h4>Period Approaching</h4>
+                  <h4>{t('periodApproachingLabel')}</h4>
                 </div>
-                <p>Get notified before your period is expected to start</p>
+                <p>{t('periodApproachingDesc')}</p>
                 {reminders.periodApproaching && (
                   <div className="reminder-sub-setting">
-                    <label>Notify me</label>
+                    <label>{t('notifyMe')}</label>
                     <select 
                       value={daysBeforePeriod} 
                       onChange={(e) => setDaysBeforePeriod(Number(e.target.value))}
                       className="reminders-select"
                     >
-                      <option value={1}>1 day before</option>
-                      <option value={2}>2 days before</option>
-                      <option value={3}>3 days before</option>
-                      <option value={5}>5 days before</option>
+                      <option value={1}>1 {t('dayBefore')}</option>
+                      <option value={2}>2 {t('daysBefore')}</option>
+                      <option value={3}>3 {t('daysBefore')}</option>
+                      <option value={5}>5 {t('daysBefore')}</option>
                     </select>
                   </div>
                 )}
@@ -84,9 +86,9 @@ export default function Reminders() {
               <div className="reminder-info">
                 <div className="reminder-title-row">
                   <span className="reminder-icon">✨</span>
-                  <h4>Ovulation Window</h4>
+                  <h4>{t('ovulationWindowLabel')}</h4>
                 </div>
-                <p>Get notified when your fertile window is starting</p>
+                <p>{t('ovulationWindowDesc')}</p>
               </div>
               <label className="toggle-switch">
                 <input 
@@ -106,9 +108,9 @@ export default function Reminders() {
               <div className="reminder-info">
                 <div className="reminder-title-row">
                   <span className="reminder-icon">📝</span>
-                  <h4>Daily check-in</h4>
+                  <h4>{t('dailyCheckInLabel')}</h4>
                 </div>
-                <p>Reminder to log your symptoms, mood, and notes</p>
+                <p>{t('dailyCheckInDesc')}</p>
               </div>
               <label className="toggle-switch">
                 <input 
@@ -124,9 +126,9 @@ export default function Reminders() {
               <div className="reminder-info">
                 <div className="reminder-title-row">
                   <span className="reminder-icon">💊</span>
-                  <h4>Medication/Pill Reminder</h4>
+                  <h4>{t('medicationReminderLabel')}</h4>
                 </div>
-                <p>Daily reminder to take your medication</p>
+                <p>{t('medicationReminderDesc')}</p>
               </div>
               <label className="toggle-switch">
                 <input 
@@ -140,9 +142,9 @@ export default function Reminders() {
           </Card>
 
           <Card className="reminder-settings-card">
-            <h3>Notification Preferences</h3>
+            <h3>{t('notificationPrefsLabel')}</h3>
             <div className="reminder-time-setting">
-              <label>Default Reminder Time</label>
+              <label>{t('defaultReminderTime')}</label>
               <input 
                 type="time" 
                 value={reminderTime} 
@@ -154,7 +156,7 @@ export default function Reminders() {
 
           <div className="reminders-actions">
             <Button onClick={handleSave} className="save-reminders-btn btn-primary">
-              Save Settings
+              {t('saveSettings')}
             </Button>
           </div>
         </div>

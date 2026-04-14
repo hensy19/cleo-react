@@ -5,6 +5,7 @@ import signupImage from '../../assets/images/signup.svg'
 import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
+import { useLanguage } from '../../context/LanguageContext'
 import './Signup.css'
 
 export default function Signup() {
@@ -22,6 +23,7 @@ export default function Signup() {
   const [showPolicyModal, setShowPolicyModal] = useState(false)
   const [policyType, setPolicyType] = useState('privacy') // 'privacy' | 'terms'
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const openPolicy = (e, type) => {
     e.preventDefault()
@@ -80,15 +82,15 @@ export default function Signup() {
         <div className="signup-container">
           <div className="signup-card">
             <div className="signup-header">
-              <h1>Create Account</h1>
-              <p>Join us to start tracking your health</p>
+              <h1>{t('createAccount')}</h1>
+              <p>{t('joinUsTracking')}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="signup-form">
               <Input
-                label="Full Name"
+                label={t('fullName')}
                 type="text"
-                placeholder="Your full name"
+                placeholder={t('fullName') || "Your full name"}
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
@@ -97,7 +99,7 @@ export default function Signup() {
               />
 
               <Input
-                label="Email Address"
+                label={t('emailAddress')}
                 type="email"
                 placeholder="you@example.com"
                 name="email"
@@ -108,9 +110,9 @@ export default function Signup() {
               />
 
               <Input
-                label="Password"
+                label={t('passwordLabel')}
                 type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
+                placeholder={t('enterPassword') || "Enter your password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -128,9 +130,9 @@ export default function Signup() {
               />
 
               <Input
-                label="Confirm Password"
+                label={t('confirmPassword')}
                 type={showConfirm ? 'text' : 'password'}
-                placeholder="Confirm your password"
+                placeholder={t('confirmPassword')}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
@@ -157,7 +159,7 @@ export default function Signup() {
                   required 
                 />
                 <label htmlFor="acceptTerms">
-                  I agree to the <a href="#terms" onClick={(e) => openPolicy(e, 'terms')}>Terms of Service</a> and <a href="#privacy" onClick={(e) => openPolicy(e, 'privacy')}>Privacy Policy</a>
+                  {t('iAgreeTo')} <a href="#terms" onClick={(e) => openPolicy(e, 'terms')}>{t('termsOfService')}</a> {t('and')} <a href="#privacy" onClick={(e) => openPolicy(e, 'privacy')}>{t('privacyPolicy')}</a>
                 </label>
               </div>
 
@@ -168,12 +170,12 @@ export default function Signup() {
                 type="submit"
                 disabled={isLoading}
               >
-                {isLoading ? 'Creating Account...' : 'Create Account'}
+                {isLoading ? t('creatingAccount') : t('createAccount')}
               </Button>
             </form>
 
             <div className="signup-footer">
-              <p>Already have an account? <Link to="/login">Sign In</Link></p>
+              <p>{t('alreadyHaveAccount')} <Link to="/login">{t('signIn')}</Link></p>
             </div>
           </div>
         </div>
@@ -190,12 +192,12 @@ export default function Signup() {
               {policyType === 'privacy' ? (
                 <>
                   <ShieldCheck size={40} className="modal-icon blue" />
-                  <h2>Privacy Policy</h2>
+                  <h2>{t('privacyPolicy')}</h2>
                 </>
               ) : (
                 <>
                   <Scale size={40} className="modal-icon gold" />
-                  <h2>Terms of Service</h2>
+                  <h2>{t('termsOfService')}</h2>
                 </>
               )}
             </div>
@@ -223,7 +225,7 @@ export default function Signup() {
               ) : (
                 <div className="policy-text-block">
                   <div className="modal-warning-box medical">
-                    <strong>Medical Disclaimer:</strong> Cleo is NOT a medical device and should not be used for birth control or diagnosis. Always consult a doctor.
+                    <strong>{t('medicalDisclaimer')}</strong> {t('medicalDisclaimerText')}
                   </div>
 
                   <h3>1. Agreement to Terms</h3>
@@ -246,7 +248,7 @@ export default function Signup() {
                 setFormData({...formData, acceptTerms: true});
                 setShowPolicyModal(false);
               }}>
-                I Understand & Agree
+                {t('iUnderstandAgree')}
               </button>
             </div>
           </div>

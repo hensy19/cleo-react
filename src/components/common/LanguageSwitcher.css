@@ -1,0 +1,132 @@
+.language-switcher-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lang-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 81, 127, 0.05);
+  border: 1px solid rgba(16, 81, 127, 0.1);
+  padding: 0.5rem 0.85rem;
+  border-radius: 50px;
+  cursor: pointer;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lang-toggle-btn:hover,
+.lang-toggle-btn.active {
+  background: rgba(16, 81, 127, 0.1);
+  border-color: rgba(16, 81, 127, 0.2);
+  transform: translateY(-1px);
+}
+
+.lang-icon {
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.lang-code {
+  letter-spacing: 0.05em;
+}
+
+.chevron-icon {
+  opacity: 0.5;
+  transition: transform 0.3s ease;
+}
+
+.chevron-icon.rotate {
+  transform: rotate(180deg);
+}
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 200px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(208, 223, 238, 0.5);
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+  animation: langDropdownSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
+}
+
+@keyframes langDropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.lang-dropdown-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: 0.85rem;
+  border: none;
+  background: transparent;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.lang-option:hover {
+  background-color: rgba(16, 81, 127, 0.05);
+}
+
+.lang-option.active {
+  background-color: rgba(16, 81, 127, 0.08);
+}
+
+.lang-option-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.lang-native {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.lang-name {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.check-icon {
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .lang-code {
+    display: none;
+  }
+}

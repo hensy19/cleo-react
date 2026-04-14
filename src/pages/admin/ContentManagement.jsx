@@ -29,18 +29,18 @@ const CATEGORY_OPTIONS = [
 export default function ContentManagement() {
   const navigate = useNavigate()
   const { showModal, showToast } = useNotifications()
-  
+
   // States
   const [tips, setTips] = useState(MOCK_TIPS)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  
+
   // Modal States
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState('view') // 'view' | 'edit' | 'new'
   const [currentTip, setCurrentTip] = useState(null)
-  
+
   const dropdownRef = useRef(null)
 
   // Auth check
@@ -64,8 +64,8 @@ export default function ContentManagement() {
 
   // Filtering Logic
   const filteredTips = tips.filter(tip => {
-    const matchesSearch = tip.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          tip.content.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = tip.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tip.content.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory ? tip.category === selectedCategory : true
     return matchesSearch && matchesCategory
   })
@@ -125,21 +125,21 @@ export default function ContentManagement() {
       {/* Stats Cards Row */}
       <div className="cm-stats-grid">
         <div className="cm-stat-card">
-          <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H15"/><path d="M12 21v-4"/><path d="M12 17a4 4 0 1 0-4-4c0 3 2 4 2 4h4s2-1 2-4a4 4 0 1 0-4 4z"/></svg>
+          <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H15" /><path d="M12 21v-4" /><path d="M12 17a4 4 0 1 0-4-4c0 3 2 4 2 4h4s2-1 2-4a4 4 0 1 0-4 4z" /></svg>
           <div className="cm-stat-info">
             <span className="cm-stat-num">13</span>
             <span className="cm-stat-lbl">Total Tips</span>
           </div>
         </div>
         <div className="cm-stat-card">
-          <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
           <div className="cm-stat-info">
             <span className="cm-stat-num">12</span>
             <span className="cm-stat-lbl">Published</span>
           </div>
         </div>
         <div className="cm-stat-card">
-          <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
           <div className="cm-stat-info">
             <span className="cm-stat-num">2</span>
             <span className="cm-stat-lbl">Drafts</span>
@@ -158,32 +158,32 @@ export default function ContentManagement() {
       <div className="cm-toolbar">
         <div className="cm-search-box">
           <svg width="18" height="18" fill="none" stroke="#A0AEC0" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input 
-            type="text" 
-            placeholder="Search articles..." 
+          <input
+            type="text"
+            placeholder="Search articles..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="cm-dropdown-container" ref={dropdownRef}>
-          <button 
-            className="cm-dropdown-btn" 
+          <button
+            className="cm-dropdown-btn"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            {selectedCategory || 'Categories'} 
+            {selectedCategory || 'Categories'}
             <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
-          
+
           {isDropdownOpen && (
             <div className="cm-dropdown-menu">
-              <div 
+              <div
                 className={`cm-dropdown-item ${selectedCategory === '' ? 'active' : ''}`}
                 onClick={() => { setSelectedCategory(''); setIsDropdownOpen(false); }}
               >
                 All Categories
               </div>
               {CATEGORY_OPTIONS.map(cat => (
-                <div 
+                <div
                   key={cat}
                   className={`cm-dropdown-item ${selectedCategory === cat ? 'active' : ''}`}
                   onClick={() => { setSelectedCategory(cat); setIsDropdownOpen(false); }}
@@ -202,7 +202,7 @@ export default function ContentManagement() {
           <h2>Manage Tips</h2>
           <p>View, edit and delete tips</p>
         </div>
-        
+
         <table className="cm-table">
           <thead>
             <tr>
@@ -254,12 +254,12 @@ export default function ContentManagement() {
           <div className="cm-modal-content" onClick={e => e.stopPropagation()}>
             <div className="cm-modal-header">
               <h2>
-                {modalMode === 'view' ? 'View Article' : 
-                 modalMode === 'edit' ? 'Edit Article' : 'New Article'}
+                {modalMode === 'view' ? 'View Article' :
+                  modalMode === 'edit' ? 'Edit Article' : 'New Article'}
               </h2>
               <button className="cm-modal-close" onClick={closeModal}>&times;</button>
             </div>
-            
+
             <form onSubmit={handleModalSave}>
               <div className="cm-modal-body">
                 <div className="cm-form-group">
@@ -267,10 +267,10 @@ export default function ContentManagement() {
                   {modalMode === 'view' ? (
                     <div className="cm-view-field">{currentTip.title}</div>
                   ) : (
-                    <input 
-                      type="text" 
-                      value={currentTip.title} 
-                      onChange={e => setCurrentTip({...currentTip, title: e.target.value})}
+                    <input
+                      type="text"
+                      value={currentTip.title}
+                      onChange={e => setCurrentTip({ ...currentTip, title: e.target.value })}
                       required
                     />
                   )}
@@ -282,9 +282,9 @@ export default function ContentManagement() {
                     {modalMode === 'view' ? (
                       <div className="cm-view-field">{currentTip.category}</div>
                     ) : (
-                      <select 
+                      <select
                         value={currentTip.category}
-                        onChange={e => setCurrentTip({...currentTip, category: e.target.value})}
+                        onChange={e => setCurrentTip({ ...currentTip, category: e.target.value })}
                       >
                         {CATEGORY_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
@@ -298,9 +298,9 @@ export default function ContentManagement() {
                         {currentTip.status}
                       </span>
                     ) : (
-                      <select 
+                      <select
                         value={currentTip.status}
-                        onChange={e => setCurrentTip({...currentTip, status: e.target.value})}
+                        onChange={e => setCurrentTip({ ...currentTip, status: e.target.value })}
                       >
                         <option value="published">Published</option>
                         <option value="draft">Draft</option>
@@ -314,16 +314,16 @@ export default function ContentManagement() {
                   {modalMode === 'view' ? (
                     <div className="cm-view-field min-h-24">{currentTip.content}</div>
                   ) : (
-                    <textarea 
-                      rows="4" 
+                    <textarea
+                      rows="4"
                       value={currentTip.content}
-                      onChange={e => setCurrentTip({...currentTip, content: e.target.value})}
+                      onChange={e => setCurrentTip({ ...currentTip, content: e.target.value })}
                       required
                     />
                   )}
                 </div>
               </div>
-              
+
               <div className="cm-modal-footer">
                 <button type="button" className="cm-btn-cancel" onClick={closeModal}>Close</button>
                 {modalMode !== 'view' && (

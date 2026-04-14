@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { useLanguage } from '../../context/LanguageContext'
 import './LogPeriod.css'
 
 export default function LogPeriod() {
@@ -10,6 +11,7 @@ export default function LogPeriod() {
   const [flow, setFlow] = useState('medium')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -38,9 +40,9 @@ export default function LogPeriod() {
         <div className="log-period-header">
           <button className="back-arrow-btn" onClick={() => navigate('/dashboard')}>
             <ChevronLeft size={32} />
-            <span>Log Period</span>
+            <span>{t('logPeriodTitle')}</span>
           </button>
-          <p className="log-period-subtitle">Record your period dates and flow</p>
+          <p className="log-period-subtitle">{t('logPeriodSubtitle')}</p>
         </div>
 
         <div className="log-period-container">
@@ -48,7 +50,7 @@ export default function LogPeriod() {
             <form onSubmit={handleSubmit} className="log-period-form">
               
               <div className="form-section">
-                <label>Start Date</label>
+                <label>{t('startDateLabel')}</label>
                 <div className="input-field">
                   <input
                     type="date"
@@ -60,7 +62,7 @@ export default function LogPeriod() {
               </div>
 
               <div className="form-section">
-                <label>End Date</label>
+                <label>{t('endDateLabel')}</label>
                 <div className="input-field">
                   <input
                     type="date"
@@ -72,7 +74,7 @@ export default function LogPeriod() {
               </div>
 
               <div className="form-section">
-                <label className="flow-label">Flow</label>
+                <label className="flow-label">{t('flowLabel')}</label>
                 <div className="flow-radio-group">
                   <label className="flow-radio-item">
                     <input 
@@ -83,7 +85,7 @@ export default function LogPeriod() {
                       onChange={() => setFlow('light')} 
                     />
                     <div className="radio-circle"></div>
-                    <span>Light flow</span>
+                    <span>{t('lightFlowLabel')}</span>
                   </label>
                   <label className="flow-radio-item">
                     <input 
@@ -94,7 +96,7 @@ export default function LogPeriod() {
                       onChange={() => setFlow('medium')} 
                     />
                     <div className="radio-circle"></div>
-                    <span>Medium flow</span>
+                    <span>{t('mediumFlowLabel')}</span>
                   </label>
                   <label className="flow-radio-item">
                     <input 
@@ -105,7 +107,7 @@ export default function LogPeriod() {
                       onChange={() => setFlow('heavy')} 
                     />
                     <div className="radio-circle"></div>
-                    <span>Heavy flow</span>
+                    <span>{t('heavyFlowLabel')}</span>
                   </label>
                 </div>
               </div>
@@ -116,14 +118,14 @@ export default function LogPeriod() {
                   className="lp-back-btn" 
                   onClick={() => navigate('/dashboard')}
                 >
-                  Back
+                  {t('back')}
                 </button>
                 <button 
                   type="submit" 
                   className="lp-continue-btn" 
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Saving...' : 'Continue'}
+                  {isLoading ? t('saving') : t('continue')}
                 </button>
               </div>
 

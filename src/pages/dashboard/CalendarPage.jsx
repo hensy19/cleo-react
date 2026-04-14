@@ -2,13 +2,23 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { useLanguage } from '../../context/LanguageContext'
 import './CalendarPage.css'
-
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
-const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 
 export default function CalendarPage() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
+  
+  const MONTH_NAMES = [
+    t('months.jan'), t('months.feb'), t('months.mar'), t('months.apr'), 
+    t('months.may'), t('months.jun'), t('months.jul'), t('months.aug'), 
+    t('months.sep'), t('months.oct'), t('months.nov'), t('months.dec')
+  ]
+  const WEEKDAYS = [
+    t('weekdays.sun'), t('weekdays.mon'), t('weekdays.tue'), t('weekdays.wed'), 
+    t('weekdays.thu'), t('weekdays.fri'), t('weekdays.sat')
+  ]
+
   const today = new Date()
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
@@ -56,7 +66,7 @@ export default function CalendarPage() {
 
     // Combine manual logs and temp selections to find the latest "start"
     const allDays = [...periodDays, ...tempSelectedDates].sort()
-    
+
     let latestStartStr = userInfo?.lastPeriodDate || null
 
     if (allDays.length > 0) {
@@ -64,7 +74,7 @@ export default function CalendarPage() {
       // For simplicity, we take the absolute latest day and look back to find its start
       const latestDay = new Date(allDays[allDays.length - 1])
       let current = new Date(latestDay)
-      
+
       // Look back through allDays to find the earliest day of this block
       while (allDays.includes(formatDate(current))) {
         latestStartStr = formatDate(current)
@@ -74,7 +84,7 @@ export default function CalendarPage() {
 
     if (latestStartStr) {
       const start = new Date(latestStartStr)
-      
+
       // Calculate Ovulation (Day 14)
       const ovDate = new Date(start)
       ovDate.setDate(ovDate.getDate() + Math.floor(cycleLength / 2))
@@ -253,7 +263,7 @@ export default function CalendarPage() {
     if (tempSelectedDates.length === 0) return
 
     const logs = JSON.parse(localStorage.getItem('periodLogs') || '[]')
-    
+
     tempSelectedDates.forEach(date => {
       // Check if already exists to avoid duplicates
       if (!periodDays.includes(date)) {
@@ -274,10 +284,10 @@ export default function CalendarPage() {
   }
 
   const FLOW_OPTIONS = [
-    { id: 'Light', label: 'Light', icon: '🩸' },
-    { id: 'Medium', label: 'Medium', icon: '🩸' },
-    { id: 'Heavy', label: 'Heavy', icon: '🩸' },
-    { id: 'Super Heavy', label: 'Super', icon: '🩸' }
+    { id: 'Light', label: t('light'), icon: '🩸' },
+    { id: 'Medium', label: t('medium'), icon: '🩸' },
+    { id: 'Heavy', label: t('heavy'), icon: '🩸' },
+    { id: 'Super Heavy', label: t('superFlow'), icon: '🩸' }
   ]
 
   const MOOD_EMOJIS = { happy: '😊', calm: '😌', tired: '😴', sad: '😢', energetic: '⚡', angry: '😠', anxious: '😰', peaceful: '💜', neutral: '😐', crying: '😭' }
@@ -292,8 +302,8 @@ export default function CalendarPage() {
             <button className="back-btn" onClick={() => navigate('/dashboard')}>
               <ChevronLeft size={20} />
               <div className="title-group">
-                <h1 className="cal-title">Cycle Calendar</h1>
-                <p className="cal-subtitle">Track and manage your cycle</p>
+                <h1 className="cal-title">{t('cycleCalendar')}</h1>
+                <p className="cal-subtitle">{t('trackManageCycle')}</p>
               </div>
             </button>
           </div>
@@ -310,8 +320,8 @@ export default function CalendarPage() {
                 <path d="M12 2.5C12 2.5 6 10 6 15.5C6 18.5 8.5 21 12 21C15.5 21 18 18.5 18 15.5C18 10 12 2.5 12 2.5Z" />
               </svg>
             </button>
-            <button className="cal-btn cal-btn-primary" onClick={() => navigate('/log-period')}>Log Period</button>
-            <button className="cal-btn cal-btn-secondary" onClick={() => navigate('/history')}>View History</button>
+            <button className="cal-btn cal-btn-primary" onClick={() => navigate('/log-period')}>{t('logPeriod')}</button>
+            <button className="cal-btn cal-btn-secondary" onClick={() => navigate('/history')}>{t('viewHistory')}</button>
           </div>
         </div>
 
@@ -348,7 +358,7 @@ export default function CalendarPage() {
                 if (isSelected) statusClasses += ' cal-day-selected'
                 if (isTempSelected) statusClasses += ' cal-day-temp-selected'
                 if (isSelectionMode) statusClasses += ' selection-mode'
-                
+
                 // Prediction classes (only if not a current/temp period day)
                 if (!isPeriod && !isTempSelected) {
                   if (isOvulation) statusClasses += ' cal-day-ovulation'
@@ -388,19 +398,19 @@ export default function CalendarPage() {
             <div className="cal-legend">
               <div className="cal-legend-item">
                 <span className="legend-indicator period"></span>
-                <span className="legend-label">Period Days</span>
+                <span className="legend-label">{t('periodDays')}</span>
               </div>
               <div className="cal-legend-item">
                 <span className="legend-indicator fertile"></span>
-                <span className="legend-label">Fertile Window</span>
+                <span className="legend-label">{t('fertileWindow')}</span>
               </div>
               <div className="cal-legend-item">
                 <span className="legend-indicator ovulation"></span>
-                <span className="legend-label">Ovulation Day</span>
+                <span className="legend-label">{t('ovulationDay')}</span>
               </div>
               <div className="cal-legend-item">
                 <span className="legend-indicator predicted"></span>
-                <span className="legend-label">Predicted Period</span>
+                <span className="legend-label">{t('predictedPeriod')}</span>
               </div>
             </div>
           </div>
@@ -411,10 +421,10 @@ export default function CalendarPage() {
           <div className="period-selection-panel">
             <div className="panel-content">
               <div className="panel-header">
-                <h3>Your period flow</h3>
-                <span className="selected-count">{tempSelectedDates.length} days selected</span>
+                <h3>{t('periodFlow')}</h3>
+                <span className="selected-count">{tempSelectedDates.length} {t('daysSelected')}</span>
               </div>
-              
+
               <div className="flow-selector">
                 {FLOW_OPTIONS.map(flow => (
                   <button
@@ -432,12 +442,12 @@ export default function CalendarPage() {
                 ))}
               </div>
 
-              <button 
-                className="save-period-btn" 
+              <button
+                className="save-period-btn"
                 onClick={handleSavePeriod}
                 disabled={tempSelectedDates.length === 0}
               >
-                Save all
+                {t('saveAll')}
               </button>
             </div>
           </div>
@@ -457,13 +467,13 @@ export default function CalendarPage() {
                 <div className="cal-modal-section">
                   <div className="cal-modal-section-header">
                     <span className="cal-modal-icon">🩸</span>
-                    <h4>Period</h4>
+                    <h4>{t('periodCycle')}</h4>
                   </div>
                   <button
                     className={`cal-period-toggle ${modalData.isPeriod ? 'active' : ''}`}
                     onClick={togglePeriodDay}
                   >
-                    {modalData.isPeriod ? '✓ Period Day' : 'Mark as Period Day'}
+                    {modalData.isPeriod ? t('periodDayActive') : t('markPeriodDay')}
                   </button>
                 </div>
 
@@ -471,7 +481,7 @@ export default function CalendarPage() {
                 <div className="cal-modal-section">
                   <div className="cal-modal-section-header">
                     <span className="cal-modal-icon">😊</span>
-                    <h4>Mood</h4>
+                    <h4>{t('mood')}</h4>
                   </div>
                   {modalData.dayMoods.length > 0 ? (
                     <div className="cal-modal-chips">
@@ -482,7 +492,7 @@ export default function CalendarPage() {
                       ))}
                     </div>
                   ) : (
-                    <p className="cal-modal-empty">No mood logged</p>
+                    <p className="cal-modal-empty">{t('noMoodLogged')}</p>
                   )}
                 </div>
 
@@ -490,7 +500,7 @@ export default function CalendarPage() {
                 <div className="cal-modal-section">
                   <div className="cal-modal-section-header">
                     <span className="cal-modal-icon">🤒</span>
-                    <h4>Symptoms</h4>
+                    <h4>{t('symptoms')}</h4>
                   </div>
                   {modalData.daySymptoms.length > 0 ? (
                     <div className="cal-modal-chips">
@@ -503,7 +513,7 @@ export default function CalendarPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="cal-modal-empty">No symptoms logged</p>
+                    <p className="cal-modal-empty">{t('noSymptomsLogged')}</p>
                   )}
                 </div>
 
@@ -511,7 +521,7 @@ export default function CalendarPage() {
                 <div className="cal-modal-section">
                   <div className="cal-modal-section-header">
                     <span className="cal-modal-icon">📝</span>
-                    <h4>Notes</h4>
+                    <h4>{t('notes')}</h4>
                   </div>
                   {modalData.dayNotes.length > 0 ? (
                     <div className="cal-modal-notes">
@@ -523,19 +533,19 @@ export default function CalendarPage() {
                       ))}
                     </div>
                   ) : (
-                    <p className="cal-modal-empty">No notes for this day</p>
+                    <p className="cal-modal-empty">{t('noNotesForDay')}</p>
                   )}
 
                   {/* Quick Note Input */}
                   <div className="cal-quick-note">
                     <input
                       type="text"
-                      placeholder="Write a quick note..."
+                      placeholder={t('writeQuickNote')}
                       value={quickNote}
                       onChange={e => setQuickNote(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && saveQuickNote()}
                     />
-                    <button onClick={saveQuickNote} disabled={!quickNote.trim()}>Add</button>
+                    <button onClick={saveQuickNote} disabled={!quickNote.trim()}>{t('add')}</button>
                   </div>
                 </div>
               </div>

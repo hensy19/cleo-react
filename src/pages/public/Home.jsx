@@ -4,10 +4,12 @@ import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
 import Button from '../../components/common/Button'
 import femaleImage from '../../assets/images/female.png'
+import { useLanguage } from '../../context/LanguageContext'
 import './Home.css'
 
 export default function Home() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken')
@@ -19,38 +21,38 @@ export default function Home() {
     {
       id: 1,
       icon: '📅',
-      title: 'Cycle Tracking',
-      description: 'Easily log and monitor your menstrual cycle with our intuitive tracking interface.'
+      title: t('cycleTracking'),
+      description: t('cycleTrackingDesc')
     },
     {
       id: 2,
       icon: '✨',
-      title: 'Fertility Insights',
-      description: 'Understand your fertile window and plan accordingly with accurate predictions.'
+      title: t('fertilityInsights'),
+      description: t('fertilityInsightsDesc')
     },
     {
       id: 3,
       icon: '📊',
-      title: 'Health Analytics',
-      description: 'Track your health trends and gain detailed insights into your cycle patterns.'
+      title: t('healthAnalytics'),
+      description: t('healthAnalyticsDesc')
     },
     {
       id: 4,
       icon: '😊',
-      title: 'Mood Tracking',
-      description: 'Log your mood and symptoms to understand how your cycle affects your well-being.'
+      title: t('moodTracking'),
+      description: t('moodTrackingDesc')
     },
     {
       id: 5,
       icon: '💡',
-      title: 'Personalized Advice',
-      description: 'Receive tailored recommendations based on your unique cycle and lifestyle.'
+      title: t('personalizedAdvice'),
+      description: t('personalizedAdviceDesc')
     },
     {
       id: 6,
       icon: '🔮',
-      title: 'Cycle Predictions',
-      description: 'Get accurate predictions for your next period and fertility window.'
+      title: t('cyclePredictions'),
+      description: t('cyclePredictionsDesc')
     }
   ]
 
@@ -58,20 +60,20 @@ export default function Home() {
     {
       number: 1,
       icon: '📝',
-      title: 'Log Your Cycle',
-      description: 'Start by logging your period and cycle information in just a few taps.'
+      title: t('logYourCycle'),
+      description: t('logYourCycleDesc')
     },
     {
       number: 2,
       icon: '🌟',
-      title: 'Track Symptoms & Mood',
-      description: 'Record your symptoms and mood throughout your cycle to see patterns.'
+      title: t('trackSymptomsMood'),
+      description: t('trackSymptomsMoodDesc')
     },
     {
       number: 3,
       icon: '🎯',
-      title: 'Get Insights & Predictions',
-      description: 'Receive personalized insights and accurate predictions for your health.'
+      title: t('getInsightsPredictions'),
+      description: t('getInsightsPredictionsDesc')
     }
   ]
 
@@ -83,16 +85,15 @@ export default function Home() {
       <section className="hero-section" id="home">
         <div className="hero-container">
           <div className="hero-content">
-            <h1 className="hero-title">Rhythm. Insight. Balance.</h1>
+            <h1 className="hero-title">{t('heroTitle')}</h1>
             <p className="hero-subtitle">
-              Track your menstrual cycle with ease and gain valuable insights into your body's unique patterns. 
-              Understand your rhythm and take control of your health.
+              {t('heroSubtitle')}
             </p>
             <div className="hero-buttons">
               <Link to="/signup">
-                <Button variant="primary" size="large">Start Tracking</Button>
+                <Button variant="primary" size="large">{t('startTracking')}</Button>
               </Link>
-              <button className="btn-secondary">Learn More</button>
+              <button className="btn-secondary">{t('learnMore')}</button>
             </div>
             
           </div>
@@ -105,7 +106,7 @@ export default function Home() {
       {/* Features Section */}
       <section className="features-section" id="features">
         <div className="features-container">
-          <h2 className="section-title">Everything You Need to Know About Your Cycle</h2>
+          <h2 className="section-title">{t('everythingYouNeed')}</h2>
           <div className="features-grid">
             {features.map(feature => (
               <div key={feature.id} className="feature-card">
@@ -121,7 +122,7 @@ export default function Home() {
       {/* How It Works Section */}
       <section className="how-it-works-section" id="how-it-works">
         <div className="how-container">
-          <h2 className="section-title">How cleo works</h2>
+          <h2 className="section-title">{t('howCleoWorks')}</h2>
           <div className="steps-grid">
             {steps.map(step => (
               <div key={step.number} className="step-card">
@@ -138,13 +139,12 @@ export default function Home() {
       {/* CTA Section */}
       <section className="cta-section">
         <div className="cta-card">
-          <h2 className="cta-title">Ready to Start Your Journey?</h2>
+          <h2 className="cta-title">{t('readyToStart')}</h2>
           <p className="cta-subtitle">
-            Take the first step towards understanding your cycle better. 
-            Join thousands of women using CLEO to track their health.
+            {t('thousandsOfWomen')}
           </p>
           <Link to="/signup">
-            <Button variant="white" size="large">Start Tracking Now</Button>
+            <Button variant="white" size="large">{t('startTrackingNow')}</Button>
           </Link>
         </div>
       </section>
