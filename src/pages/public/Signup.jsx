@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, ShieldCheck, X, Scale, FileText } from 'lucide-react'
 import signupImage from '../../assets/images/signup.svg'
+import logo from '../../assets/images/logo.png'
 import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
@@ -82,6 +83,7 @@ export default function Signup() {
         <div className="signup-container">
           <div className="signup-card">
             <div className="signup-header">
+              <img src={logo} alt="CLEO Logo" className="signup-logo" />
               <h1>{t('createAccount')}</h1>
               <p>{t('joinUsTracking')}</p>
             </div>

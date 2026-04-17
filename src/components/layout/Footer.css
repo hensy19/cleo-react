@@ -18,11 +18,11 @@
   gap: 3rem;
 }
 
-.footer-section h3 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-  color: #fff;
+.footer-logo {
+  height: 32px;
+  width: auto;
+  margin-bottom: 1rem;
+  filter: brightness(0) invert(1); /* Make logo white for dark footer */
 }
 
 .footer-section h4 {

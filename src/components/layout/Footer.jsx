@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import logo from '../../assets/images/logo.png'
 import './Footer.css'
 
 export default function Footer() {
@@ -7,8 +8,10 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
-        <div className="footer-section">
-          <h3>CLEO</h3>
+        <div className="footer-section footer-brand">
+          <Link to="/">
+            <img src={logo} alt="CLEO Logo" className="footer-logo" />
+          </Link>
           <p>Track and understand your menstrual cycle with ease.</p>
         </div>
 

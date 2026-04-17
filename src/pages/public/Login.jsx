@@ -4,6 +4,7 @@ import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import signinImage from '../../assets/images/signin.svg'
+import logo from '../../assets/images/logo.png'
 import { Eye, EyeOff } from 'lucide-react'
 import { useLanguage } from '../../context/LanguageContext'
 import './Login.css'
@@ -55,6 +56,7 @@ export default function Login() {
         <div className="login-container">
           <div className="login-card">
             <div className="login-header">
+              <img src={logo} alt="CLEO Logo" className="login-logo" />
               <h1>{t('helloAgain')}</h1>
               <p>{t('welcomeBackMissed')}</p>
             </div>

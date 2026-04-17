@@ -438,3 +438,5 @@
   font-weight: bold;
 }
 
+
+.signup-logo { display: block; width: 120px; margin: 0 auto 1.25rem; object-fit: contain; }

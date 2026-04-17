@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import logo from '../../assets/images/logo.png'
 import './AdminLayout.css'
 
 export default function AdminLayout({ children, activePage = 'dashboard', onSearch }) {
@@ -29,9 +30,8 @@ export default function AdminLayout({ children, activePage = 'dashboard', onSear
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="admin-sidebar-top">
-          <div className="admin-logo">
-            
-            <span>cleoAdmin</span>
+          <div className="admin-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+            <img src={logo} alt="CLEO Logo" className="admin-logo-image" />
           </div>
 
           <div className="admin-nav-section">
