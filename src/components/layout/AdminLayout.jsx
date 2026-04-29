@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import logo from '../../assets/images/logo.png'
+import { useSettings } from '../../context/SettingsContext'
 import './AdminLayout.css'
 
 export default function AdminLayout({ children, activePage = 'dashboard', onSearch }) {
   const navigate = useNavigate()
-  
+  const { logoUrl } = useSettings()
   const [isSettingsOpen, setIsSettingsOpen] = useState(activePage.startsWith('settings'))
 
   const handleLogout = () => {
@@ -31,7 +31,7 @@ export default function AdminLayout({ children, activePage = 'dashboard', onSear
       <aside className="admin-sidebar">
         <div className="admin-sidebar-top">
           <div className="admin-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            <img src={logo} alt="CLEO Logo" className="admin-logo-image" />
+            <img src={logoUrl} alt="CLEO Logo" className="admin-logo-image" />
           </div>
 
           <div className="admin-nav-section">

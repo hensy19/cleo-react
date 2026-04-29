@@ -4,6 +4,7 @@ import Button from '../common/Button'
 import Input from '../common/Input'
 import Card from '../common/Card'
 import bgImage from '../../assets/images/bg.jpg'
+import { api } from '../../utils/api'
 import './Onboarding.css'
 
 export default function Onboarding() {
@@ -68,21 +69,24 @@ export default function Onboarding() {
     }
   }
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     if (validateStep()) {
-      // Save onboarding data
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-      const updatedInfo = {
-        ...userInfo,
-        age: parseInt(answers.age),
-        cycleLength: parseInt(answers.cycleLength),
-        periodLength: parseInt(answers.periodLength),
-        lastPeriodDate: answers.lastPeriodDate,
-        onboardingCompleted: true
+      try {
+        const response = await api.completeOnboarding({
+          age: parseInt(answers.age),
+          cycleLength: parseInt(answers.cycleLength),
+          periodLength: parseInt(answers.periodLength),
+          lastPeriodDate: answers.lastPeriodDate
+        });
+
+        // Update local storage with new user info
+        localStorage.setItem('userInfo', JSON.stringify(response.user));
+        localStorage.setItem('onboardingCompleted', 'true'); // Still keep for quick check
+        navigate('/dashboard');
+      } catch (err) {
+        console.error('Failed to complete onboarding:', err);
+        setErrors({ server: 'Failed to save onboarding data. Please try again.' });
       }
-      localStorage.setItem('userInfo', JSON.stringify(updatedInfo))
-      localStorage.setItem('onboardingCompleted', 'true')
-      navigate('/dashboard')
     }
   }
 

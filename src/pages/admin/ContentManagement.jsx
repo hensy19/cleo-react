@@ -4,19 +4,7 @@ import AdminLayout from '../../components/layout/AdminLayout'
 import { useNotifications } from '../../context/NotificationContext'
 import './ContentManagement.css'
 
-// Mock Tip Data matching the image contents
-const MOCK_TIPS = [
-  { id: 1, category: "Diet and nutrition", title: "Iron-Rich Foods", content: "Include spinach and lentils during menstruation", status: "published" },
-  { id: 2, category: "Exercise", title: "Gentle Workouts", content: "Try yoga or walking during your period.", status: "published" },
-  { id: 3, category: "PMS Relief", title: "Mood Support", content: "Practice mindfulness and meditation.", status: "published" },
-  { id: 4, category: "Hygiene", title: "Iron-Rich Foods", content: "Include spinach and lentils during menstruation", status: "draft" },
-  { id: 5, category: "Diet and nutrition", title: "Iron-Rich Foods", content: "Include spinach and lentils during menstruation", status: "published" },
-  { id: 6, category: "PMS Relief", title: "Mood Support", content: "Practice mindfulness and meditation.", status: "published" },
-  { id: 7, category: "Hygiene", title: "Iron-Rich Foods", content: "Include spinach and lentils during menstruation", status: "published" },
-  { id: 8, category: "Diet and nutrition", title: "Iron-Rich Foods", content: "Include spinach and lentils during menstruation", status: "published" },
-  { id: 9, category: "Exercise", title: "Strength Training", content: "During the follicular phase, you may have more energy for intense workouts.", status: "published" },
-  { id: 10, category: "Exercise", title: "Gentle Movement", content: "Light yoga or walking can help reduce menstrual cramps.", status: "published" },
-]
+// Mock Data removed - using live backend data
 
 const CATEGORY_OPTIONS = [
   "Diet and nutrition",
@@ -26,15 +14,18 @@ const CATEGORY_OPTIONS = [
   "Wellness"
 ]
 
+import { api } from '../../utils/api'
+
 export default function ContentManagement() {
   const navigate = useNavigate()
   const { showModal, showToast } = useNotifications()
 
   // States
-  const [tips, setTips] = useState(MOCK_TIPS)
+  const [tips, setTips] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Modal States
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -43,13 +34,29 @@ export default function ContentManagement() {
 
   const dropdownRef = useRef(null)
 
-  // Auth check
+  // Auth check & Fetch
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken')
     if (!adminToken) {
       navigate('/admin/login')
+      return
     }
+    
+    fetchContent()
   }, [navigate])
+
+  const fetchContent = async () => {
+    try {
+      setIsLoading(true)
+      const data = await api.getAdminTips()
+      setTips(data)
+    } catch (err) {
+      console.error("Failed to fetch tips", err)
+      showToast('Failed to load tips from database')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   // Handle outside click for dropdown
   useEffect(() => {
@@ -65,7 +72,7 @@ export default function ContentManagement() {
   // Filtering Logic
   const filteredTips = tips.filter(tip => {
     const matchesSearch = tip.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tip.content.toLowerCase().includes(searchTerm.toLowerCase())
+      (tip.content && tip.content.toLowerCase().includes(searchTerm.toLowerCase()))
     const matchesCategory = selectedCategory ? tip.category === selectedCategory : true
     return matchesSearch && matchesCategory
   })
@@ -77,15 +84,20 @@ export default function ContentManagement() {
       message: 'Are you sure you want to delete this tip? This article will be permanently removed.',
       type: 'danger',
       confirmText: 'Delete',
-      onConfirm: () => {
-        setTips(tips.filter(t => t.id !== id))
-        showToast('Tip deleted successfully!')
+      onConfirm: async () => {
+        try {
+          await api.deleteAdminTip(id)
+          setTips(tips.filter(t => t.id !== id))
+          showToast('Tip deleted successfully!')
+        } catch (err) {
+          showToast('Failed to delete tip')
+        }
       }
     })
   }
 
   const openModal = (tip, mode) => {
-    setCurrentTip(tip ? { ...tip } : { category: CATEGORY_OPTIONS[0], title: '', content: '', status: 'draft' })
+    setCurrentTip(tip ? { ...tip } : { category: CATEGORY_OPTIONS[0], title: '', content: '', detailed_content: '', status: 'draft' })
     setModalMode(mode)
     setIsModalOpen(true)
   }
@@ -95,17 +107,22 @@ export default function ContentManagement() {
     setCurrentTip(null)
   }
 
-  const handleModalSave = (e) => {
+  const handleModalSave = async (e) => {
     e.preventDefault()
-    if (modalMode === 'edit') {
-      setTips(tips.map(t => t.id === currentTip.id ? currentTip : t))
-      showToast('Tip updated successfully!')
-    } else if (modalMode === 'new') {
-      const newTip = { ...currentTip, id: Date.now() }
-      setTips([newTip, ...tips])
-      showToast('Tip created successfully!')
+    try {
+      if (modalMode === 'edit') {
+        const updated = await api.updateAdminTip(currentTip.id, currentTip)
+        setTips(tips.map(t => t.id === currentTip.id ? updated : t))
+        showToast('Tip updated successfully!')
+      } else if (modalMode === 'new') {
+        const created = await api.createAdminTip(currentTip)
+        setTips([created, ...tips])
+        showToast('Tip created successfully!')
+      }
+      closeModal()
+    } catch (err) {
+      showToast('Failed to save tip')
     }
-    closeModal()
   }
 
   return (
@@ -127,28 +144,28 @@ export default function ContentManagement() {
         <div className="cm-stat-card">
           <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H15" /><path d="M12 21v-4" /><path d="M12 17a4 4 0 1 0-4-4c0 3 2 4 2 4h4s2-1 2-4a4 4 0 1 0-4 4z" /></svg>
           <div className="cm-stat-info">
-            <span className="cm-stat-num">13</span>
+            <span className="cm-stat-num">{tips.length}</span>
             <span className="cm-stat-lbl">Total Tips</span>
           </div>
         </div>
         <div className="cm-stat-card">
           <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
           <div className="cm-stat-info">
-            <span className="cm-stat-num">12</span>
+            <span className="cm-stat-num">{tips.filter(t => t.status === 'published').length}</span>
             <span className="cm-stat-lbl">Published</span>
           </div>
         </div>
         <div className="cm-stat-card">
           <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
           <div className="cm-stat-info">
-            <span className="cm-stat-num">2</span>
+            <span className="cm-stat-num">{tips.filter(t => t.status === 'draft').length}</span>
             <span className="cm-stat-lbl">Drafts</span>
           </div>
         </div>
         <div className="cm-stat-card">
           <svg className="cm-stat-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <div className="cm-stat-info">
-            <span className="cm-stat-num">6</span>
+            <span className="cm-stat-num">{new Set(tips.map(t => t.category)).size}</span>
             <span className="cm-stat-lbl">Categories</span>
           </div>
         </div>
@@ -310,15 +327,30 @@ export default function ContentManagement() {
                 </div>
 
                 <div className="cm-form-group">
-                  <label>Content</label>
+                  <label>Content (Short Description)</label>
                   {modalMode === 'view' ? (
                     <div className="cm-view-field min-h-24">{currentTip.content}</div>
                   ) : (
                     <textarea
-                      rows="4"
-                      value={currentTip.content}
+                      rows="3"
+                      value={currentTip.content || ''}
                       onChange={e => setCurrentTip({ ...currentTip, content: e.target.value })}
                       required
+                    />
+                  )}
+                </div>
+
+                <div className="cm-form-group">
+                  <label>Detailed Content</label>
+                  {modalMode === 'view' ? (
+                    <div className="cm-view-field min-h-24" dangerouslySetInnerHTML={{ __html: currentTip.detailed_content }}></div>
+                  ) : (
+                    <textarea
+                      rows="6"
+                      value={currentTip.detailed_content || ''}
+                      onChange={e => setCurrentTip({ ...currentTip, detailed_content: e.target.value })}
+                      required
+                      placeholder="Enter detailed HTML or text content here..."
                     />
                   )}
                 </div>

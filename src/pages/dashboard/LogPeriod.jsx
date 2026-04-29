@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './LogPeriod.css'
 
 export default function LogPeriod() {
@@ -13,24 +14,32 @@ export default function LogPeriod() {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!startDate || !endDate) return
 
     setIsLoading(true)
-    setTimeout(() => {
-      const periodLogs = JSON.parse(localStorage.getItem('periodLogs') || '[]')
-      periodLogs.push({
-        id: Date.now(),
-        startDate,
-        endDate,
-        flow,
-        createdAt: new Date().toISOString()
+    try {
+      await api.logPeriod({
+        start_date: startDate,
+        end_date: endDate,
+        flow
       })
-      localStorage.setItem('periodLogs', JSON.stringify(periodLogs))
-      setIsLoading(false)
+      
+      // Update local storage for immediate UI dashboard updates if needed
+      // (Though a full reload or refetch is better)
+      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+      localStorage.setItem('userInfo', JSON.stringify({
+        ...userInfo,
+        lastPeriodDate: startDate
+      }))
+
       navigate('/dashboard')
-    }, 800)
+    } catch (err) {
+      console.error("Error logging period:", err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

@@ -47,6 +47,17 @@
   gap: 1rem;
 }
 
+.error-alert {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #fee2e2;
+  text-align: center;
+}
+
 .password-toggle-inline {
   background: none;
   border: none;

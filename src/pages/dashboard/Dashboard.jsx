@@ -18,9 +18,13 @@ import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
 import Button from '../../components/common/Button'
 import { useLanguage } from '../../context/LanguageContext'
+import { useSettings } from '../../context/SettingsContext'
 import './Dashboard.css'
+import { calculatePredictions, getCycleDay, daysUntil, formatDateToISO } from '../../utils/cycleUtils'
+import { formatDate } from '../../utils/helpers'
 
 export default function Dashboard() {
+  const { settings } = useSettings()
   const [selectedMood, setSelectedMood] = useState(null)
   const [toast, setToast] = useState({ show: false, message: '' })
   const [user, setUser] = useState(null)
@@ -78,33 +82,44 @@ export default function Dashboard() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
     setUser(userInfo)
 
-    // Mock data for the dashboard elements
+    // Calculate real data based on user cycle settings
+    const lastStart = userInfo.lastPeriodDate
+    const cycleLen = parseInt(userInfo.cycleLength || 28)
+    const periodLen = parseInt(userInfo.periodLength || 5)
+
+    const predictions = calculatePredictions(lastStart, cycleLen, periodLen)
+    const nextPeriodDate = predictions.nextPeriod[0]
+    const ovulationDate = predictions.ovulation[0]
+    const currentDay = getCycleDay(lastStart)
+    const daysLeft = daysUntil(nextPeriodDate)
+    const daysToOv = daysUntil(ovulationDate)
+
     setCycleData({
       firstPeriod: {
-        date: 'Feb 28, 2026',
-        daysUntil: 14,
-        progress: 60
+        date: formatDate(nextPeriodDate),
+        daysUntil: daysLeft,
+        progress: Math.min(100, Math.max(0, ((cycleLen - daysLeft) / cycleLen) * 100))
       },
       ovulation: {
-        date: 'Feb 21, 2026',
-        daysUntil: 7,
-        status: 'peak'
+        date: formatDate(ovulationDate),
+        daysUntil: Math.max(0, daysToOv),
+        status: daysToOv <= 2 && daysToOv >= 0 ? 'peak' : 'approaching'
       },
       currentCycle: {
-        day: 14,
-        totalDays: 28,
-        percentage: 50
+        day: currentDay || 0,
+        totalDays: cycleLen,
+        percentage: currentDay ? Math.min(100, (currentDay / cycleLen) * 100) : 0
       },
       insights: [
-        { id: 1, title: 'Regular Cycle Pattern', description: 'Your cycle has been consistent for the last 03 months.', icon: '📈' },
-        { id: 2, title: 'Upcoming Fertile Window', description: 'Fertility window starts next 05 days.', icon: '✨' },
-        { id: 3, title: 'Average Cycle Length', description: 'Your average cycle is 28 days.', icon: '⏳' }
+        { id: 1, title: 'Regular Cycle Pattern', description: `Your cycle is set to ${cycleLen} days.`, icon: '📈' },
+        { id: 2, title: 'Upcoming Fertile Window', description: `Fertility window starts in about ${Math.max(0, daysToOv - 5)} days.`, icon: '✨' },
+        { id: 3, title: 'Average Cycle Length', description: `Your average cycle is ${cycleLen} days.`, icon: '⏳' }
       ],
-      recentNotes: [
-        { id: 1, date: 'Feb 15, 2026', content: 'Feeling slightly better today after the...' },
-        { id: 2, date: 'Feb 12, 2026', content: 'Mild cramps in the morning...' },
-        { id: 3, date: 'Feb 11, 2026', content: 'The diet seems to be working...' }
-      ]
+      recentNotes: JSON.parse(localStorage.getItem('userNotes') || '[]').slice(0, 3).map(n => ({
+        id: n.id,
+        date: n.date,
+        content: n.content
+      }))
     })
   }, [navigate])
 
@@ -148,55 +163,59 @@ export default function Dashboard() {
           <div className="dashboard-main">
 
             {/* Summary Row */}
-            <div className="summary-row">
-              <Card
-                className="summary-card period-card"
-                hover={true}
-                onClick={() => navigate('/calendar')}
-              >
-                <div className="card-header">
-                  <span className="card-label">{t('firstPeriod')}</span>
-                  <div className="card-icon-small">📅</div>
-                </div>
-                <h2 className="card-value">{cycleData?.firstPeriod.date}</h2>
-                <p className="card-subtext">in {cycleData?.firstPeriod.daysUntil} days</p>
-                <div className="progress-bar-container">
-                  <div className="progress-bar-fill" style={{ width: `${cycleData?.firstPeriod.progress}%` }}></div>
-                </div>
-              </Card>
-
-              <Card
-                className="summary-card ovulation-card"
-                hover={true}
-                onClick={() => navigate('/calendar')}
-              >
-                <div className="card-header">
-                  <span className="card-label">{t('ovulationDay')}</span>
-                  <div className="card-icon-small card-icon-heart">💜</div>
-                </div>
-                <h2 className="card-value">{cycleData?.ovulation.date}</h2>
-                <p className="card-subtext">{t('inDays')} {cycleData?.ovulation.daysUntil} {t('days')}</p>
-                <span className="status-tag tag-purple">{t('peakStatus')}</span>
-              </Card>
-
-              <Card
-                className="summary-card cycle-card"
-                hover={true}
-                onClick={() => navigate('/history')}
-              >
-                <span className="card-label">{t('currentCycleDay')}</span>
-                <div className="cycle-progress-container">
-                  <div className="cycle-info">
-                    <span className="cycle-day">{cycleData?.currentCycle.day}</span>
-                    <span className="cycle-total">{t('of')} {cycleData?.currentCycle.totalDays} {t('days')}</span>
+            {settings.showCycleSummary !== false && (
+              <div className="summary-row">
+                <Card
+                  className="summary-card period-card"
+                  hover={true}
+                  onClick={() => navigate('/calendar')}
+                >
+                  <div className="card-header">
+                    <span className="card-label">{t('firstPeriod')}</span>
+                    <div className="card-icon-small">📅</div>
                   </div>
-                  <div className="circular-progress">
-                    {/* SVG circular progress can be added here or just styled div */}
-                    <div className="circular-percentage">50%</div>
+                  <h2 className="card-value">{cycleData?.firstPeriod.date}</h2>
+                  <p className="card-subtext">in {cycleData?.firstPeriod.daysUntil} days</p>
+                  <div className="progress-bar-container">
+                    <div className="progress-bar-fill" style={{ width: `${cycleData?.firstPeriod.progress}%` }}></div>
                   </div>
-                </div>
-              </Card>
-            </div>
+                </Card>
+
+                {settings.enableOvulationDisplay !== false && (
+                  <Card
+                    className="summary-card ovulation-card"
+                    hover={true}
+                    onClick={() => navigate('/calendar')}
+                  >
+                    <div className="card-header">
+                      <span className="card-label">{t('ovulationDay')}</span>
+                      <div className="card-icon-small card-icon-heart">💜</div>
+                    </div>
+                    <h2 className="card-value">{cycleData?.ovulation.date}</h2>
+                    <p className="card-subtext">{t('inDays')} {cycleData?.ovulation.daysUntil} {t('days')}</p>
+                    <span className="status-tag tag-purple">{t('peakStatus')}</span>
+                  </Card>
+                )}
+
+                <Card
+                  className="summary-card cycle-card"
+                  hover={true}
+                  onClick={() => navigate('/history')}
+                >
+                  <span className="card-label">{t('currentCycleDay')}</span>
+                  <div className="cycle-progress-container">
+                    <div className="cycle-info">
+                      <span className="cycle-day">{cycleData?.currentCycle.day}</span>
+                      <span className="cycle-total">{t('of')} {cycleData?.currentCycle.totalDays} {t('days')}</span>
+                    </div>
+                    <div className="circular-progress">
+                      {/* SVG circular progress can be added here or just styled div */}
+                      <div className="circular-percentage">50%</div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            )}
 
             {/* Quick Actions */}
             <Card className="quick-actions-card">
@@ -263,6 +282,26 @@ export default function Dashboard() {
 
           {/* Sidebar */}
           <aside className="dashboard-sidebar">
+            {/* User Profile Summary */}
+            <Card className="user-profile-summary-card">
+              <h3>{t('yourProfile')}</h3>
+              <div className="profile-stats">
+                <div className="stat-item">
+                  <span className="stat-label">Age</span>
+                  <span className="stat-value">{user.age || '—'} yrs</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Cycle</span>
+                  <span className="stat-value">{user.cycleLength || '—'} days</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Period</span>
+                  <span className="stat-value">{user.periodLength || '—'} days</span>
+                </div>
+              </div>
+              <button className="edit-profile-btn" onClick={() => navigate('/profile')}>Edit Profile</button>
+            </Card>
+
             {/* Recent Notes */}
             <Card className="recent-notes-card">
               <h3>{t('recentNotes')}</h3>
@@ -278,16 +317,18 @@ export default function Dashboard() {
             </Card>
 
             {/* Today's Health Tip */}
-            <Card className="health-tip-card">
-              <div className="tip-header">
-                <span className="tip-icon">💡</span>
-                <h3>{t('healthTip')}</h3>
-              </div>
-              <p className="tip-content">
-                Stay hydrated! drinking plenty of water can help reduce bloating and PMS symptoms during your cycle.
-              </p>
-              <Button variant="secondary" className="tip-btn" onClick={() => navigate('/tips')}>{t('moreTips')}</Button>
-            </Card>
+            {settings.showTips !== false && (
+              <Card className="health-tip-card">
+                <div className="tip-header">
+                  <span className="tip-icon">💡</span>
+                  <h3>{t('healthTip')}</h3>
+                </div>
+                <p className="tip-content">
+                  Stay hydrated! drinking plenty of water can help reduce bloating and PMS symptoms during your cycle.
+                </p>
+                <Button variant="secondary" className="tip-btn" onClick={() => navigate('/tips')}>{t('moreTips')}</Button>
+              </Card>
+            )}
 
             {/* Reminders */}
             <Card className="reminders-card">

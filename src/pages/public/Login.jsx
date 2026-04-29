@@ -7,6 +7,7 @@ import signinImage from '../../assets/images/signin.svg'
 import logo from '../../assets/images/logo.png'
 import { Eye, EyeOff } from 'lucide-react'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './Login.css'
 
 export default function Login() {
@@ -32,18 +33,25 @@ export default function Login() {
     if (!validateForm()) return
 
     setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      localStorage.setItem('authToken', 'token_' + Date.now())
-      localStorage.setItem('userInfo', JSON.stringify({
-        email,
-        name: email.split('@')[0]
-      }))
-      // Check if user has completed onboarding
-      const onboardingCompleted = localStorage.getItem('onboardingCompleted') === 'true'
+    setErrors({})
+
+    try {
+      const response = await api.login({ email, password })
+      
+      // Success
+      localStorage.setItem('authToken', response.token)
+      localStorage.setItem('userInfo', JSON.stringify(response.user))
+      
+      // Check if user has completed onboarding from server response
+      const onboardingCompleted = response.user.has_onboarded;
+      localStorage.setItem('onboardingCompleted', String(onboardingCompleted));
+      
       navigate(onboardingCompleted ? '/dashboard' : '/onboarding')
+    } catch (err) {
+      setErrors({ server: err.message })
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -62,6 +70,11 @@ export default function Login() {
             </div>
 
             <form onSubmit={handleSubmit} className="login-form">
+              {errors.server && (
+                <div className="error-alert">
+                  {errors.server}
+                </div>
+              )}
               <Input
                 label={t('emailAddress')}
                 type="email"

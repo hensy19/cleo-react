@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { User, Lock, LogOut } from 'lucide-react'
-import logo from '../../assets/images/logo.png'
+import { useSettings } from '../../context/SettingsContext'
 import { useLanguage } from '../../context/LanguageContext'
 import LanguageSwitcher from '../common/LanguageSwitcher'
 import './Navbar.css'
@@ -11,6 +11,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { t } = useLanguage()
+  const { logoUrl } = useSettings()
   const isLoggedIn = localStorage.getItem('authToken')
   const isHomePage = location.pathname === '/'
 
@@ -38,7 +39,7 @@ export default function Navbar() {
       <div className="navbar-container">
         <div className="navbar-left">
           <Link to="/" className="navbar-logo" onClick={handleNavClick}>
-            <img src={logo} alt="CLEO Logo" className="logo-image" />
+            <img src={logoUrl} alt="CLEO Logo" className="logo-image" />
           </Link>
         </div>
 

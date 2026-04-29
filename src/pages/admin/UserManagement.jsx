@@ -68,9 +68,12 @@ const MOCK_USERS = [
   }
 ]
 
+import { api } from '../../utils/api'
+
 export default function UserManagement() {
-  const [users, setUsers] = useState(MOCK_USERS)
+  const [users, setUsers] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const { showModal, showToast } = useNotifications()
 
@@ -80,7 +83,47 @@ export default function UserManagement() {
       navigate('/admin/login')
       return
     }
+
+    fetchUsers()
   }, [navigate])
+
+  const fetchUsers = async () => {
+    try {
+      setIsLoading(true)
+      const data = await api.getAdminUsers()
+
+      // Transform data to match UI needs
+      const formattedUsers = data.map(user => {
+        // Generate initials
+        const nameParts = user.name.split(' ')
+        const initials = nameParts.length > 1
+          ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
+          : user.name.substring(0, 2).toUpperCase()
+
+        // Format date
+        const joinDate = new Date(user.created_at).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
+        })
+
+        return {
+          ...user,
+          initials,
+          joinDate,
+          role: 'User',
+          lastActive: 'Recently', // Mocked for now
+          cyclesLogged: user.cycle_length ? 'Tracked' : 'New',
+          status: 'active'
+        }
+      })
+
+      setUsers(formattedUsers)
+    } catch (err) {
+      console.error("Failed to fetch users", err)
+      showToast('Failed to load users from database')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleDeleteUser = (id) => {
     showModal({
@@ -98,16 +141,16 @@ export default function UserManagement() {
   const handleBlockUser = (id) => {
     const user = users.find(u => u.id === id)
     const isBlocked = user.status === 'blocked'
-    
+
     showModal({
       title: isBlocked ? 'Unblock User' : 'Block User',
-      message: isBlocked 
+      message: isBlocked
         ? `Are you sure you want to unblock ${user.name}? They will regain access to their account.`
         : `Are you sure you want to block ${user.name}? They will lose access to their account immediately.`,
       confirmText: isBlocked ? 'Unblock' : 'Block',
       type: isBlocked ? 'primary' : 'danger',
       onConfirm: () => {
-        setUsers(users.map(u => 
+        setUsers(users.map(u =>
           u.id === id ? { ...u, status: isBlocked ? 'active' : 'blocked' } : u
         ))
         showToast(`User ${isBlocked ? 'unblocked' : 'blocked'} successfully!`)
@@ -129,12 +172,12 @@ export default function UserManagement() {
 
       <div className="users-search-wrapper">
         <svg className="users-search-icon" width="20" height="20" fill="none" stroke="#A0AEC0" strokeWidth="2" viewBox="0 0 24 24">
-           <circle cx="11" cy="11" r="8"></circle>
-           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input 
-          type="text" 
-          placeholder="Search users by name or email..." 
+        <input
+          type="text"
+          placeholder="Search users by name or email..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="users-search-input"
@@ -177,8 +220,8 @@ export default function UserManagement() {
                     </td>
                     <td>
                       <div className="u-actions">
-                        <button 
-                          className={`btn-action block-btn ${user.status === 'blocked' ? 'is-blocked' : ''}`} 
+                        <button
+                          className={`btn-action block-btn ${user.status === 'blocked' ? 'is-blocked' : ''}`}
                           onClick={() => handleBlockUser(user.id)}
                           title={user.status === 'blocked' ? "Unblock User" : "Block User"}
                         >
@@ -187,17 +230,17 @@ export default function UserManagement() {
                             <path d="M7 17L17 7" stroke="currentColor" strokeWidth="1.5" />
                           </svg>
                         </button>
-                        <button 
-                          className="btn-action del-btn" 
+                        <button
+                          className="btn-action del-btn"
                           onClick={() => handleDeleteUser(user.id)}
                           title="Delete User"
                         >
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                             <path d="M4 7H20" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
-                             <path d="M10 11V17" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
-                             <path d="M14 11V17" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
-                             <path d="M5 7L6 19C6 20.1046 6.89543 21 8 21H16C17.1046 21 18 20.1046 18 19L19 7" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
-                             <path d="M9 7V4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V7" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M4 7H20" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M10 11V17" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M14 11V17" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M5 7L6 19C6 20.1046 6.89543 21 8 21H16C17.1046 21 18 20.1046 18 19L19 7" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M9 7V4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V7" stroke="#FF4757" strokeWidth="1.5" strokeLinecap="round" />
                           </svg>
                         </button>
                       </div>

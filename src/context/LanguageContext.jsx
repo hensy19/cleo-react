@@ -90,7 +90,7 @@ const translations = {
     weekdays: {
       sun: 'Sun', mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat'
     },
-    
+
     // History
     historyTitle: 'Period History',
     historySubtitle: 'View and manage your cycle records',
@@ -113,7 +113,7 @@ const translations = {
     ofCycles: 'of cycles',
     basedOn: 'Based on',
     variation: 'variation',
-    
+
     // Reminders
     manageReminders: 'Manage Reminders',
     remindersSubtitle: 'Customize when and how you want Cleo to notify you',
@@ -133,7 +133,7 @@ const translations = {
     notifyMe: 'Notify me',
     daysBefore: 'days before',
     dayBefore: 'day before',
-    
+
     // Tips
     tipsTitle: 'Health & Self-Care Tips',
     tipsSubtitle: 'Expert advice for better menstrual health',
@@ -208,7 +208,7 @@ const translations = {
         detail: 'Building muscle mass improves hormone balance and insulin sensitivity. Focus on consistency and allow for rest days during your period.'
       }
     },
-    
+
     // Log Period
     logPeriodTitle: 'Log Period',
     logPeriodSubtitle: 'Record your period dates and flow',
@@ -217,7 +217,7 @@ const translations = {
     lightFlowLabel: 'Light flow',
     mediumFlowLabel: 'Medium flow',
     heavyFlowLabel: 'Heavy flow',
-    
+
     // Change Password
     changePasswordTitle: 'Change your password',
     currentPasswordLabel: 'Current Password',
@@ -229,7 +229,7 @@ const translations = {
     enterCurrentPassword: 'Enter your current password',
     enterNewPassword: 'Enter a new password',
     reEnterPassword: 'Re-enter your password',
-    
+
     // Auth - Forgot Password
     forgotPasswordTitle: 'Forgot Password?',
     forgotPasswordDesc: "Enter your email and we'll send you a link to reset your password.",
@@ -239,18 +239,15 @@ const translations = {
     resetEmailSent: "We've sent a password reset link to",
     checkInboxSpam: 'Please check your inbox and spam folder.',
     didntReceiveEmail: "Didn't receive it? Try again",
-    
+
     // Resources
     aboutTitle: 'About Cleo',
     aboutSubtitle: 'Empowering millions to understand their bodies with precision, care, and advanced data science.',
-    ourMission: 'Our Mission',
-    privacyPolicy: 'Privacy Policy',
-    termsOfService: 'Terms of Service',
     lastUpdated: 'Last Updated',
     needHelp: 'Need Help?',
     emailSupport: 'Email Support',
     backToHome: 'Back to Home',
-    
+
     // Onboarding
     step: 'Step',
     of: 'of',
@@ -261,7 +258,7 @@ const translations = {
     lastPeriodQuestion: 'When was your last period?',
     getStarted: 'Get Started',
     updateLaterSettings: 'You can update this information later in settings',
-    
+
     // Admin
     adminDashboard: 'Admin Dashboard',
     userManagement: 'User Management',
@@ -274,52 +271,26 @@ const translations = {
     showing: 'Showing',
     previous: 'Previous',
     next: 'Next',
-    
+
     // Footer
     quickLinks: 'Quick Links',
     resources: 'Resources',
     contact: 'Contact',
     allRightsReserved: 'All rights reserved.',
-    
+
     // Common
     back: 'Back',
     continue: 'Continue',
     saving: 'Saving...',
     saveChanges: 'Save Changes',
+    save: 'Save',
     cancel: 'Cancel',
     delete: 'Delete',
     edit: 'Edit',
-    
-    // Dashboard
-    welcome: 'Welcome back',
-    selfCare: "There's no better treatment than self-care.",
-    firstPeriod: 'First Period',
-    ovulationDay: 'Ovulation Day',
-    currentCycleDay: 'Current Cycle Day',
-    peakStatus: 'You are at your peak',
-    days: 'days',
-    inDays: 'in',
-    of: 'of',
-    quickActions: 'Quick Actions',
-    howFeeling: 'How are you feeling today?',
-    viewMood: 'View Mood Analytics',
-    cycleInsights: 'Cycle Insights',
-    recentNotes: 'Recent Notes',
-    viewAllNotes: 'View All Notes',
-    healthTip: "Today's Health Tip",
-    moreTips: 'More Tips',
-    reminders: 'Reminders',
-    manageReminders: 'Manage Reminders',
-    logPeriod: 'Log Period',
-    addNote: 'Add Note',
-    trackSymptoms: 'Track symptoms, feelings, and important observations.',
-    noteTips: 'Note Taking Tips',
-    noteTip1: 'Track symptoms like cramps, headaches, or mood changes.',
-    noteTip2: 'Note any interventions or supplements you take.',
-    noteTip3: 'Record diet, exercise, or lifestyle changes to keep patterns in mind.',
-    noteTip4: 'Document conversations with your healthcare provider.',
-    startFirstNote: 'Start Your First Note',
-    clickToAdd: 'Click to add your symptoms or observations',
+    confirm: 'Confirm',
+    success: 'Success',
+    error: 'Error',
+
     noteTips: 'Note Taking Tips',
     editNoteTitle: 'Edit Note',
     addNewNote: 'Add New Note',
@@ -332,7 +303,7 @@ const translations = {
     noteDeleted: 'Note deleted successfully!',
     deleteNoteConfirm: 'Are you sure you want to delete this note?',
     permanentAction: 'This action cannot be undone.',
-    
+
     // Profile
     updateProfile: 'Update Profile',
     profileUpdated: 'Profile updated successfully!',
@@ -371,7 +342,7 @@ const translations = {
     newHealthGoal: 'New Health Goal',
     accountDeleted: 'Account deleted successfully! Goodbye.',
     dangerPermanent: 'Danger: Permanent Action',
-    
+
     // Symptoms
     logSymptoms: 'Log Symptoms',
     cramps: 'Cramps',
@@ -396,7 +367,7 @@ const translations = {
     finishReturn: 'Finish & Return to Dashboard',
     editLog: 'Edit Log',
     writeAdditional: 'Add Additional symptoms about how you are feeling today...',
-    
+
     // Moods
     happy: 'Happy',
     sad: 'Sad',
@@ -419,24 +390,40 @@ const translations = {
     logAnother: 'Log Another Mood',
     greatJobLogging: 'Great job logging your mood!',
     recommendedForYou: 'Recommended for You',
-    saving: 'Saving...',
     noMoodEntries: 'No mood entries yet. Select a mood above to start tracking!',
     suggestedHelp: "Based on how you're feeling, we thought this might help:",
-    
+
     // Calendar
     months: {
       jan: 'January', feb: 'February', mar: 'March', apr: 'April', may: 'May', jun: 'June',
       jul: 'July', aug: 'August', sep: 'September', oct: 'October', nov: 'November', dec: 'December'
     },
-    
-    // Common
-    save: 'Save',
-    cancel: 'Cancel',
-    delete: 'Delete',
-    edit: 'Edit',
-    confirm: 'Confirm',
-    success: 'Success',
-    error: 'Error'
+
+    // Dashboard
+    welcome: 'Welcome back',
+    selfCare: "There's no better treatment than self-care.",
+    firstPeriod: 'First Period',
+    currentCycleDay: 'Current Cycle Day',
+    peakStatus: 'You are at your peak',
+    days: 'days',
+    inDays: 'in',
+    quickActions: 'Quick Actions',
+    howFeeling: 'How are you feeling today?',
+    viewMood: 'View Mood Analytics',
+    cycleInsights: 'Cycle Insights',
+    recentNotes: 'Recent Notes',
+    viewAllNotes: 'View All Notes',
+    healthTip: "Today's Health Tip",
+    moreTips: 'More Tips',
+    reminders: 'Reminders',
+    addNote: 'Add Note',
+    trackSymptoms: 'Track symptoms, feelings, and important observations.',
+    noteTip1: 'Track symptoms like cramps, headaches, or mood changes.',
+    noteTip2: 'Note any interventions or supplements you take.',
+    noteTip3: 'Record diet, exercise, or lifestyle changes to keep patterns in mind.',
+    noteTip4: 'Document conversations with your healthcare provider.',
+    startFirstNote: 'Start Your First Note',
+    clickToAdd: 'Click to add your symptoms or observations',
   },
   hi: {
     // Navbar
@@ -525,7 +512,7 @@ const translations = {
     weekdays: {
       sun: 'रवि', mon: 'सोम', tue: 'मंगल', wed: 'बुध', thu: 'गुरु', fri: 'शुक्र', sat: 'शनि'
     },
-    
+
     // History
     historyTitle: 'पीरियड इतिहास',
     historySubtitle: 'अपने चक्र रिकॉर्ड देखें और प्रबंधित करें',
@@ -548,7 +535,7 @@ const translations = {
     ofCycles: 'चक्रों का',
     basedOn: 'आधारित',
     variation: 'बदलाव',
-    
+
     // Reminders
     manageReminders: 'रिमाइंडर प्रबंधित करें',
     remindersSubtitle: 'अनुकूलित करें कि आप कब और कैसे चाहते हैं कि Cleo आपको सूचित करे',
@@ -568,7 +555,7 @@ const translations = {
     notifyMe: 'मुझे सूचित करें',
     daysBefore: 'दिन पहले',
     dayBefore: 'दिन पहले',
-    
+
     // Tips
     tipsTitle: 'स्वास्थ्य और आत्म-देखभाल युक्तियाँ',
     tipsSubtitle: 'बेहतर मासिक धर्म स्वास्थ्य के लिए विशेषज्ञ की सलाह',
@@ -643,7 +630,7 @@ const translations = {
         detail: 'मांसपेशियां बनाने से हार्मोनल संतुलन सुधरता है और स्वास्थ्य बेहतर होता है।'
       }
     },
-    
+
     // Log Period
     logPeriodTitle: 'पीरियड लॉग करें',
     logPeriodSubtitle: 'अपने पीरियड की तारीखें और प्रवाह रिकॉर्ड करें',
@@ -652,7 +639,7 @@ const translations = {
     lightFlowLabel: 'हल्का प्रवाह',
     mediumFlowLabel: 'मध्यम प्रवाह',
     heavyFlowLabel: 'भारी प्रवाह',
-    
+
     // Change Password
     changePasswordTitle: 'अपना पासवर्ड बदलें',
     currentPasswordLabel: 'वर्तमान पासवर्ड',
@@ -664,7 +651,7 @@ const translations = {
     enterCurrentPassword: 'अपना वर्तमान पासवर्ड दर्ज करें',
     enterNewPassword: 'नया पासवर्ड दर्ज करें',
     reEnterPassword: 'अपना पासवर्ड फिर से दर्ज करें',
-    
+
     // Auth - Forgot Password
     forgotPasswordTitle: 'पासवर्ड भूल गए?',
     forgotPasswordDesc: 'अपना ईमेल दर्ज करें और हम आपको आपका पासवर्ड रीसेट करने के लिए एक लिंक भेजेंगे।',
@@ -674,18 +661,15 @@ const translations = {
     resetEmailSent: 'हमने एक पासवर्ड रीसेट लिंक भेजा है',
     checkInboxSpam: 'कृपया अपना इनबॉक्स और स्पैम फ़ोल्डर जांचें।',
     didntReceiveEmail: 'प्राप्त नहीं हुआ? पुन: प्रयास करें',
-    
+
     // Resources
     aboutTitle: 'Cleo के बारे में',
     aboutSubtitle: 'सटीकता, देखभाल और उन्नत डेटा विज्ञान के साथ लाखों लोगों को अपने शरीर को समझने के लिए सशक्त बनाना।',
     ourMission: 'हमारा मिशन',
-    privacyPolicy: 'गोपनीयता नीति',
-    termsOfService: 'सेवा की शर्तें',
-    lastUpdated: 'अंतिम अपडेट',
     needHelp: 'मदद चाहिए?',
     emailSupport: 'ईमेल समर्थन',
     backToHome: 'होम पर वापस जाएं',
-    
+
     // Onboarding
     step: 'कदम',
     of: 'का',
@@ -696,7 +680,7 @@ const translations = {
     lastPeriodQuestion: 'आपका पिछला पीरियड कब था?',
     getStarted: 'शुरू करें',
     updateLaterSettings: 'आप इस जानकारी को बाद में सेटिंग्स में अपडेट कर सकते हैं',
-    
+
     // Admin
     adminDashboard: 'एडमिन डैशबोर्ड',
     userManagement: 'उपयोगकर्ता प्रबंधन',
@@ -709,46 +693,26 @@ const translations = {
     showing: 'दिखा रहा है',
     previous: 'पिछला',
     next: 'अगला',
-    
+
     // Footer
     quickLinks: 'त्वरित लिंक',
     resources: 'संसाधन',
     contact: 'संपर्क',
     allRightsReserved: 'सर्वाधिकार सुरक्षित।',
-     
+
     // Common
     back: 'पीछे',
     continue: 'जारी रखें',
     saving: 'सहेज रहा है...',
     saveChanges: 'परिवर्तन सहेजें',
+    save: 'सहेजें',
     cancel: 'रद्द करें',
     delete: 'हटाएं',
     edit: 'संपादित करें',
-    
-    // Dashboard
-    welcome: 'स्वागत है',
-    selfCare: 'आत्म-देखभाल से बेहतर कोई उपचार नहीं है।',
-    firstPeriod: 'पहला पीरियड',
-    ovulationDay: 'ओव्यूलेशन दिन',
-    currentCycleDay: 'वर्तमान चक्र दिन',
-    peakStatus: 'आप अपने शिखर पर हैं',
-    days: 'दिन',
-    inDays: 'में',
-    of: 'का',
-    quickActions: 'त्वरित कार्रवाई',
-    howFeeling: 'आज आप कैसा महसूस कर रहे हैं?',
-    viewMood: 'मूड विश्लेषण देखें',
-    cycleInsights: 'चक्र अंतर्दृष्टि',
-    recentNotes: 'हाल के नोट्स',
-    viewAllNotes: 'सभी नोट्स देखें',
-    healthTip: 'आज की स्वास्थ्य टिप',
-    moreTips: 'अधिक टिप्स',
-    reminders: 'अनुस्मारक',
-    manageReminders: 'अनुस्मारक प्रबंधित करें',
-    logPeriod: 'पीरियड लॉग करें',
-    addNote: 'नोट जोड़ें',
-    myNotes: 'मेरे नोट्स',
-    trackSymptoms: 'लक्षणों, भावनाओं और महत्वपूर्ण टिप्पणियों को ट्रैक करें।',
+    confirm: 'पुष्टि करें',
+    success: 'सफलता',
+    error: 'त्रुटि',
+
     noteTips: 'नोट्स लेने के लिए सुझाव',
     noteTip1: 'ऐंठन, सिरदर्द या मूड में बदलाव जैसे लक्षणों को ट्रैक करें।',
     noteTip2: 'आपके द्वारा लिए गए पूरक या दवाओं को नोट करें।',
@@ -767,7 +731,7 @@ const translations = {
     noteDeleted: 'नोट सफलतापूर्वक हटाया गया!',
     deleteNoteConfirm: 'क्या आप वाकई इस नोट को हटाना चाहते हैं?',
     permanentAction: 'यह कार्रवाई पूर्ववत नहीं की जा जा सकती।',
-    
+
     // Profile
     updateProfile: 'प्रोफ़ाइल अपडेट करें',
     profileUpdated: 'प्रोफ़ाइल सफलतापूर्वक अपडेट की गई!',
@@ -806,7 +770,7 @@ const translations = {
     newHealthGoal: 'नया स्वास्थ्य लक्ष्य',
     accountDeleted: 'खाता सफलतापूर्वक हटा दिया गया! अलविदा।',
     dangerPermanent: 'खतरा: स्थायी कार्रवाई',
-    
+
     // Symptoms
     logSymptoms: 'लक्षण लॉग करें',
     cramps: 'ऐंठन',
@@ -831,7 +795,7 @@ const translations = {
     finishReturn: 'समाप्त करें और डैशबोर्ड पर लौटें',
     editLog: 'लॉग संपादित करें',
     writeAdditional: 'आज आप कैसा महसूस कर रहे हैं, इसके बारे में अतिरिक्त लक्षण जोड़ें...',
-    
+
     // Moods
     happy: 'खुश',
     sad: 'दुखी',
@@ -854,24 +818,35 @@ const translations = {
     logAnother: 'एक और मूड लॉग करें',
     greatJobLogging: 'अपना मूड लॉग करने के लिए बहुत अच्छा काम!',
     recommendedForYou: 'आपके लिए अनुशंसित',
-    saving: 'सहेज रहा है...',
     noMoodEntries: 'अभी तक कोई मूड प्रविष्टि नहीं है। ट्रैकिंग शुरू करने के लिए ऊपर एक मूड चुनें!',
     suggestedHelp: 'आप कैसा महसूस कर रहे हैं, इसके आधार पर हमने सोचा कि यह मदद कर सकता है:',
-    
+
+    // Dashboard
+    welcome: 'स्वागत है',
+    selfCare: 'आत्म-देखभाल से बेहतर कोई उपचार नहीं है।',
+    firstPeriod: 'पहला पीरियड',
+    currentCycleDay: 'वर्तमान चक्र दिन',
+    peakStatus: 'आप अपने शिखर पर हैं',
+    days: 'दिन',
+    inDays: 'में',
+    quickActions: 'त्वरित कार्रवाई',
+    howFeeling: 'आज आप कैसा महसूस कर रहे हैं?',
+    viewMood: 'मूड विश्लेषण देखें',
+    cycleInsights: 'चक्र अंतर्दृष्टि',
+    recentNotes: 'हाल के नोट्स',
+    viewAllNotes: 'सभी नोट्स देखें',
+    healthTip: 'आज की स्वास्थ्य टिप',
+    moreTips: 'अधिक टिप्स',
+    reminders: 'अनुस्मारक',
+    addNote: 'नोट जोड़ें',
+    myNotes: 'मेरे नोट्स',
+    trackSymptoms: 'लक्षणों, भावनाओं और महत्वपूर्ण टिप्पणियों को ट्रैक करें।',
+
     // Calendar
     months: {
       jan: 'जनवरी', feb: 'फरवरी', mar: 'मार्च', apr: 'अप्रैल', may: 'मई', jun: 'जून',
       jul: 'जुलाई', aug: 'अगस्त', sep: 'सितंबर', oct: 'अक्टूबर', nov: 'नवंबर', dec: 'दिसंबर'
-    },
-    
-    // Common
-    save: 'सहेजें',
-    cancel: 'रद्द करें',
-    delete: 'हटाएं',
-    edit: 'संपादित करें',
-    confirm: 'पुष्टि करें',
-    success: 'सफलता',
-    error: 'त्रुटि'
+    }
   },
   gj: {
     // Navbar
@@ -960,7 +935,7 @@ const translations = {
     weekdays: {
       sun: 'રવિ', mon: 'સોમ', tue: 'મંગળ', wed: 'બુધ', thu: 'ગુરુ', fri: 'શુક્ર', sat: 'શનિ'
     },
-    
+
     // History
     historyTitle: 'માસિક ઇતિહાસ',
     historySubtitle: 'તમારા ચક્રના રેકોર્ડ જુઓ અને મેનેજ કરો',
@@ -983,7 +958,7 @@ const translations = {
     ofCycles: 'ચક્રમાંથી',
     basedOn: 'આધારિત',
     variation: 'તફાવત',
-    
+
     // Reminders
     manageReminders: 'રિમાઇન્ડર મેનેજ કરો',
     remindersSubtitle: 'Cleo તમને ક્યારે અને કેવી રીતે જાણ કરે તે કસ્ટમાઇઝ કરો',
@@ -1003,7 +978,7 @@ const translations = {
     notifyMe: 'મને જાણ કરો',
     daysBefore: 'દિવસ પહેલા',
     dayBefore: 'દિવસ પહેલા',
-    
+
     // Tips
     tipsTitle: 'સ્વાસ્થ્ય અને આત્મ-સંભાળ ટિપ્સ',
     tipsSubtitle: 'વધારે સારા માસિક સ્વાસ્થ્ય માટે નિષ્ણાતની સલાહ',
@@ -1078,7 +1053,7 @@ const translations = {
         detail: 'મસલ્સ બનાવવાથી હોર્મોનલ બેલેન્સ સુધરે છે અને સ્વાસ્થ્ય સારું રહે છે.'
       }
     },
-    
+
     // Log Period
     logPeriodTitle: 'માસિક લોગ કરો',
     logPeriodSubtitle: 'તમારા માસિકની તારીખો અને પ્રવાહ રેકોર્ડ કરો',
@@ -1087,7 +1062,7 @@ const translations = {
     lightFlowLabel: 'હળવો પ્રવાહ',
     mediumFlowLabel: 'મધ્યમ પ્રવાહ',
     heavyFlowLabel: 'ભારે પ્રવાહ',
-    
+
     // Change Password
     changePasswordTitle: 'તમારો પાસવર્ડ બદલો',
     currentPasswordLabel: 'વર્તમાન પાસવર્ડ',
@@ -1099,7 +1074,7 @@ const translations = {
     enterCurrentPassword: 'તમારો વર્તમાન પાસવર્ડ દાખલ કરો',
     enterNewPassword: 'નવો પાસવર્ડ દાખલ કરો',
     reEnterPassword: 'તમારો પાસવર્ડ ફરીથી દાખલ કરો',
-    
+
     // Auth - Forgot Password
     forgotPasswordTitle: 'પાસવર્ડ ભૂલી ગયા છો?',
     forgotPasswordDesc: 'તમારું ઇમેઇલ દાખલ કરો અને અમે તમને તમારો પાસવર્ડ રીસેટ કરવા માટે એક લિંક મોકલીશું.',
@@ -1109,18 +1084,16 @@ const translations = {
     resetEmailSent: 'અમે પાસવર્ડ રીસેટ લિંક મોકલી છે',
     checkInboxSpam: 'કૃપા કરીને તમારું ઇનબોક્સ અને સ્પામ ફોલ્ડર તપાસો.',
     didntReceiveEmail: 'મળ્યું નથી? ફરી પ્રયત્ન કરો',
-    
+
     // Resources
     aboutTitle: 'Cleo વિશે',
     aboutSubtitle: 'ચોકસાઈ, સંભાળ અને અદ્યતન ડેટા સાયન્સ સાથે લાખો લોકોને તેમના શરીરને સમજવા માટે સશક્ત બનાવવા.',
     ourMission: 'અમારું મિશન',
-    privacyPolicy: 'ગોપનીયતા નીતિ',
-    termsOfService: 'સેવાની શરતો',
     lastUpdated: 'છેલ્લે અપડેટ કરેલ',
     needHelp: 'મદદ જોઈતી હોય તો?',
     emailSupport: 'ઇમેઇલ સપોર્ટ',
     backToHome: 'હોમ પર પાછા જાઓ',
-    
+
     // Onboarding
     step: 'પગલું',
     of: 'થી',
@@ -1131,7 +1104,7 @@ const translations = {
     lastPeriodQuestion: 'તમારું છેલ્લું માસિક ક્યારે હતું?',
     getStarted: 'શરૂ કરો',
     updateLaterSettings: 'તમે આ માહિતી પછીથી સેટિંગ્સમાં અપડેટ કરી શકો છો',
-    
+
     // Admin
     adminDashboard: 'એડમિન ડેશબોર્ડ',
     userManagement: 'વપરાશકર્તા સંચાલન',
@@ -1144,53 +1117,27 @@ const translations = {
     showing: 'બતાવી રહ્યું છે',
     previous: 'અગાઉનું',
     next: 'આગળ',
-    
+
     // Footer
     quickLinks: 'ઝડપી લિંક્સ',
     resources: 'સંસાધનો',
     contact: 'સંપર્ક',
     allRightsReserved: 'તમામ હકો અનામત.',
-    
+
     // Common
     back: 'પાછા',
     continue: 'ચાલુ રાખો',
     saving: 'સાચવી રહ્યું છે...',
     saveChanges: 'ફેરફારો સાચવો',
+    save: 'સાચવો',
     cancel: 'રદ કરો',
     delete: 'કાઢી નાખો',
     edit: 'સંપાદિત કરો',
-    
-    // Dashboard
-    welcome: 'સ્વાગત છે',
-    selfCare: 'સ્વ-સંભાળથી વધુ સારું કોઈ સારવાર નથી.',
-    firstPeriod: 'પ્રથમ માસિક',
-    ovulationDay: 'ઓવ્યુલેશન દિવસ',
-    currentCycleDay: 'વર્તમાન ચક્ર દિવસ',
-    peakStatus: 'તમે તમારા શિખર પર છો',
-    days: 'દિવસો',
-    inDays: 'માં',
-    of: 'નું',
-    quickActions: 'ઝડપી કાર્યો',
-    howFeeling: 'આજે તમે કેવું અનુભવો છો?',
-    viewMood: 'મૂડ એનાલિટિક્સ જુઓ',
-    cycleInsights: 'ચક્ર આંતરદૃષ્ટિ',
-    recentNotes: 'તાજેતરની નોંધો',
-    viewAllNotes: 'બધી નોંધો જુઓ',
-    healthTip: 'આજની હેલ્થ ટીપ',
-    moreTips: 'વધુ ટિપ્સ',
-    reminders: 'રિમાઇન્ડર્સ',
-    manageReminders: 'રિમાઇન્ડર્સ મેનેજ કરો',
-    logPeriod: 'માસિક લોગ કરો',
-    addNote: 'નોંધ ઉમેરો',
-    myNotes: 'મારી નોંધો',
-    trackSymptoms: 'લક્ષણો, લાગણીઓ અને મહત્વપૂર્ણ અવલોકનો ટ્રૅક કરો.',
+    confirm: 'પુષ્ટિ કરો',
+    success: 'સફળતા',
+    error: 'ભૂલ',
+
     noteTips: 'નોટ્સ લેવા માટેની ટિપ્સ',
-    noteTip1: 'ક્રેમ્પ્સ, માથાનો દુખાવો અથવા મૂડમાં ફેરફાર જેવા લક્ષણો ટ્રૅક કરો.',
-    noteTip2: 'તમે જે દવાઓ લેતા હોવ તેની નોટ રાખો.',
-    noteTip3: 'ખોરાક અને જીવનશૈલીમાં થયેલા ફેરફારની નોંધ રાખો.',
-    noteTip4: 'તમારા ડૉક્ટર સાથે થયેલી વાતચીતની નોંધ રાખો.',
-    startFirstNote: 'તમારી પ્રથમ નોંધ શરૂ કરો',
-    clickToAdd: 'તમારા લક્ષણો અથવા અવલોકનો ઉમેરવા માટે ક્લિક કરો',
     editNoteTitle: 'નોંધમાં ફેરફાર કરો',
     addNewNote: 'નવી નોંધ ઉમેરો',
     title: 'શીર્ષક',
@@ -1202,7 +1149,7 @@ const translations = {
     noteDeleted: 'નોંધ સફળતાપૂર્વક કાઢી નાખવામાં આવી!',
     deleteNoteConfirm: 'શું તમે ખરેખર આ નોંધ કાઢી નાખવા માંગો છો?',
     permanentAction: 'આ પ્રક્રિયા ઉલટાવી શકાતી નથી.',
-    
+
     // Profile
     updateProfile: 'પ્રોફાઇલ અપડેટ કરો',
     profileUpdated: 'પ્રોફાઇલ સફળતાપૂર્વક અપડેટ કરવામાં આવી!',
@@ -1241,7 +1188,7 @@ const translations = {
     newHealthGoal: 'નવું સ્વાસ્થ્ય લક્ષ્ય',
     accountDeleted: 'ખાતું સફળતાપૂર્વક કાઢી નાખવામાં આવ્યું! આવજો.',
     dangerPermanent: 'જોખમ: કાયમી પ્રક્રિયા',
-    
+
     // Symptoms
     logSymptoms: 'લક્ષણો લોગ કરો',
     cramps: 'પેડુનો દુખાવો',
@@ -1266,7 +1213,7 @@ const translations = {
     finishReturn: 'પૂર્ણ કરો અને ડેેશબોર્ડ પર પાછા ફરો',
     editLog: 'લોગમાં ફેરફાર કરો',
     writeAdditional: 'આજે તમે કેવું અનુભવો છો તે વિશે વધારાના લક્ષણો ઉમેરો...',
-    
+
     // Moods
     happy: 'ખુશ',
     sad: 'દુઃખી',
@@ -1289,24 +1236,41 @@ const translations = {
     logAnother: 'બીજો મૂડ લોગ કરો',
     greatJobLogging: 'તમારો મૂડ લોગ કરવા બદલ ખૂબ સરસ!',
     recommendedForYou: 'તમારા માટે ભલામણ કરેલ',
-    saving: 'સાચવી રહ્યું છે...',
     noMoodEntries: 'હજી સુધી કોઈ મૂડ એન્ટ્રી નથી. ટ્રૅકિંગ શરૂ કરવા માટે ઉપર એક મૂડ પસંદ કરો!',
     suggestedHelp: 'તમે જેવું અનુભવી રહ્યા છો તેના આધારે, અમને લાગ્યું કે આ મદદ કરી શકે છે:',
-    
+
+    // Dashboard
+    welcome: 'સ્વાગત છે',
+    selfCare: 'સ્વ-સંભાળથી વધુ સારું કોઈ સારવાર નથી.',
+    firstPeriod: 'પ્રથમ માસિક',
+    currentCycleDay: 'વર્તમાન ચક્ર દિવસ',
+    peakStatus: 'તમે તમારા શિખર પર છો',
+    days: 'દિવસો',
+    inDays: 'માં',
+    quickActions: 'ઝડપી કાર્યો',
+    howFeeling: 'આજે તમે કેવું અનુભવો છો?',
+    viewMood: 'મૂડ એનાલિટિક્સ જુઓ',
+    cycleInsights: 'ચક્ર આંતરદૃષ્ટિ',
+    recentNotes: 'તાજેતરની નોંધો',
+    viewAllNotes: 'બધી નોંધો જુઓ',
+    healthTip: 'આજની હેલ્થ ટીપ',
+    moreTips: 'વધુ ટિપ્સ',
+    reminders: 'રિમાઇન્ડર્સ',
+    addNote: 'નોંધ ઉમેરો',
+    myNotes: 'મારી નોંધો',
+    trackSymptoms: 'લક્ષણો, લાગણીઓ અને મહત્વપૂર્ણ અવલોકનો ટ્રૅક કરો.',
+    noteTip1: 'ક્રેમ્પ્સ, માથાનો દુખાવો અથવા મૂડમાં ફેરફાર જેવા લક્ષણો ટ્રૅક કરો.',
+    noteTip2: 'તમે જે દવાઓ લેતા હોવ તેની નોટ રાખો.',
+    noteTip3: 'ખોરાક અને જીવનશૈલીમાં થયેલા ફેરફારની નોંધ રાખો.',
+    noteTip4: 'તમારા ડૉક્ટર સાથે થયેલી વાતચીતની નોંધ રાખો.',
+    startFirstNote: 'તમારી પ્રથમ નોંધ શરૂ કરો',
+    clickToAdd: 'તમારા લક્ષણો અથવા અવલોકનો ઉમેરવા માટે ક્લિક કરો',
+
     // Calendar
     months: {
       jan: 'જાન્યુઆરી', feb: 'ફેબ્રુઆરી', mar: 'માર્ચ', apr: 'એપ્રિલ', may: 'મે', jun: 'જૂન',
       jul: 'જુલાઈ', aug: 'ઓગસ્ટ', sep: 'સપ્ટેમ્બર', oct: 'ઓક્ટોબર', nov: 'નવેમ્બર', dec: 'ડિસેમ્બર'
-    },
-    
-    // Common
-    save: 'સાચવો',
-    cancel: 'રદ કરો',
-    delete: 'કાઢી નાખો',
-    edit: 'ફેરફાર કરો',
-    confirm: 'પુષ્ટિ કરો',
-    success: 'સફળતા',
-    error: 'ભૂલ'
+    }
   }
 };
 
@@ -1322,7 +1286,7 @@ export const LanguageProvider = ({ children }) => {
 
   const t = (key) => {
     const keys = key.split('.');
-    
+
     // Attempt lookup in primary language
     let value = translations[language];
     for (const k of keys) {

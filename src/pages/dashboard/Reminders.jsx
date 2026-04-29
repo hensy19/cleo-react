@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
@@ -6,6 +6,7 @@ import Card from '../../components/common/Card'
 import Button from '../../components/common/Button'
 import { useNotifications } from '../../context/NotificationContext'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './Reminders.css'
 
 export default function Reminders() {
@@ -26,10 +27,45 @@ export default function Reminders() {
     setReminders(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
-  const handleSave = () => {
-    // Save to local storage or API
-    console.log('Saved reminders:', { reminders, reminderTime, daysBeforePeriod })
-    showToast(t('passwordSavedSuccess')) // Reusing this for success message or I should have added a specific one
+  useEffect(() => {
+    const fetchReminders = async () => {
+      try {
+        const data = await api.getReminders();
+        setReminders({
+          periodApproaching: data.period_approaching,
+          ovulationApproaching: data.ovulation_approaching,
+          dailyLog: data.daily_log,
+          pillReminder: data.pill_reminder,
+        });
+        setDaysBeforePeriod(data.days_before_period);
+        // Format time properly just in case it comes back with seconds
+        let time = data.reminder_time;
+        if (time && time.length > 5) {
+          time = time.substring(0, 5);
+        }
+        setReminderTime(time);
+      } catch (err) {
+        console.error("Failed to load reminders:", err);
+      }
+    };
+    fetchReminders();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      await api.updateReminders({
+        period_approaching: reminders.periodApproaching,
+        days_before_period: daysBeforePeriod,
+        ovulation_approaching: reminders.ovulationApproaching,
+        daily_log: reminders.dailyLog,
+        pill_reminder: reminders.pillReminder,
+        reminder_time: reminderTime
+      });
+      showToast(t('passwordSavedSuccess') || 'Reminders saved successfully');
+    } catch (err) {
+      console.error(err);
+      showToast('Error saving reminders', 'error');
+    }
   }
 
   return (

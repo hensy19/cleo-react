@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom'
-import logo from '../../assets/images/logo.png'
+import { useSettings } from '../../context/SettingsContext'
 import './Footer.css'
 
 export default function Footer() {
   const year = new Date().getFullYear()
+  const { logoUrl } = useSettings()
 
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section footer-brand">
           <Link to="/">
-            <img src={logo} alt="CLEO Logo" className="footer-logo" />
+            <img src={logoUrl} alt="CLEO Logo" className="footer-logo" />
           </Link>
           <p>Track and understand your menstrual cycle with ease.</p>
         </div>

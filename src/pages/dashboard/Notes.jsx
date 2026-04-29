@@ -3,24 +3,36 @@ import { Plus, Trash2, Edit3, ChevronLeft, Notebook } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useNotifications } from '../../context/NotificationContext'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './Notes.css'
 
 export default function Notes() {
   const [notes, setNotes] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingNote, setEditingNote] = useState(null)
-  
+
   const [noteTitle, setNoteTitle] = useState('')
   const [noteContent, setNoteContent] = useState('')
   const { t } = useLanguage()
   const { showModal, showToast } = useNotifications()
 
   useEffect(() => {
-    const stored = localStorage.getItem('userNotes')
-    if (stored) {
-      setNotes(JSON.parse(stored))
-    }
+    fetchNotes()
   }, [])
+
+  const fetchNotes = async () => {
+    try {
+      const data = await api.getNotes()
+      // Standardize the date for display if needed
+      const processedNotes = data.map(n => ({
+        ...n,
+        date: new Date(n.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+      }))
+      setNotes(processedNotes)
+    } catch (err) {
+      console.error("Failed to fetch notes:", err)
+    }
+  }
 
   const openAddModal = () => {
     setEditingNote(null)
@@ -36,35 +48,33 @@ export default function Notes() {
     setIsModalOpen(true)
   }
 
-  const handleSaveNote = () => {
+  const handleSaveNote = async () => {
     if (!noteTitle.trim() && !noteContent.trim()) return
 
     const now = new Date()
-    const formattedDate = now.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-    
-    if (editingNote) {
-      const updatedNotes = notes.map(n => 
-        n.id === editingNote.id 
-          ? { ...n, title: noteTitle, content: noteContent } 
-          : n
-      )
-      setNotes(updatedNotes)
-      localStorage.setItem('userNotes', JSON.stringify(updatedNotes))
-      showToast(t('noteUpdated'))
-    } else {
-      const newNote = {
-        id: Date.now(),
-        title: noteTitle || t('untitledNote'),
-        content: noteContent,
-        date: formattedDate
+    const isoDate = now.toISOString().split('T')[0] // YYYY-MM-DD for DB
+
+    try {
+      if (editingNote) {
+        await api.updateNote(editingNote.id, {
+          title: noteTitle,
+          content: noteContent
+        })
+        showToast(t('noteUpdated'))
+      } else {
+        await api.createNote({
+          title: noteTitle || t('untitledNote'),
+          content: noteContent,
+          date: isoDate
+        })
+        showToast(t('noteSaved'))
       }
-      const updatedNotes = [newNote, ...notes]
-      setNotes(updatedNotes)
-      localStorage.setItem('userNotes', JSON.stringify(updatedNotes))
-      showToast(t('noteSaved'))
+      fetchNotes()
+      setIsModalOpen(false)
+    } catch (err) {
+      console.error("Error saving note:", err)
+      showToast("Error saving note")
     }
-    
-    setIsModalOpen(false)
   }
 
   const handleDeleteNote = (id) => {
@@ -73,11 +83,14 @@ export default function Notes() {
       message: `${t('deleteNoteConfirm')} ${t('permanentAction')}`,
       type: 'danger',
       confirmText: t('delete'),
-      onConfirm: () => {
-        const updated = notes.filter(note => note.id !== id)
-        setNotes(updated)
-        localStorage.setItem('userNotes', JSON.stringify(updated))
-        showToast(t('noteDeleted'))
+      onConfirm: async () => {
+        try {
+          await api.deleteNote(id)
+          fetchNotes()
+          showToast(t('noteDeleted'))
+        } catch (err) {
+          console.error("Error deleting note:", err)
+        }
       }
     })
   }
@@ -89,7 +102,7 @@ export default function Notes() {
           <div className="header-left">
             <button className="back-btn" onClick={() => window.history.back()}>
               <ChevronLeft size={20} />
-              <span>{t('myNotes')}</span>
+              <span>{t('my Notes')}</span>
             </button>
             <p>{t('trackSymptoms')}</p>
           </div>
@@ -119,7 +132,7 @@ export default function Notes() {
               </div>
             </div>
           ))}
-          
+
           {notes.length === 0 && (
             <div className="notes-empty-placeholder" onClick={openAddModal}>
               <div className="placeholder-icon">
@@ -152,17 +165,17 @@ export default function Notes() {
               <div className="modal-body">
                 <div className="modal-field">
                   <label>{t('title')}</label>
-                  <input 
-                    type="text" 
-                    placeholder={t('enterTitle')} 
+                  <input
+                    type="text"
+                    placeholder={t('enterTitle')}
                     value={noteTitle}
                     onChange={(e) => setNoteTitle(e.target.value)}
                   />
                 </div>
                 <div className="modal-field">
                   <label>{t('content')}</label>
-                  <textarea 
-                    placeholder={t('writeObservation')} 
+                  <textarea
+                    placeholder={t('writeObservation')}
                     rows="8"
                     value={noteContent}
                     onChange={(e) => setNoteContent(e.target.value)}

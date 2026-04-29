@@ -7,14 +7,14 @@ import './Resources.css'
 export default function About() {
   const navigate = useNavigate()
   const { t } = useLanguage()
-  
+
   return (
     <DashboardLayout>
       <div className="resources-page">
         <button className="back-btn-minimal" onClick={() => navigate('/')}>
           <ArrowLeft size={18} /> {t('backToHome')}
         </button>
-        
+
         <div className="resource-card-main">
           <div className="resources-header" style={{ textAlign: 'left', alignItems: 'flex-start', marginBottom: '4rem' }}>
             <h1>{t('aboutTitle')}</h1>

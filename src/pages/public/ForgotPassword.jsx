@@ -21,7 +21,7 @@ export default function ForgotPassword() {
   return (
     <div className="auth-page">
       <Navbar />
-      
+
       <div className="auth-container">
         {!isSubmitted ? (
           <div className="auth-card">
@@ -35,9 +35,9 @@ export default function ForgotPassword() {
                 <label>{t('email')}</label>
                 <div className="input-with-icon">
                   <Mail className="input-icon" size={20} />
-                  <input 
-                    type="email" 
-                    placeholder="name@example.com" 
+                  <input
+                    type="email"
+                    placeholder="       name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -63,11 +63,11 @@ export default function ForgotPassword() {
             </div>
             <h1>{t('checkYourEmail')}</h1>
             <p>{t('resetEmailSent')} <strong>{email}</strong>. {t('checkInboxSpam')}</p>
-            
+
             <button className="auth-btn" onClick={() => setIsSubmitted(false)}>
               {t('didntReceiveEmail')}
             </button>
-            
+
             <div className="auth-footer">
               <Link to="/login" className="back-to-login">
                 <ArrowLeft size={16} /> Back to Login

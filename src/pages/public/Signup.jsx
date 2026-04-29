@@ -7,9 +7,12 @@ import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
+import { useSettings } from '../../context/SettingsContext'
 import './Signup.css'
 
 export default function Signup() {
+  const { settings, isLoading: settingsLoading } = useSettings()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -45,8 +48,24 @@ export default function Signup() {
     if (!formData.name.trim()) newErrors.name = 'Name is required'
     if (!formData.email.trim()) newErrors.email = 'Email is required'
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is not valid'
-    if (!formData.password) newErrors.password = 'Password is required'
-    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
+
+    // Dynamic Password Validation
+    if (!formData.password) {
+      newErrors.password = 'Password is required'
+    } else {
+      if (settings.pwdRequireLength && formData.password.length < 8) {
+        newErrors.password = 'Password must be at least 8 characters'
+      } else if (!settings.pwdRequireLength && formData.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters'
+      }
+
+      if (settings.pwdRequireUppercase && !/[A-Z]/.test(formData.password)) {
+        newErrors.password = newErrors.password
+          ? newErrors.password + ' and include an uppercase letter'
+          : 'Password must include at least one uppercase letter'
+      }
+    }
+
     if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm your password'
     else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
@@ -57,20 +76,36 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Extra safety: block if registration is disabled
+    if (settings.allowRegistration === false) {
+      setErrors({ server: 'Registrations are currently closed.' })
+      return
+    }
+
     if (!validateForm()) return
 
     setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      localStorage.setItem('authToken', 'token_' + Date.now())
-      localStorage.setItem('userInfo', JSON.stringify({
+    setErrors({}) // Clear previous errors
+
+    try {
+      const response = await api.signup({
         name: formData.name,
-        email: formData.email
-      }))
+        email: formData.email,
+        password: formData.password
+      })
+
+      // Success
+      localStorage.setItem('authToken', response.token)
+      localStorage.setItem('userInfo', JSON.stringify(response.user))
       localStorage.setItem('onboardingCompleted', 'false')
+
       navigate('/onboarding')
+    } catch (err) {
+      setErrors({ server: err.message })
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -89,6 +124,19 @@ export default function Signup() {
             </div>
 
             <form onSubmit={handleSubmit} className="signup-form">
+              {errors.server && (
+                <div className="error-alert">
+                  {errors.server}
+                </div>
+              )}
+
+              {settings.allowRegistration === false && (
+                <div className="registration-closed-alert">
+                  <ShieldCheck size={20} />
+                  <span>{t('Registrations Closed')}</span>
+                </div>
+              )}
+
               <Input
                 label={t('fullName')}
                 type="text"
@@ -98,6 +146,7 @@ export default function Signup() {
                 onChange={handleChange}
                 error={errors.name}
                 required
+                disabled={settings.allowRegistration === false}
               />
 
               <Input
@@ -109,6 +158,7 @@ export default function Signup() {
                 onChange={handleChange}
                 error={errors.email}
                 required
+                disabled={settings.allowRegistration === false}
               />
 
               <Input
@@ -120,16 +170,29 @@ export default function Signup() {
                 onChange={handleChange}
                 error={errors.password}
                 required
+                disabled={settings.allowRegistration === false}
                 suffix={
                   <button
                     type="button"
                     className="password-toggle-inline"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={settings.allowRegistration === false}
                   >
                     {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
                   </button>
                 }
               />
+
+              <div className="password-hints">
+                <p className={formData.password.length >= (settings.pwdRequireLength ? 8 : 6) ? 'met' : ''}>
+                  {settings.pwdRequireLength ? 'Min. 8 characters' : 'Min. 6 characters'}
+                </p>
+                {settings.pwdRequireUppercase && (
+                  <p className={/[A-Z]/.test(formData.password) ? 'met' : ''}>
+                    Include one uppercase letter
+                  </p>
+                )}
+              </div>
 
               <Input
                 label={t('confirmPassword')}
@@ -140,11 +203,13 @@ export default function Signup() {
                 onChange={handleChange}
                 error={errors.confirmPassword}
                 required
+                disabled={settings.allowRegistration === false}
                 suffix={
                   <button
                     type="button"
                     className="password-toggle-inline"
                     onClick={() => setShowConfirm(!showConfirm)}
+                    disabled={settings.allowRegistration === false}
                   >
                     {showConfirm ? <Eye size={18} /> : <EyeOff size={18} />}
                   </button>
@@ -152,13 +217,14 @@ export default function Signup() {
               />
 
               <div className="terms">
-                <input 
-                  type="checkbox" 
-                  id="acceptTerms" 
-                  name="acceptTerms" 
+                <input
+                  type="checkbox"
+                  id="acceptTerms"
+                  name="acceptTerms"
                   checked={formData.acceptTerms}
                   onChange={handleChange}
-                  required 
+                  required
+                  disabled={settings.allowRegistration === false}
                 />
                 <label htmlFor="acceptTerms">
                   {t('iAgreeTo')} <a href="#terms" onClick={(e) => openPolicy(e, 'terms')}>{t('termsOfService')}</a> {t('and')} <a href="#privacy" onClick={(e) => openPolicy(e, 'privacy')}>{t('privacyPolicy')}</a>
@@ -170,9 +236,9 @@ export default function Signup() {
                 size="large"
                 className="button-full"
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || settings.allowRegistration === false || settingsLoading}
               >
-                {isLoading ? t('creatingAccount') : t('createAccount')}
+                {settingsLoading ? '...' : (isLoading ? t('creatingAccount') : t('createAccount'))}
               </Button>
             </form>
 
@@ -189,7 +255,7 @@ export default function Signup() {
             <button className="close-modal-btn" onClick={() => setShowPolicyModal(false)}>
               <X size={20} />
             </button>
-            
+
             <div className="modal-policy-header">
               {policyType === 'privacy' ? (
                 <>
@@ -208,10 +274,10 @@ export default function Signup() {
               {policyType === 'privacy' ? (
                 <div className="policy-text-block">
                   <p className="intro-lead">At Cleo, your privacy is our foundation. We recognize that health data is extremely sensitive, and we are committed to providing the highest level of protection.</p>
-                  
+
                   <h3><ShieldCheck size={18} /> Our Commitment</h3>
                   <p>All data is encrypted in transit and at rest using AES-256 standards. We never sell your personal or health data to advertisers.</p>
-                  
+
                   <h3>1. Information We Collect</h3>
                   <ul>
                     <li><strong>Profile Data:</strong> Name, Email, and Date of Birth.</li>
@@ -232,7 +298,7 @@ export default function Signup() {
 
                   <h3>1. Agreement to Terms</h3>
                   <p>By using Cleo, you agree to be bound by these legal terms. If you do not agree, you must discontinue use immediately.</p>
-                  
+
                   <h3>2. User Representations</h3>
                   <p>You represent that your registration info is accurate and that you are at least 13 years of age (or legal age in your region).</p>
 
@@ -247,7 +313,7 @@ export default function Signup() {
 
             <div className="modal-policy-footer">
               <button className="confirm-policy-btn" onClick={() => {
-                setFormData({...formData, acceptTerms: true});
+                setFormData({ ...formData, acceptTerms: true });
                 setShowPolicyModal(false);
               }}>
                 {t('iUnderstandAgree')}

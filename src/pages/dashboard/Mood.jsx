@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './Mood.css'
 
 export default function Mood() {
@@ -43,49 +44,54 @@ export default function Mood() {
   ]
 
   useEffect(() => {
-    const stored = localStorage.getItem('moodEntries')
-    if (stored) {
-      setMoodEntries(JSON.parse(stored))
-    }
+    fetchMoods()
   }, [])
 
-  const handleSaveMood = () => {
+  const fetchMoods = async () => {
+    try {
+      const data = await api.getMoods()
+      const processed = data.map(entry => {
+        const selected = moods.find(m => m.id === entry.mood_id)
+        return {
+          id: entry.id,
+          moodId: entry.mood_id,
+          label: selected ? selected.label : entry.mood_id,
+          date: new Date(entry.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+        }
+      })
+      setMoodEntries(processed)
+    } catch (err) {
+      console.error("Failed to fetch moods:", err)
+    }
+  }
+
+  const handleSaveMood = async () => {
     if (!selectedMood) return
 
     setIsLoading(true)
     const selected = moods.find(m => m.id === selectedMood)
+    const now = new Date()
+    const isoDate = now.toISOString().split('T')[0]
 
-    setTimeout(() => {
-      const now = new Date()
-      const formattedDate = now.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
-
-      const newEntry = {
-        id: Date.now(),
-        moodId: selected.id,
-        label: selected.label,
-        date: formattedDate
-      }
-
-      const updated = [newEntry, ...moodEntries]
-      setMoodEntries(updated)
-      localStorage.setItem('moodEntries', JSON.stringify(updated))
-
-      // Select a relevant tip
-      const tipsMapping = {
-        'tired': { title: 'Sleep Quality', content: 'Aim for 7-8 hours of quality sleep. Poor sleep can worsen PMS symptoms and irregular cycles.', color: 'purple' },
-        'anxious': { title: 'Stress Management', content: 'Practice meditation or deep breathing. Stress can affect your menstrual regularity.', color: 'purple' },
-        'sad': { title: 'Exercise Benefits', content: 'Gentle yoga or walking can help reduce cramps and improve mood during your period.', color: 'blue' },
-        'energetic': { title: 'Strength Training', content: 'Regular strength training can help reduce period pain and regulate hormones.', color: 'blue' }
-      }
-
-      setSuggestedTip(tipsMapping[selected.id] || {
-        title: 'Stay Hydrated',
-        content: 'Drinking plenty of water helps reduce bloating and fatigue throughout your cycle.',
-        color: 'green'
+    try {
+      const response = await api.logMood({
+        date: isoDate,
+        mood_id: selectedMood
       })
 
+      fetchMoods()
+
+      // Use the recommendation returned from the Backend
+      setSuggestedTip(response.recommendation || {
+        title: t('stayHydrated'),
+        content: t('hygieneTip'),
+        color: 'green'
+      })
+    } catch (err) {
+      console.error("Error saving mood:", err)
+    } finally {
       setIsLoading(false)
-    }, 800)
+    }
   }
 
   const getMoodIcon = (moodId) => {
@@ -109,7 +115,6 @@ export default function Mood() {
               <div className="selection-inner">
                 <div className="selection-header">
                   <h3>{t('howFeeling')}</h3>
-                  <p>{t('selectYourMood') || 'Select your current mood'}</p>
                 </div>
 
                 <div className="mood-icons-row">

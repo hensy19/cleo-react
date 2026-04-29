@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useNotifications } from '../../context/NotificationContext'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './Profile.css'
 
 export default function Profile() {
@@ -66,41 +67,156 @@ export default function Profile() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [newGoalData, setNewGoalData] = useState({ name: '', target: 10, unit: '' })
 
-  const handleResetGoals = () => {
-    const resetGoals = {};
-    Object.keys(goals).forEach(key => {
-      resetGoals[key] = { ...goals[key], current: 0, notified: false };
-    });
-    setGoals(resetGoals);
-    setShowResetModal(false);
+  const handleResetGoals = async () => {
+    try {
+      await api.resetGoals();
+      const resetGoals = {};
+      Object.keys(goals).forEach(key => {
+        resetGoals[key] = { ...goals[key], current: 0, notified: false };
+      });
+      setGoals(resetGoals);
+      setShowResetModal(false);
+    } catch(err) { console.error(err) }
   }
 
-  const handleAddNewGoal = () => {
+  const handleAddNewGoal = async () => {
     if (newGoalData.name) {
-      const key = newGoalData.name.toLowerCase().replace(/\s+/g, '');
-      setGoals({ ...goals, [key]: { current: 0, target: newGoalData.target, unit: newGoalData.unit || '', notified: false } });
-      setNewGoalData({ name: '', target: 10, unit: '' });
-      setShowAddGoalModal(false);
+      try {
+        const key = newGoalData.name.toLowerCase().replace(/\s+/g, '');
+        await api.saveGoal({
+          goal_name: key,
+          target_value: newGoalData.target,
+          unit: newGoalData.unit || ''
+        });
+        setGoals({ ...goals, [key]: { current: 0, target: newGoalData.target, unit: newGoalData.unit || '', notified: false } });
+        setNewGoalData({ name: '', target: 10, unit: '' });
+        setShowAddGoalModal(false);
+      } catch(err) { console.error(err) }
     }
   }
 
-  const handleCompleteGoal = (key) => {
-    setGoals(prev => ({
-      ...prev,
-      [key]: { ...prev[key], current: prev[key].target }
-    }));
+  const handleCompleteGoal = async (key) => {
+    try {
+      const goal = goals[key];
+      const newCurrent = goal.target;
+      await api.updateGoalProgress(key, {
+        current_value: newCurrent,
+        notified: goal.notified
+      });
+      setGoals(prev => ({
+        ...prev,
+        [key]: { ...prev[key], current: newCurrent }
+      }));
+    } catch(err) { console.error(err) }
   }
 
-  const handleUpdateProfile = () => {
-    localStorage.setItem('userInfo', JSON.stringify(user))
-    showToast(t('profileUpdated'))
+  const handleToggleEditingGoals = async () => {
+    if (isEditingGoals) {
+      try {
+        await Promise.all(Object.keys(goals).map(key => {
+          const goal = goals[key];
+          return api.saveGoal({
+            goal_name: key,
+            target_value: goal.target,
+            unit: goal.unit
+          });
+        }));
+        showToast('Goals saved successfully');
+      } catch (err) {
+        console.error(err);
+        showToast('Error saving goals', 'error');
+      }
+    }
+    setIsEditingGoals(!isEditingGoals)
+  }
+
+  const handleUpdateProfile = async () => {
+    try {
+      const payload = {
+        name: user.name,
+        dob: user.dob,
+        age: user.age ? parseInt(user.age) : null,
+        cycle_length: user.cycleLength ? parseInt(user.cycleLength) : null,
+        period_length: user.periodLength ? parseInt(user.periodLength) : null
+      }
+      const updatedUser = await api.updateProfile(payload)
+      
+      const cached = JSON.parse(localStorage.getItem('userInfo') || '{}')
+      localStorage.setItem('userInfo', JSON.stringify({
+        ...cached,
+        name: updatedUser.name,
+        dob: updatedUser.dob,
+        age: updatedUser.age,
+        cycleLength: updatedUser.cycle_length,
+        periodLength: updatedUser.period_length
+      }))
+      showToast(t('profileUpdated'))
+    } catch (err) {
+      console.error(err)
+      showToast('Error updating profile', 'error')
+    }
   }
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-    if (Object.keys(userInfo).length > 0) {
-      setUser(prev => ({ ...prev, ...userInfo }))
+    const fetchProfile = async () => {
+      try {
+        const profile = await api.getProfile()
+        
+        let formattedDob = user.dob;
+        if (profile.dob) {
+          const d = new Date(profile.dob)
+          formattedDob = d.toISOString().split('T')[0]
+        }
+
+        let formattedMemberSince = user.memberSince;
+        if (profile.created_at) {
+          const d = new Date(profile.created_at)
+          formattedMemberSince = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+        }
+
+        setUser(prev => ({ 
+          ...prev, 
+          ...profile,
+          dob: formattedDob,
+          cycleLength: profile.cycle_length || prev.cycleLength,
+          periodLength: profile.period_length || prev.periodLength,
+          memberSince: formattedMemberSince
+        }))
+        
+        localStorage.setItem('userInfo', JSON.stringify({
+          ...profile,
+          cycleLength: profile.cycle_length,
+          periodLength: profile.period_length
+        }))
+
+        // Fetch goals
+        try {
+          const goalsData = await api.getGoals();
+          if (goalsData && goalsData.length > 0) {
+            const newGoals = {};
+            goalsData.forEach(g => {
+              newGoals[g.goal_name] = {
+                current: parseFloat(g.current_value),
+                target: parseFloat(g.target_value),
+                unit: g.unit,
+                notified: g.notified
+              }
+            });
+            setGoals(newGoals);
+          }
+        } catch (err) {
+          console.error("Failed to load goals:", err);
+        }
+      } catch (err) {
+        console.error("Failed to load profile:", err)
+        const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+        if (Object.keys(userInfo).length > 0) {
+          setUser(prev => ({ ...prev, ...userInfo }))
+        }
+      }
     }
+
+    fetchProfile()
 
     // Dynamically calculate stats
     const notes = JSON.parse(localStorage.getItem('userNotes') || '[]')
@@ -189,6 +305,7 @@ export default function Profile() {
                               <span className="unit-label">{goals[key].unit}</span>
                               {key !== 'water' && key !== 'sleep' && key !== 'mindfulness' && (
                                 <button className="delete-goal-btn" onClick={() => {
+                                  api.deleteGoal(key).catch(console.error);
                                   const newGoals = { ...goals };
                                   delete newGoals[key];
                                   setGoals(newGoals);
@@ -210,7 +327,7 @@ export default function Profile() {
                 <div className="filler-actions">
                   <button
                     className={`filler-action-btn ${isEditingGoals ? '' : 'btn-outline'}`}
-                    onClick={() => setIsEditingGoals(!isEditingGoals)}
+                    onClick={handleToggleEditingGoals}
                   >
                     {isEditingGoals ? t('saveGoals') : t('editGoals')}
                   </button>

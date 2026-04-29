@@ -136,9 +136,28 @@
   transition: all 0.2s;
 }
 
-.as-btn-change:hover {
+.as-btn-change:hover:not(:disabled) {
   background-color: var(--white);
   border-color: var(--primary-color);
+}
+
+.as-btn-change:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Logo upload spinner */
+.as-logo-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #E2E8F0;
+  border-top-color: #3B82F6;
+  border-radius: 50%;
+  animation: as-spin 0.8s linear infinite;
+}
+
+@keyframes as-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Toggle Switches */

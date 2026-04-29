@@ -3,9 +3,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useLanguage } from '../../context/LanguageContext'
+import { useSettings } from '../../context/SettingsContext'
+import { calculatePredictions } from '../../utils/cycleUtils'
+import { api } from '../../utils/api'
 import './CalendarPage.css'
 
 export default function CalendarPage() {
+  const { settings } = useSettings()
   const navigate = useNavigate()
   const { t } = useLanguage()
   
@@ -35,27 +39,51 @@ export default function CalendarPage() {
     nextPeriod: []
   })
   const [userInfo, setUserInfo] = useState(null)
+  const [allMoods, setAllMoods] = useState([])
+  const [allSymptoms, setAllSymptoms] = useState([])
+  const [allNotes, setAllNotes] = useState([])
 
-  // Load initial data
+  // Load initial data from API
   useEffect(() => {
-    const logs = JSON.parse(localStorage.getItem('periodLogs') || '[]')
     const user = JSON.parse(localStorage.getItem('userInfo') || '{}')
     setUserInfo(user)
-
-    const days = []
-    logs.forEach(log => {
-      if (log.startDate) {
-        const start = new Date(log.startDate)
-        const length = log.periodLength || log.duration || 5
-        for (let i = 0; i < length; i++) {
-          const d = new Date(start)
-          d.setDate(d.getDate() + i)
-          days.push(d.toISOString().split('T')[0])
-        }
-      }
-    })
-    setPeriodDays(days)
+    fetchAllData()
   }, [])
+
+  const fetchAllData = async () => {
+    try {
+      const [periods, moods, symptoms, notes] = await Promise.all([
+        api.getPeriods(),
+        api.getMoods(),
+        api.getSymptoms(),
+        api.getNotes()
+      ])
+
+      const days = []
+      periods.forEach(log => {
+        if (log.start_date) {
+          const start = new Date(log.start_date)
+          let length = 5
+          if (log.end_date) {
+            const end = new Date(log.end_date)
+            length = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1
+          }
+          for (let i = 0; i < length; i++) {
+            const d = new Date(start)
+            d.setDate(d.getDate() + i)
+            days.push(formatDate(d))
+          }
+        }
+      })
+
+      setPeriodDays(days)
+      setAllMoods(moods)
+      setAllSymptoms(symptoms)
+      setAllNotes(notes)
+    } catch (err) {
+      console.error("Failed to fetch calendar data:", err)
+    }
+  }
 
   // Recalculate predictions whenever period days change
   useEffect(() => {
@@ -83,44 +111,29 @@ export default function CalendarPage() {
     }
 
     if (latestStartStr) {
-      const start = new Date(latestStartStr)
-
-      // Calculate Ovulation (Day 14)
-      const ovDate = new Date(start)
-      ovDate.setDate(ovDate.getDate() + Math.floor(cycleLength / 2))
-      const ovulation = [formatDate(ovDate)]
-
-      // Calculate Fertile Window (Day 9 to Day 14)
-      const fertile = []
-      for (let i = -5; i <= 0; i++) {
-        const d = new Date(ovDate)
-        d.setDate(d.getDate() + i)
-        fertile.push(formatDate(d))
-      }
-
-      // Calculate Next Period (Day 28)
-      const nextPeriod = []
-      const nextStart = new Date(start)
-      nextStart.setDate(nextStart.getDate() + cycleLength)
-      for (let i = 0; i < periodLength; i++) {
-        const d = new Date(nextStart)
-        d.setDate(d.getDate() + i)
-        nextPeriod.push(formatDate(d))
-      }
-
-      setPredictions({ ovulation, fertile, nextPeriod })
+      const preds = calculatePredictions(latestStartStr, cycleLength, periodLength)
+      setPredictions(preds)
     }
   }, [periodDays, tempSelectedDates, userInfo])
 
   function formatDate(date) {
-    return date.toISOString().split('T')[0]
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  const toLocalISO = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return formatDate(date);
   }
 
   // Build calendar days
   const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay()
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate()
-  const todayStr = today.toISOString().split('T')[0]
+  const todayStr = formatDate(today)
 
   const calendarDays = []
   // Previous month trailing days
@@ -140,7 +153,10 @@ export default function CalendarPage() {
 
   function formatDateStr(y, m, d) {
     const date = new Date(y, m, d)
-    return date.toISOString().split('T')[0]
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
   }
 
   // Get data indicators for a date
@@ -149,19 +165,24 @@ export default function CalendarPage() {
     const isPeriod = periodDays.includes(dateStr)
     if (isPeriod) indicators.push('period')
 
-    const moods = JSON.parse(localStorage.getItem('moodEntries') || '[]')
-    const dateParts = dateStr.split('-')
-    const dateObj = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]))
+    // Moods
+    const dateObj = new Date(dateStr + 'T00:00:00')
     const moodDateStr = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
-    if (moods.some(m => m.date === moodDateStr)) indicators.push('mood')
+    if (allMoods.some(m => {
+      const mDate = new Date(m.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+      return mDate === moodDateStr
+    })) indicators.push('mood')
 
-    const symptoms = JSON.parse(localStorage.getItem('symptomLogs') || '[]')
-    if (symptoms.some(s => s.date === dateStr)) indicators.push('symptom')
+    // Symptoms
+    if (allSymptoms.some(s => {
+      const sDate = toLocalISO(s.date)
+      return sDate === dateStr
+    })) indicators.push('symptom')
 
-    const notes = JSON.parse(localStorage.getItem('userNotes') || '[]')
-    if (notes.some(n => {
-      const noteDate = new Date(n.date || n.createdAt)
-      return noteDate.toISOString().split('T')[0] === dateStr
+    // Notes
+    if (allNotes.some(n => {
+      const nDate = toLocalISO(n.date)
+      return nDate === dateStr
     })) indicators.push('note')
 
     return indicators
@@ -188,65 +209,65 @@ export default function CalendarPage() {
     const displayDate = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
     const moodDateStr = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
 
-    // Moods
-    const allMoods = JSON.parse(localStorage.getItem('moodEntries') || '[]')
-    const dayMoods = allMoods.filter(m => m.date === moodDateStr)
-
-    // Symptoms
-    const allSymptoms = JSON.parse(localStorage.getItem('symptomLogs') || '[]')
-    const daySymptoms = allSymptoms.filter(s => s.date === dateStr)
-
-    // Notes
-    const allNotes = JSON.parse(localStorage.getItem('userNotes') || '[]')
-    const dayNotes = allNotes.filter(n => {
-      const noteDate = new Date(n.date || n.createdAt)
-      return noteDate.toISOString().split('T')[0] === dateStr
+    // Filter data for the specific day
+    const dayMoods = allMoods.filter(m => {
+      const mDate = new Date(m.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+      return mDate === moodDateStr
+    }).map(m => {
+      const selected = Object.keys(MOOD_EMOJIS).find(key => key === m.mood_id)
+      return { ...m, moodId: m.mood_id, label: m.mood_id }
     })
 
-    // Period
+    const daySymptoms = allSymptoms.filter(s => {
+      const sDate = toLocalISO(s.date)
+      return sDate === dateStr
+    })
+
+    const dayNotes = allNotes.filter(n => {
+      const nDate = toLocalISO(n.date)
+      return nDate === dateStr
+    })
+
     const isPeriod = periodDays.includes(dateStr)
 
     setModalData({ displayDate, dateStr, dayMoods, daySymptoms, dayNotes, isPeriod })
   }
 
-  // Toggle period day
-  function togglePeriodDay() {
+  // Toggle period day (marks a single day as start of period for simplicity)
+  async function togglePeriodDay() {
     if (!selectedDate) return
-    const updated = periodDays.includes(selectedDate)
-      ? periodDays.filter(d => d !== selectedDate)
-      : [...periodDays, selectedDate]
-    setPeriodDays(updated)
-
-    // Also update localStorage periodLogs
-    const logs = JSON.parse(localStorage.getItem('periodLogs') || '[]')
-    if (periodDays.includes(selectedDate)) {
-      // Removing — just update state, simplified approach
-    } else {
-      logs.push({ startDate: selectedDate, periodLength: 1, id: Date.now() })
+    const isAlreadyPeriod = periodDays.includes(selectedDate)
+    
+    if (!isAlreadyPeriod) {
+      try {
+        await api.logPeriod({
+          start_date: selectedDate,
+          end_date: selectedDate,
+          flow: 'medium'
+        })
+        fetchAllData()
+        setModalData(prev => prev ? { ...prev, isPeriod: true } : prev)
+      } catch (err) {
+        console.error("Error logging period day:", err)
+      }
     }
-    localStorage.setItem('periodLogs', JSON.stringify(logs))
-
-    // Update modal
-    setModalData(prev => prev ? { ...prev, isPeriod: !prev.isPeriod } : prev)
   }
 
   // Save quick note for the selected date
-  function saveQuickNote() {
+  async function saveQuickNote() {
     if (!quickNote.trim() || !selectedDate) return
-    const dateObj = new Date(selectedDate + 'T00:00:00')
-    const formattedDate = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-    const newNote = {
-      id: Date.now(),
-      title: `Note — ${formattedDate}`,
-      content: quickNote,
-      date: formattedDate
+    try {
+      await api.createNote({
+        date: selectedDate,
+        title: `Note — ${selectedDate}`,
+        content: quickNote
+      })
+      setQuickNote('')
+      fetchAllData()
+      // Refresh modal data will happen after fetchAllData updates the state
+    } catch (err) {
+      console.error("Error saving quick note:", err)
     }
-    const allNotes = JSON.parse(localStorage.getItem('userNotes') || '[]')
-    const updated = [newNote, ...allNotes]
-    localStorage.setItem('userNotes', JSON.stringify(updated))
-    setQuickNote('')
-    // Refresh modal data
-    setModalData(prev => prev ? { ...prev, dayNotes: [newNote, ...prev.dayNotes] } : prev)
   }
 
   const handlePrev = () => {
@@ -259,28 +280,30 @@ export default function CalendarPage() {
     else setCurrentMonth(m => m + 1)
   }
 
-  const handleSavePeriod = () => {
+  const handleSavePeriod = async () => {
     if (tempSelectedDates.length === 0) return
 
-    const logs = JSON.parse(localStorage.getItem('periodLogs') || '[]')
+    setIsLoading(true)
+    try {
+      // Find the min and max dates from tempSelectedDates to log as a block
+      const sortedDates = [...tempSelectedDates].sort()
+      const startDate = sortedDates[0]
+      const endDate = sortedDates[sortedDates.length - 1]
 
-    tempSelectedDates.forEach(date => {
-      // Check if already exists to avoid duplicates
-      if (!periodDays.includes(date)) {
-        logs.push({
-          id: Date.now() + Math.random(),
-          startDate: date,
-          periodLength: 1,
-          flow: selectedFlow,
-          type: 'manual'
-        })
-      }
-    })
+      await api.logPeriod({
+        start_date: startDate,
+        end_date: endDate,
+        flow: selectedFlow
+      })
 
-    localStorage.setItem('periodLogs', JSON.stringify(logs))
-    setPeriodDays(prev => [...new Set([...prev, ...tempSelectedDates])])
-    setTempSelectedDates([])
-    setIsSelectionMode(false)
+      fetchAllData()
+      setTempSelectedDates([])
+      setIsSelectionMode(false)
+    } catch (err) {
+      console.error("Error saving period block:", err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const FLOW_OPTIONS = [
@@ -361,8 +384,8 @@ export default function CalendarPage() {
 
                 // Prediction classes (only if not a current/temp period day)
                 if (!isPeriod && !isTempSelected) {
-                  if (isOvulation) statusClasses += ' cal-day-ovulation'
-                  else if (isFertile) statusClasses += ' cal-day-fertile'
+                  if (isOvulation && settings.enableOvulationDisplay !== false) statusClasses += ' cal-day-ovulation'
+                  else if (isFertile && settings.enableOvulationDisplay !== false) statusClasses += ' cal-day-fertile'
                   else if (isPredicted) statusClasses += ' cal-day-predicted'
                 }
 
@@ -400,14 +423,18 @@ export default function CalendarPage() {
                 <span className="legend-indicator period"></span>
                 <span className="legend-label">{t('periodDays')}</span>
               </div>
-              <div className="cal-legend-item">
-                <span className="legend-indicator fertile"></span>
-                <span className="legend-label">{t('fertileWindow')}</span>
-              </div>
-              <div className="cal-legend-item">
-                <span className="legend-indicator ovulation"></span>
-                <span className="legend-label">{t('ovulationDay')}</span>
-              </div>
+              {settings.enableOvulationDisplay !== false && (
+                <>
+                  <div className="cal-legend-item">
+                    <span className="legend-indicator fertile"></span>
+                    <span className="legend-label">{t('fertileWindow')}</span>
+                  </div>
+                  <div className="cal-legend-item">
+                    <span className="legend-indicator ovulation"></span>
+                    <span className="legend-label">{t('ovulationDay')}</span>
+                  </div>
+                </>
+              )}
               <div className="cal-legend-item">
                 <span className="legend-indicator predicted"></span>
                 <span className="legend-label">{t('predictedPeriod')}</span>

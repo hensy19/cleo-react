@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import { Eye, EyeOff } from 'lucide-react'
+import { api } from '../../utils/api'
 import './AdminLogin.css'
 
 export default function AdminLogin() {
@@ -27,15 +28,22 @@ export default function AdminLogin() {
     if (!validateForm()) return
 
     setIsLoading(true)
-    setTimeout(() => {
-      localStorage.setItem('adminToken', 'admin_token_' + Date.now())
-      localStorage.setItem('adminInfo', JSON.stringify({
-        email,
-        role: 'admin'
-      }))
+    try {
+      // Call the real API endpoint
+      const response = await api.adminLogin({ email, password })
+      
+      // Save the special admin token and user info
+      localStorage.setItem('adminToken', response.token)
+      localStorage.setItem('adminInfo', JSON.stringify(response.admin))
+      
+      // Navigate to Admin Dashboard
       navigate('/admin/dashboard')
+    } catch (err) {
+      console.error("Login failed", err)
+      setErrors({ form: err.message || 'Invalid credentials' })
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -48,6 +56,8 @@ export default function AdminLogin() {
           </div>
 
           <form onSubmit={handleSubmit} className="admin-login-form">
+            {errors.form && <div className="error-alert">{errors.form}</div>}
+            
             <Input
               label="Admin Email"
               type="email"

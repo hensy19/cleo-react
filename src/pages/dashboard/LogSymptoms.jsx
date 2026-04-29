@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './LogSymptoms.css'
 
 export default function LogSymptoms() {
@@ -40,40 +41,39 @@ export default function LogSymptoms() {
     )
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (selectedSymptoms.length === 0) return
 
     setIsLoading(true)
-    setTimeout(() => {
-      const logs = JSON.parse(localStorage.getItem('symptomLogs') || '[]')
-      const newEntry = {
-        id: Date.now(),
-        date: new Date().toISOString().split('T')[0],
-        symptoms: selectedSymptoms,
-        notes,
-        createdAt: new Date().toISOString()
+    const isoDate = new Date().toISOString().split('T')[0]
+
+    try {
+      const response = await api.logSymptoms({
+        date: isoDate,
+        symptoms: selectedSymptoms
+      })
+
+      // If user provided notes, also save them to the notes table
+      if (notes.trim()) {
+        await api.createNote({
+          date: isoDate,
+          title: "Symptom Logging Notes",
+          content: notes
+        })
       }
-      localStorage.setItem('symptomLogs', JSON.stringify([...logs, newEntry]))
-      
-      // Analysis for relevant tip
-      const tipsMapping = {
-        'cramps': { title: 'Heat Therapy', content: 'Apply a heating pad to your lower abdomen for 15-20 minutes to relieve menstrual cramps.', color: 'pink' },
-        'bloating': { title: 'Reduce Bloating', content: 'Avoid salty foods and drink plenty of water. Potassium-rich foods like bananas can help.', color: 'green' },
-        'fatigue': { title: 'Iron-Rich Foods', content: 'Include spinach, lentils, and red meat in your diet to replenish iron lost during menstruation.', color: 'green' },
-        'headache': { title: 'Stay Hydrated', content: 'Drinking plenty of water and getting rest can help alleviate menstrual headaches.', color: 'lightblue' }
-      }
-      
-      // Pick first matched symptom or default
-      const matchedSymptom = selectedSymptoms.find(s => tipsMapping[s])
-      setSuggestedTip(tipsMapping[matchedSymptom] || { 
-        title: 'Managing PMS Symptoms', 
-        content: 'Stay hydrated, reduce caffeine, and get adequate sleep to minimize menstruation-related symptoms.',
+
+      // Use the recommendation returned from the Backend
+      setSuggestedTip(response.recommendation || { 
+        title: t('pmsRelief'), 
+        content: t('pmsReliefTip'),
         color: 'pink'
       })
-      
+    } catch (err) {
+      console.error("Error saving symptoms:", err)
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
