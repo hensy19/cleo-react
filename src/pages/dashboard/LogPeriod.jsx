@@ -14,6 +14,25 @@ export default function LogPeriod() {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
+  // Get user's default period length for automatic calculation
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+  const defaultPeriodLength = parseInt(userInfo.periodLength || 5)
+
+  const handleStartDateChange = (e) => {
+    const startStr = e.target.value
+    setStartDate(startStr)
+
+    if (startStr) {
+      const start = new Date(startStr)
+      // Add (periodLength - 1) days to the start date
+      const end = new Date(start)
+      end.setDate(start.getDate() + (defaultPeriodLength - 1))
+      
+      const endStr = end.toISOString().split('T')[0]
+      setEndDate(endStr)
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!startDate || !endDate) return
@@ -64,7 +83,7 @@ export default function LogPeriod() {
                   <input
                     type="date"
                     value={startDate}
-                    onChange={e => setStartDate(e.target.value)}
+                    onChange={handleStartDateChange}
                     required
                   />
                 </div>

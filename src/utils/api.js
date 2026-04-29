@@ -1,3 +1,5 @@
+import { clearUserData, clearAdminData } from './helpers';
+
 /**
  * Centralized API utility for handling backend requests
  */
@@ -15,8 +17,14 @@ const request = async (endpoint, options = {}) => {
     ...options.headers,
   };
 
-  // Check for admin token first, then normal user token
-  const token = localStorage.getItem('adminToken') || localStorage.getItem('authToken');
+  // Select appropriate token based on endpoint
+  let token;
+  if (endpoint.startsWith('/admin')) {
+    token = localStorage.getItem('adminToken');
+  } else {
+    token = localStorage.getItem('authToken');
+  }
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
@@ -31,8 +39,8 @@ const request = async (endpoint, options = {}) => {
 
     if (!response.ok) {
       if (response.status === 401) {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('adminToken');
+        clearUserData();
+        clearAdminData();
         window.location.href = '/login';
       }
       throw new Error(data.message || 'Something went wrong');
@@ -54,6 +62,10 @@ export const api = {
   login: (credentials) => request('/auth/login', {
     method: 'POST',
     body: JSON.stringify(credentials),
+  }),
+  googleLogin: (idToken) => request('/auth/google', {
+    method: 'POST',
+    body: JSON.stringify({ idToken }),
   }),
 
   // Admin Auth
@@ -138,7 +150,17 @@ export const api = {
   getAllTips: () => request('/tips'),
 
   // Admin Endpoints
+  getAdminStats: () => request('/admin/stats'),
+  getAdminActivity: () => request('/admin/activity'),
+  getAdminActiveUsers: () => request('/admin/active-users'),
   getAdminUsers: () => request('/admin/users'),
+  updateAdminUserStatus: (id, status) => request(`/admin/users/${id}/status`, {
+    method: 'PUT',
+    body: JSON.stringify({ status }),
+  }),
+  deleteAdminUser: (id) => request(`/admin/users/${id}`, {
+    method: 'DELETE',
+  }),
   getAdminTips: () => request('/admin/tips'),
   createAdminTip: (tipData) => request('/admin/tips', {
     method: 'POST',

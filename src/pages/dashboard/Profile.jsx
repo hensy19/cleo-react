@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { useNotifications } from '../../context/NotificationContext'
 import { useLanguage } from '../../context/LanguageContext'
+import { clearUserData, clearAdminData } from '../../utils/helpers'
 import { api } from '../../utils/api'
 import './Profile.css'
 
@@ -207,31 +208,32 @@ export default function Profile() {
         } catch (err) {
           console.error("Failed to load goals:", err);
         }
+
+        // Fetch notes and moods for stats
+        const notesData = await api.getNotes().catch(() => []);
+        const moodsData = await api.getMoods().catch(() => []);
+        
+        setUser(prev => ({
+          ...prev,
+          notesCreated: notesData.length,
+          moodEntries: moodsData.length
+        }))
       } catch (err) {
-        console.error("Failed to load profile:", err)
-        const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-        if (Object.keys(userInfo).length > 0) {
+        console.error("Failed to load profile from API:", err)
+        // Fallback
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        if (userInfo) {
           setUser(prev => ({ ...prev, ...userInfo }))
         }
       }
     }
 
     fetchProfile()
-
-    // Dynamically calculate stats
-    const notes = JSON.parse(localStorage.getItem('userNotes') || '[]')
-    const moods = JSON.parse(localStorage.getItem('moodEntries') || '[]')
-
-    setUser(prev => ({
-      ...prev,
-      notesCreated: notes.length,
-      moodEntries: moods.length
-    }))
   }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('userInfo')
+    clearUserData()
+    clearAdminData()
     navigate('/')
   }
 
@@ -357,7 +359,7 @@ export default function Profile() {
               {/* Horizontal Profile Header */}
               <div className="profile-horizontal-header">
                 <div className="header-avatar-mini">
-                  <span className="avatar-letter-small">H</span>
+                  <span className="avatar-letter-small">{user.name ? user.name[0].toUpperCase() : '?'}</span>
                 </div>
                 <div className="header-info-mini">
                   <h2>{user.name}</h2>

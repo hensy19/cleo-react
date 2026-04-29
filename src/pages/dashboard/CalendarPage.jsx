@@ -52,12 +52,23 @@ export default function CalendarPage() {
 
   const fetchAllData = async () => {
     try {
-      const [periods, moods, symptoms, notes] = await Promise.all([
+      const [periods, moods, symptoms, notes, profile] = await Promise.all([
         api.getPeriods(),
         api.getMoods(),
         api.getSymptoms(),
-        api.getNotes()
+        api.getNotes(),
+        api.getProfile()
       ])
+
+      // Update user info with fresh profile data
+      const updatedUser = {
+        ...profile,
+        cycleLength: profile.cycle_length,
+        periodLength: profile.period_length,
+        lastPeriodDate: profile.last_period_date
+      }
+      setUserInfo(updatedUser)
+      localStorage.setItem('userInfo', JSON.stringify(updatedUser))
 
       const days = []
       periods.forEach(log => {

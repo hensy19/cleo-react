@@ -6,6 +6,7 @@ import Card from '../../components/common/Card'
 import Modal from '../../components/common/Modal'
 import { useLanguage } from '../../context/LanguageContext'
 import { api } from '../../utils/api'
+import { calculatePredictions } from '../../utils/cycleUtils'
 import './History.css'
 
 export default function History() {
@@ -66,11 +67,20 @@ export default function History() {
       // Calculate stats
       if (processed.length > 0) {
         const last = processed[0]
+        
+        // Use user's cycle settings for predictions
+        const user = JSON.parse(localStorage.getItem('userInfo') || '{}')
+        const cycleLen = parseInt(user.cycleLength || 28)
+        const periodLen = parseInt(user.periodLength || 5)
+        
+        const preds = calculatePredictions(data[0].start_date, cycleLen, periodLen)
+        const nextDate = new Date(preds.nextPeriod[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+
         setStats({
           totalCycles: processed.length,
-          avgCycle: 28, // Placeholder or calculated if multiple periods exist
+          avgCycle: cycleLen,
           lastPeriod: last.startDate,
-          nextExpected: 'Calculating...' // Can use prediction logic here
+          nextExpected: nextDate
         })
       }
     } catch (err) {

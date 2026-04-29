@@ -1,7 +1,9 @@
+require("dotenv").config();
 const pool = require("./db");
 
 async function updateTable() {
     try {
+        await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active'");
         await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS has_onboarded BOOLEAN DEFAULT FALSE");
         console.log("Database table updated successfully.");
     } catch (err) {

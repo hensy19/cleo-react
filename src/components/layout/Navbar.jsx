@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { User, Lock, LogOut } from 'lucide-react'
+import { User, Lock, LogOut, Bell } from 'lucide-react'
 import { useSettings } from '../../context/SettingsContext'
 import { useLanguage } from '../../context/LanguageContext'
 import LanguageSwitcher from '../common/LanguageSwitcher'
+import { clearUserData, clearAdminData } from '../../utils/helpers'
 import './Navbar.css'
 
 export default function Navbar() {
@@ -15,9 +16,12 @@ export default function Navbar() {
   const isLoggedIn = localStorage.getItem('authToken')
   const isHomePage = location.pathname === '/'
 
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+  const userName = userInfo.name || 'H'
+
   const handleLogout = () => {
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('userInfo')
+    clearUserData()
+    clearAdminData()
     setIsDropdownOpen(false)
     navigate('/')
   }
@@ -76,33 +80,40 @@ export default function Navbar() {
           </div>
 
           {isLoggedIn ? (
-            <div className="nav-profile-wrapper">
-              <div 
-                className="nav-profile-container" 
-                onClick={toggleDropdown}
-                title="Profile Settings"
-              >
-                <div className="profile-avatar-img">
-                  <span className="avatar-placeholder">H</span>
+            <div className="navbar-actions">
+              <Link to="/reminders" className="nav-notification-btn" title="Reminders">
+                <Bell size={20} />
+                <span className="notification-dot"></span>
+              </Link>
+              
+              <div className="nav-profile-wrapper">
+                <div 
+                  className="nav-profile-container" 
+                  onClick={toggleDropdown}
+                  title="Profile Settings"
+                >
+                  <div className="profile-avatar-img">
+                    <span className="avatar-placeholder">{userName[0].toUpperCase()}</span>
+                  </div>
                 </div>
-              </div>
 
-              {isDropdownOpen && (
-                <div className="profile-dropdown">
-                  <Link to="/profile" className="dropdown-item" onClick={closeDropdown}>
-                    <User size={18} />
-                    <span>{t('profile')}</span>
-                  </Link>
-                  <Link to="/change-password" className="dropdown-item" onClick={closeDropdown}>
-                    <Lock size={18} />
-                    <span>{t('changePassword')}</span>
-                  </Link>
-                  <button className="dropdown-item logout" onClick={handleLogout}>
-                    <LogOut size={18} />
-                    <span>{t('logout')}</span>
-                  </button>
-                </div>
-              )}
+                {isDropdownOpen && (
+                  <div className="profile-dropdown">
+                    <Link to="/profile" className="dropdown-item" onClick={closeDropdown}>
+                      <User size={18} />
+                      <span>{t('profile')}</span>
+                    </Link>
+                    <Link to="/change-password" className="dropdown-item" onClick={closeDropdown}>
+                      <Lock size={18} />
+                      <span>{t('changePassword')}</span>
+                    </Link>
+                    <button className="dropdown-item logout" onClick={handleLogout}>
+                      <LogOut size={18} />
+                      <span>{t('logout')}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <Link to="/signup" className="nav-signup-btn" onClick={handleNavClick}>{t('signup')}</Link>

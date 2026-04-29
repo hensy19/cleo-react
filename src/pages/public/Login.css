@@ -166,6 +166,35 @@
   cursor: not-allowed;
 }
 
+.login-separator {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #94A3B8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.login-separator::before,
+.login-separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #E2E8F0;
+}
+
+.login-separator span {
+  padding: 0 1rem;
+}
+
+.google-login-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .login-footer {
   text-align: center;
   margin-top: 1.5rem;

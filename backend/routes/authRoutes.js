@@ -8,4 +8,7 @@ router.post("/signup", authController.signup);
 // Path: /api/auth/login
 router.post("/login", authController.login);
 
+// Path: /api/auth/google
+router.post("/google", authController.googleLogin);
+
 module.exports = router;

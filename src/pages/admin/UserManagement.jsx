@@ -112,7 +112,7 @@ export default function UserManagement() {
           role: 'User',
           lastActive: 'Recently', // Mocked for now
           cyclesLogged: user.cycle_length ? 'Tracked' : 'New',
-          status: 'active'
+          status: user.status || 'active'
         }
       })
 
@@ -131,9 +131,15 @@ export default function UserManagement() {
       message: 'Are you sure you want to delete this user? This will permanently remove their data.',
       type: 'danger',
       confirmText: 'Delete',
-      onConfirm: () => {
-        setUsers(users.filter(user => user.id !== id))
-        showToast('User deleted successfully!')
+      onConfirm: async () => {
+        try {
+          await api.deleteAdminUser(id)
+          setUsers(users.filter(user => user.id !== id))
+          showToast('User deleted successfully!')
+        } catch (err) {
+          console.error("Failed to delete user", err)
+          showToast('Error deleting user', 'error')
+        }
       }
     })
   }
@@ -141,6 +147,7 @@ export default function UserManagement() {
   const handleBlockUser = (id) => {
     const user = users.find(u => u.id === id)
     const isBlocked = user.status === 'blocked'
+    const newStatus = isBlocked ? 'active' : 'blocked'
 
     showModal({
       title: isBlocked ? 'Unblock User' : 'Block User',
@@ -149,11 +156,17 @@ export default function UserManagement() {
         : `Are you sure you want to block ${user.name}? They will lose access to their account immediately.`,
       confirmText: isBlocked ? 'Unblock' : 'Block',
       type: isBlocked ? 'primary' : 'danger',
-      onConfirm: () => {
-        setUsers(users.map(u =>
-          u.id === id ? { ...u, status: isBlocked ? 'active' : 'blocked' } : u
-        ))
-        showToast(`User ${isBlocked ? 'unblocked' : 'blocked'} successfully!`)
+      onConfirm: async () => {
+        try {
+          await api.updateAdminUserStatus(id, newStatus)
+          setUsers(users.map(u =>
+            u.id === id ? { ...u, status: newStatus } : u
+          ))
+          showToast(`User ${isBlocked ? 'unblocked' : 'blocked'} successfully!`)
+        } catch (err) {
+          console.error("Failed to update user status", err)
+          showToast('Error updating user status', 'error')
+        }
       }
     })
   }
@@ -256,16 +269,7 @@ export default function UserManagement() {
           </table>
         </div>
 
-        <div className="u-pagination">
-          <span className="u-page-info">Showing 1-{filteredUsers.length} of 2,481</span>
-          <div className="u-page-controls">
-            <button className="u-page-text">Previous</button>
-            <button className="u-page-num active">1</button>
-            <button className="u-page-num">2</button>
-            <button className="u-page-num">3</button>
-            <button className="u-page-text">Next</button>
-          </div>
-        </div>
+
       </div>
     </AdminLayout>
   )

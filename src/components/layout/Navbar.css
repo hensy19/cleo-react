@@ -147,6 +147,43 @@
   transform: translateY(-2px);
 }
 
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-notification-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--primary-color);
+  background: rgba(16, 81, 127, 0.05);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.nav-notification-btn:hover {
+  background: rgba(16, 81, 127, 0.1);
+  transform: translateY(-1px);
+  color: #0d3e62;
+}
+
+.notification-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
 .nav-profile-wrapper {
   position: relative;
 }

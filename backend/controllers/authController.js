@@ -1,6 +1,10 @@
+const { OAuth2Client } = require('google-auth-library');
 const pool = require("../db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 /**
  * Helper to create JWT token
@@ -90,8 +94,15 @@ const login = async (req, res) => {
         }
 
         const user = userQuery.rows[0];
+        
+        // 2. Check if account is blocked
+        if (user.status === 'blocked') {
+            return res.status(403).json({ 
+                message: "This account has been blocked by an administrator. Please contact support if you believe this is an error." 
+            });
+        }
 
-        // 2. Verify password
+        // 3. Verify password
         const validPassword = await bcrypt.compare(password, user.password_hash);
 
         if (!validPassword) {
@@ -117,7 +128,79 @@ const login = async (req, res) => {
     }
 };
 
+/**
+ * Handle Google Login
+ */
+const googleLogin = async (req, res) => {
+    try {
+        const { idToken } = req.body;
+
+        if (!idToken) {
+            return res.status(400).json({ message: "Google ID Token is required" });
+        }
+
+        console.log("Verifying token with Client ID:", process.env.GOOGLE_CLIENT_ID);
+
+        // 1. Verify Google ID Token
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { sub: googleId, email, name, picture } = payload;
+
+        // 2. Check if user already exists
+        let userResult = await pool.query("SELECT * FROM users WHERE google_id = $1 OR email = $2", [googleId, email]);
+        let user;
+
+        if (userResult.rows.length > 0) {
+            user = userResult.rows[0];
+            
+            // Check if account is blocked
+            if (user.status === 'blocked') {
+                return res.status(403).json({ 
+                    message: "This account has been blocked by an administrator." 
+                });
+            }
+
+            // Update google_id if it was found by email but didn't have google_id linked
+            if (!user.google_id) {
+                await pool.query("UPDATE users SET google_id = $1 WHERE id = $2", [googleId, user.id]);
+            }
+        } else {
+            // 3. Create new user if not exists
+            const newUser = await pool.query(
+                "INSERT INTO users (name, email, google_id) VALUES ($1, $2, $3) RETURNING id, name, email, has_onboarded",
+                [name, email, googleId]
+            );
+            user = newUser.rows[0];
+        }
+
+        // 4. Create token
+        const token = createToken(user.id);
+
+        res.json({
+            message: "Google login successful!",
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                has_onboarded: user.has_onboarded
+            }
+        });
+    } catch (err) {
+        console.error("Google Auth Detailed Error:", err);
+        res.status(500).json({ 
+            message: "Google Authentication failed", 
+            error: err.message 
+        });
+    }
+};
+
 module.exports = {
     signup,
-    login
+    login,
+    googleLogin
 };

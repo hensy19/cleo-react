@@ -101,7 +101,7 @@ export default function Tips() {
               onClick={() => handleCardClick(recommendedTip)}
             >
               <div className="featured-icon">
-                <IconMapper name={recommendedTip.icon_name} size={32} />
+                <IconMapper name={recommendedTip.icon_name} size={24} />
               </div>
               <div className="featured-info">
                 <span className="featured-category">{recommendedTip.category}</span>

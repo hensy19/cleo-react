@@ -7,7 +7,9 @@ import signinImage from '../../assets/images/signin.svg'
 import logo from '../../assets/images/logo.png'
 import { Eye, EyeOff } from 'lucide-react'
 import { useLanguage } from '../../context/LanguageContext'
+import { GoogleLogin } from '@react-oauth/google'
 import { api } from '../../utils/api'
+import { clearUserData } from '../../utils/helpers'
 import './Login.css'
 
 export default function Login() {
@@ -18,6 +20,28 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { t } = useLanguage()
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoading(true);
+    setErrors({});
+    try {
+      const response = await api.googleLogin(credentialResponse.credential);
+      clearUserData();
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('userInfo', JSON.stringify(response.user));
+      const onboardingCompleted = response.user.has_onboarded;
+      localStorage.setItem('onboardingCompleted', String(onboardingCompleted));
+      navigate(onboardingCompleted ? '/dashboard' : '/onboarding');
+    } catch (err) {
+      setErrors({ server: "Google login failed: " + err.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setErrors({ server: "Google login was unsuccessful. Please try again." });
+  };
 
   const validateForm = () => {
     const newErrors = {}
@@ -37,6 +61,9 @@ export default function Login() {
 
     try {
       const response = await api.login({ email, password })
+      
+      // Clear any leftover data from previous user sessions
+      clearUserData()
       
       // Success
       localStorage.setItem('authToken', response.token)
@@ -117,6 +144,23 @@ export default function Login() {
               >
                 {isLoading ? t('signingIn') : t('signIn')}
               </Button>
+
+              <div className="login-separator">
+                <span>{t('or') || 'OR'}</span>
+              </div>
+
+              <div className="google-login-wrapper">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  useOneTap
+                  theme="outline"
+                  size="large"
+                  text="signin_with"
+                  shape="pill"
+                  width="100%"
+                />
+              </div>
             </form>
 
             <div className="login-footer">

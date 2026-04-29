@@ -12,6 +12,13 @@ const path = require("path");
 
 const app = express();
 
+// Validate Environment Variables
+if (!process.env.GOOGLE_CLIENT_ID) {
+    console.warn("WARNING: GOOGLE_CLIENT_ID is not defined in .env file.");
+} else {
+    console.log("GOOGLE_CLIENT_ID loaded successfully.");
+}
+
 // MIDDLEWARE
 app.use(cors());
 app.use(express.json());

@@ -6,7 +6,7 @@ import logo from '../../assets/images/logo.png'
 import Footer from '../../components/layout/Footer'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
-import { useLanguage } from '../../context/LanguageContext'
+import { GoogleLogin } from '@react-oauth/google'
 import { api } from '../../utils/api'
 import { useSettings } from '../../context/SettingsContext'
 import './Signup.css'
@@ -28,6 +28,27 @@ export default function Signup() {
   const [policyType, setPolicyType] = useState('privacy') // 'privacy' | 'terms'
   const navigate = useNavigate()
   const { t } = useLanguage()
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoading(true);
+    setErrors({});
+    try {
+      const response = await api.googleLogin(credentialResponse.credential);
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('userInfo', JSON.stringify(response.user));
+      const onboardingCompleted = response.user.has_onboarded;
+      localStorage.setItem('onboardingCompleted', String(onboardingCompleted));
+      navigate(onboardingCompleted ? '/dashboard' : '/onboarding');
+    } catch (err) {
+      setErrors({ server: "Google signup failed: " + err.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setErrors({ server: "Google registration was unsuccessful. Please try again." });
+  };
 
   const openPolicy = (e, type) => {
     e.preventDefault()
@@ -240,6 +261,23 @@ export default function Signup() {
               >
                 {settingsLoading ? '...' : (isLoading ? t('creatingAccount') : t('createAccount'))}
               </Button>
+
+              <div className="login-separator">
+                <span>{t('or') || 'OR'}</span>
+              </div>
+
+              <div className="google-login-wrapper">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  useOneTap
+                  theme="outline"
+                  size="large"
+                  text="signup_with"
+                  shape="pill"
+                  width="100%"
+                />
+              </div>
             </form>
 
             <div className="signup-footer">

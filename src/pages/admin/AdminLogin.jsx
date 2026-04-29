@@ -4,6 +4,7 @@ import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 import { Eye, EyeOff } from 'lucide-react'
 import { api } from '../../utils/api'
+import { clearAdminData } from '../../utils/helpers'
 import './AdminLogin.css'
 
 export default function AdminLogin() {
@@ -31,6 +32,9 @@ export default function AdminLogin() {
     try {
       // Call the real API endpoint
       const response = await api.adminLogin({ email, password })
+      
+      // Clear any leftover data from previous admin sessions
+      clearAdminData()
       
       // Save the special admin token and user info
       localStorage.setItem('adminToken', response.token)

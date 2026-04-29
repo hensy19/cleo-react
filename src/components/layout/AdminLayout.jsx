@@ -1,12 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../../context/SettingsContext'
+import { api } from '../../utils/api'
 import './AdminLayout.css'
 
 export default function AdminLayout({ children, activePage = 'dashboard', onSearch }) {
   const navigate = useNavigate()
   const { logoUrl } = useSettings()
   const [isSettingsOpen, setIsSettingsOpen] = useState(activePage.startsWith('settings'))
+  const [activeUsers, setActiveUsers] = useState([])
+
+  useEffect(() => {
+    fetchActiveUsers()
+  }, [])
+
+  const fetchActiveUsers = async () => {
+    try {
+      const data = await api.getAdminActiveUsers()
+      setActiveUsers(data)
+    } catch (err) {
+      console.error("Failed to fetch active users", err)
+    }
+  }
+
+  const dotColors = ['dot-red', 'dot-blue', 'dot-purple']
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken')
@@ -85,9 +102,16 @@ export default function AdminLayout({ children, activePage = 'dashboard', onSear
         <div className="admin-sidebar-bottom">
           <div className="active-users-list">
             <div className="list-title">Most active users</div>
-            <div className="active-user"><span className="dot dot-red"></span>Hensy Patel</div>
-            <div className="active-user"><span className="dot dot-blue"></span>Ridhdhi Raval</div>
-            <div className="active-user"><span className="dot dot-purple"></span>Komal Mishra</div>
+            {activeUsers.length > 0 ? (
+              activeUsers.map((user, index) => (
+                <div className="active-user" key={user.id}>
+                  <span className={`dot ${dotColors[index % dotColors.length]}`}></span>
+                  {user.name}
+                </div>
+              ))
+            ) : (
+              <div className="active-user" style={{ fontSize: '0.8rem', color: '#999' }}>Loading...</div>
+            )}
           </div>
           <button className="btn-logout" onClick={handleLogout}>
              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>

@@ -1,18 +1,18 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-  Smile, 
-  Heart, 
-  CloudMoon, 
-  Frown, 
-  Zap, 
-  CloudRain, 
-  Meh, 
-  Angry, 
+import {
+  Smile,
+  Heart,
+  CloudMoon,
+  Frown,
+  Zap,
+  CloudRain,
+  Meh,
+  Angry,
   Moon,
   AlertCircle,
   Thermometer,
-  Utensils 
+  Utensils
 } from 'lucide-react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Card from '../../components/common/Card'
@@ -22,13 +22,20 @@ import { useSettings } from '../../context/SettingsContext'
 import './Dashboard.css'
 import { calculatePredictions, getCycleDay, daysUntil, formatDateToISO } from '../../utils/cycleUtils'
 import { formatDate } from '../../utils/helpers'
+import { api } from '../../utils/api'
 
 export default function Dashboard() {
   const { settings } = useSettings()
   const [selectedMood, setSelectedMood] = useState(null)
   const [toast, setToast] = useState({ show: false, message: '' })
   const [user, setUser] = useState(null)
-  const [cycleData, setCycleData] = useState(null)
+  const [cycleData, setCycleData] = useState({
+    firstPeriod: { date: '—', daysUntil: 0, progress: 0 },
+    ovulation: { date: '—', daysUntil: 0, status: '' },
+    currentCycle: { day: 0, totalDays: 28, percentage: 0 },
+    insights: [],
+    recentNotes: []
+  })
   const { t } = useLanguage()
   const navigate = useNavigate()
 
@@ -79,72 +86,121 @@ export default function Dashboard() {
       return
     }
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-    setUser(userInfo)
+    const loadData = async () => {
+      try {
+        // Fetch fresh profile data to ensure predictions are accurate after login
+        const profile = await api.getProfile();
+        const updatedUserInfo = {
+          ...profile,
+          cycleLength: profile.cycle_length,
+          periodLength: profile.period_length,
+          lastPeriodDate: profile.last_period_date
+        };
 
-    // Calculate real data based on user cycle settings
-    const lastStart = userInfo.lastPeriodDate
-    const cycleLen = parseInt(userInfo.cycleLength || 28)
-    const periodLen = parseInt(userInfo.periodLength || 5)
+        // Update local storage so other components have fresh data
+        localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+        setUser(updatedUserInfo);
 
-    const predictions = calculatePredictions(lastStart, cycleLen, periodLen)
-    const nextPeriodDate = predictions.nextPeriod[0]
-    const ovulationDate = predictions.ovulation[0]
-    const currentDay = getCycleDay(lastStart)
-    const daysLeft = daysUntil(nextPeriodDate)
-    const daysToOv = daysUntil(ovulationDate)
+        // Calculate real data based on user cycle settings
+        const lastStart = updatedUserInfo.lastPeriodDate;
+        const cycleLen = parseInt(updatedUserInfo.cycleLength || 28);
+        const periodLen = parseInt(updatedUserInfo.periodLength || 5);
 
-    setCycleData({
-      firstPeriod: {
-        date: formatDate(nextPeriodDate),
-        daysUntil: daysLeft,
-        progress: Math.min(100, Math.max(0, ((cycleLen - daysLeft) / cycleLen) * 100))
-      },
-      ovulation: {
-        date: formatDate(ovulationDate),
-        daysUntil: Math.max(0, daysToOv),
-        status: daysToOv <= 2 && daysToOv >= 0 ? 'peak' : 'approaching'
-      },
-      currentCycle: {
-        day: currentDay || 0,
-        totalDays: cycleLen,
-        percentage: currentDay ? Math.min(100, (currentDay / cycleLen) * 100) : 0
-      },
-      insights: [
-        { id: 1, title: 'Regular Cycle Pattern', description: `Your cycle is set to ${cycleLen} days.`, icon: '📈' },
-        { id: 2, title: 'Upcoming Fertile Window', description: `Fertility window starts in about ${Math.max(0, daysToOv - 5)} days.`, icon: '✨' },
-        { id: 3, title: 'Average Cycle Length', description: `Your average cycle is ${cycleLen} days.`, icon: '⏳' }
-      ],
-      recentNotes: JSON.parse(localStorage.getItem('userNotes') || '[]').slice(0, 3).map(n => ({
-        id: n.id,
-        date: n.date,
-        content: n.content
-      }))
-    })
+        if (lastStart) {
+          const predictions = calculatePredictions(lastStart, cycleLen, periodLen)
+          const nextPeriodDate = predictions.nextPeriod[0]
+          const ovulationDate = predictions.ovulation[0]
+          const currentDay = getCycleDay(lastStart)
+          const daysLeft = daysUntil(nextPeriodDate)
+          const daysToOv = daysUntil(ovulationDate)
+
+          setCycleData({
+            firstPeriod: {
+              date: formatDate(nextPeriodDate),
+              daysUntil: daysLeft,
+              progress: Math.min(100, Math.max(0, ((cycleLen - daysLeft) / cycleLen) * 100))
+            },
+            ovulation: {
+              date: formatDate(ovulationDate),
+              daysUntil: Math.max(0, daysToOv),
+              status: daysToOv <= 2 && daysToOv >= 0 ? 'peak' : 'approaching'
+            },
+            currentCycle: {
+              day: currentDay || 0,
+              totalDays: cycleLen,
+              percentage: currentDay ? Math.min(100, (currentDay / cycleLen) * 100) : 0
+            },
+            insights: [
+              { id: 1, title: 'Regular Cycle Pattern', description: `Your cycle is set to ${cycleLen} days.`, icon: '📈' },
+              { id: 2, title: 'Upcoming Fertile Window', description: `Fertility window starts in about ${Math.max(0, daysToOv - 5)} days.`, icon: '✨' },
+              { id: 3, title: 'Average Cycle Length', description: `Your average cycle is ${cycleLen} days.`, icon: '⏳' }
+            ],
+            recentNotes: []
+          })
+        }
+
+        // Fetch recent notes from database
+        const notesData = await api.getNotes().catch(() => []);
+        const recentNotesFromDB = notesData.slice(0, 3).map(n => ({
+          id: n.id,
+          date: new Date(n.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }),
+          content: n.title || n.content
+        }));
+
+        setCycleData(prev => ({
+          ...(prev || {}),
+          recentNotes: recentNotesFromDB
+        }));
+
+        // Fetch recommended health tip
+        const tipData = await api.getTipRecommendation().catch(() => null);
+        if (tipData) {
+          setCycleData(prev => ({
+            ...(prev || {}),
+            recommendedTip: tipData.content
+          }));
+        }
+
+        // Fetch today's mood to sync with Mood page
+        const moodsData = await api.getMoods().catch(() => []);
+        const today = new Date().toISOString().split('T')[0];
+        const todayMood = moodsData.find(m => m.date.split('T')[0] === today);
+        if (todayMood) {
+          const moodInfo = moods.find(m => m.id === todayMood.mood_id);
+          if (moodInfo) setSelectedMood(moodInfo.label);
+        }
+
+
+      } catch (error) {
+        console.error("Failed to load user profile:", error);
+        // fallback to localStorage if offline or error
+        const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+        setUser(userInfo);
+      }
+    };
+
+    loadData();
   }, [navigate])
 
-  const handleMoodClick = (mood) => {
+  const handleMoodClick = async (mood) => {
     setSelectedMood(mood.label)
-    
+
     // Show cute feedback
     const supportMessage = moodMessages[mood.id] || "Mood logged! Stay wonderful! 🌸"
     showCuteToast(supportMessage)
 
-    // Save to mood history for consistency with the Mood page
-    const stored = localStorage.getItem('moodEntries')
-    const moodEntries = stored ? JSON.parse(stored) : []
-    
-    const now = new Date()
-    const formattedDate = now.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
-    
-    const newEntry = {
-      id: Date.now(),
-      moodId: mood.id,
-      label: mood.label,
-      date: formattedDate
+    // Save to database to sync with Mood page
+    try {
+      const now = new Date()
+      const isoDate = now.toISOString().split('T')[0]
+
+      await api.logMood({
+        date: isoDate,
+        mood_id: mood.id
+      })
+    } catch (err) {
+      console.error("Error logging mood from dashboard:", err)
     }
-    
-    localStorage.setItem('moodEntries', JSON.stringify([newEntry, ...moodEntries]))
   }
 
   if (!user) return null
@@ -174,10 +230,10 @@ export default function Dashboard() {
                     <span className="card-label">{t('firstPeriod')}</span>
                     <div className="card-icon-small">📅</div>
                   </div>
-                  <h2 className="card-value">{cycleData?.firstPeriod.date}</h2>
-                  <p className="card-subtext">in {cycleData?.firstPeriod.daysUntil} days</p>
+                  <h2 className="card-value">{cycleData?.firstPeriod?.date || '—'}</h2>
+                  <p className="card-subtext">in {cycleData?.firstPeriod?.daysUntil || 0} days</p>
                   <div className="progress-bar-container">
-                    <div className="progress-bar-fill" style={{ width: `${cycleData?.firstPeriod.progress}%` }}></div>
+                    <div className="progress-bar-fill" style={{ width: `${cycleData?.firstPeriod?.progress || 0}%` }}></div>
                   </div>
                 </Card>
 
@@ -191,8 +247,8 @@ export default function Dashboard() {
                       <span className="card-label">{t('ovulationDay')}</span>
                       <div className="card-icon-small card-icon-heart">💜</div>
                     </div>
-                    <h2 className="card-value">{cycleData?.ovulation.date}</h2>
-                    <p className="card-subtext">{t('inDays')} {cycleData?.ovulation.daysUntil} {t('days')}</p>
+                    <h2 className="card-value">{cycleData?.ovulation?.date || '—'}</h2>
+                    <p className="card-subtext">{t('inDays')} {cycleData?.ovulation?.daysUntil || 0} {t('days')}</p>
                     <span className="status-tag tag-purple">{t('peakStatus')}</span>
                   </Card>
                 )}
@@ -205,8 +261,8 @@ export default function Dashboard() {
                   <span className="card-label">{t('currentCycleDay')}</span>
                   <div className="cycle-progress-container">
                     <div className="cycle-info">
-                      <span className="cycle-day">{cycleData?.currentCycle.day}</span>
-                      <span className="cycle-total">{t('of')} {cycleData?.currentCycle.totalDays} {t('days')}</span>
+                      <span className="cycle-day">{cycleData?.currentCycle?.day || 0}</span>
+                      <span className="cycle-total">{t('of')} {cycleData?.currentCycle?.totalDays || 28} {t('days')}</span>
                     </div>
                     <div className="circular-progress">
                       {/* SVG circular progress can be added here or just styled div */}
@@ -267,7 +323,7 @@ export default function Dashboard() {
                 <h3>{t('cycleInsights')}</h3>
               </div>
               <div className="insights-list">
-                {cycleData?.insights.map(insight => (
+                {cycleData?.insights?.map(insight => (
                   <div key={insight.id} className="insight-item">
                     <div className="insight-icon">{insight.icon}</div>
                     <div className="insight-content">
@@ -284,7 +340,7 @@ export default function Dashboard() {
           <aside className="dashboard-sidebar">
             {/* User Profile Summary */}
             <Card className="user-profile-summary-card">
-              <h3>{t('yourProfile')}</h3>
+              <h3>{user.name}</h3>
               <div className="profile-stats">
                 <div className="stat-item">
                   <span className="stat-label">Age</span>
@@ -306,7 +362,7 @@ export default function Dashboard() {
             <Card className="recent-notes-card">
               <h3>{t('recentNotes')}</h3>
               <div className="notes-list">
-                {cycleData?.recentNotes.map(note => (
+                {cycleData?.recentNotes?.map(note => (
                   <div key={note.id} className="note-item">
                     <span className="note-date">{note.date}</span>
                     <p className="note-text">{note.content}</p>
@@ -324,7 +380,7 @@ export default function Dashboard() {
                   <h3>{t('healthTip')}</h3>
                 </div>
                 <p className="tip-content">
-                  Stay hydrated! drinking plenty of water can help reduce bloating and PMS symptoms during your cycle.
+                  {cycleData?.recommendedTip || "Stay hydrated! drinking plenty of water can help reduce bloating and PMS symptoms during your cycle."}
                 </p>
                 <Button variant="secondary" className="tip-btn" onClick={() => navigate('/tips')}>{t('moreTips')}</Button>
               </Card>

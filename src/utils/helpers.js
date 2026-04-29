@@ -197,3 +197,22 @@ export const isLoggedIn = () => {
 export const isAdmin = () => {
   return !!localStorage.getItem('adminToken')
 }
+
+/**
+ * Clear all user-related data from local storage
+ */
+export const clearUserData = () => {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('userInfo');
+  localStorage.removeItem('onboardingCompleted');
+  localStorage.removeItem('moodEntries');
+  localStorage.removeItem('userNotes');
+}
+
+/**
+ * Clear all admin-related data from local storage
+ */
+export const clearAdminData = () => {
+  localStorage.removeItem('adminToken');
+  localStorage.removeItem('adminInfo');
+}
