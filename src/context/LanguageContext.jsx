@@ -133,6 +133,8 @@ const translations = {
     notifyMe: 'Notify me',
     daysBefore: 'days before',
     dayBefore: 'day before',
+    newCycleSummaryLabel: 'New Cycle Summary',
+    newCycleSummaryDesc: 'Get a summary of your next predicted cycle and ovulation as soon as you log a new period.',
 
     // Tips
     tipsTitle: 'Health & Self-Care Tips',
@@ -555,6 +557,8 @@ const translations = {
     notifyMe: 'मुझे सूचित करें',
     daysBefore: 'दिन पहले',
     dayBefore: 'दिन पहले',
+    newCycleSummaryLabel: 'नई साइकिल सारांश',
+    newCycleSummaryDesc: 'नया पीरियड लॉग करते ही अपने अगले चक्र और ओव्यूलेशन का सारांश प्राप्त करें।',
 
     // Tips
     tipsTitle: 'स्वास्थ्य और आत्म-देखभाल युक्तियाँ',
@@ -978,6 +982,8 @@ const translations = {
     notifyMe: 'મને જાણ કરો',
     daysBefore: 'દિવસ પહેલા',
     dayBefore: 'દિવસ પહેલા',
+    newCycleSummaryLabel: 'નવી સાયકલ સારાંશ',
+    newCycleSummaryDesc: 'નવું માસિક લોગ કરતા જ તમારા આગામી ચક્ર અને ઓવ્યુલેશનનો સારાંશ મેળવો.',
 
     // Tips
     tipsTitle: 'સ્વાસ્થ્ય અને આત્મ-સંભાળ ટિપ્સ',

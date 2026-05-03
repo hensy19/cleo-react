@@ -1,4 +1,5 @@
 const pool = require("../db");
+const { sendCycleSummaryEmail } = require("../services/emailService");
 
 /**
  * Get period history for the logged-in user
@@ -28,11 +29,47 @@ const logPeriod = async (req, res) => {
             [req.user.id, start_date, end_date, flow || 'medium']
         );
 
-        // Also update the user's last_period_date in the users table for easier predictions
-        await pool.query(
-            "UPDATE users SET last_period_date = $1 WHERE id = $2",
+        // 1. Update the user's last_period_date in the users table
+        const userUpdate = await pool.query(
+            "UPDATE users SET last_period_date = $1 WHERE id = $2 RETURNING name, email, cycle_length, period_length",
             [start_date, req.user.id]
         );
+        
+        const user = userUpdate.rows[0];
+
+        // 2. Check if user wants a cycle summary email
+        const reminderPrefs = await pool.query(
+            "SELECT new_cycle_summary FROM reminders WHERE user_id = $1",
+            [req.user.id]
+        );
+
+        if (reminderPrefs.rows.length > 0 && reminderPrefs.rows[0].new_cycle_summary) {
+            // 3. Calculate Predictions
+            const cycleLength = user.cycle_length || 28;
+            const start = new Date(start_date);
+            
+            // Next Period
+            const nextPeriod = new Date(start);
+            nextPeriod.setDate(start.getDate() + cycleLength);
+            
+            // Ovulation Window (approx 14 days before next period)
+            // Window is typically 5 days before ovulation + ovulation day
+            const ovulationDay = new Date(nextPeriod);
+            ovulationDay.setDate(nextPeriod.getDate() - 14);
+            
+            const ovulationStart = new Date(ovulationDay);
+            ovulationStart.setDate(ovulationDay.getDate() - 3); // 3 days before
+            
+            const ovulationEnd = new Date(ovulationDay);
+            ovulationEnd.setDate(ovulationDay.getDate() + 1); // 1 day after
+
+            // 4. Send Email (Async, don't block the response)
+            sendCycleSummaryEmail(user.email, user.name, {
+                nextPeriod: nextPeriod.toISOString().split('T')[0],
+                ovulationStart: ovulationStart.toISOString().split('T')[0],
+                ovulationEnd: ovulationEnd.toISOString().split('T')[0]
+            }).catch(e => console.error("Email sending failed:", e));
+        }
 
         res.status(201).json(newEntry.rows[0]);
     } catch (err) {

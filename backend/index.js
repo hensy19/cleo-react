@@ -9,8 +9,12 @@ const symptomRoutes = require("./routes/symptomRoutes");
 const periodRoutes = require("./routes/periodRoutes");
 
 const path = require("path");
+const { initReminderCron } = require("./utils/reminderCron");
 
 const app = express();
+
+// Initialize automated tasks
+initReminderCron();
 
 // Validate Environment Variables
 if (!process.env.GOOGLE_CLIENT_ID) {

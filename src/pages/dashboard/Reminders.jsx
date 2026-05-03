@@ -16,6 +16,7 @@ export default function Reminders() {
   const [reminders, setReminders] = useState({
     periodApproaching: true,
     ovulationApproaching: true,
+    newCycleSummary: true,
     dailyLog: false,
     pillReminder: false,
   })
@@ -34,6 +35,7 @@ export default function Reminders() {
         setReminders({
           periodApproaching: data.period_approaching,
           ovulationApproaching: data.ovulation_approaching,
+          newCycleSummary: data.new_cycle_summary ?? true,
           dailyLog: data.daily_log,
           pillReminder: data.pill_reminder,
         });
@@ -57,6 +59,7 @@ export default function Reminders() {
         period_approaching: reminders.periodApproaching,
         days_before_period: daysBeforePeriod,
         ovulation_approaching: reminders.ovulationApproaching,
+        new_cycle_summary: reminders.newCycleSummary,
         daily_log: reminders.dailyLog,
         pill_reminder: reminders.pillReminder,
         reminder_time: reminderTime
@@ -131,6 +134,24 @@ export default function Reminders() {
                   type="checkbox" 
                   checked={reminders.ovulationApproaching} 
                   onChange={() => handleToggle('ovulationApproaching')} 
+                />
+                <span className="slider round"></span>
+              </label>
+            </div>
+
+            <div className="reminder-item">
+              <div className="reminder-info">
+                <div className="reminder-title-row">
+                  <span className="reminder-icon">📊</span>
+                  <h4>{t('newCycleSummaryLabel') || 'New Cycle Summary'}</h4>
+                </div>
+                <p>{t('newCycleSummaryDesc') || 'Get a summary of your next predicted cycle and ovulation as soon as you log a new period.'}</p>
+              </div>
+              <label className="toggle-switch">
+                <input 
+                  type="checkbox" 
+                  checked={reminders.newCycleSummary} 
+                  onChange={() => handleToggle('newCycleSummary')} 
                 />
                 <span className="slider round"></span>
               </label>
