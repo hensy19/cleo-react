@@ -24,43 +24,25 @@ import './Profile.css'
 export default function Profile() {
   const navigate = useNavigate()
   const { t } = useLanguage()
-  const { showModal, showToast } = useNotifications()
+  const { showModal, showToast, requestBrowserPermission, sendBrowserNotification, getBrowserPermissionStatus } = useNotifications()
   const [user, setUser] = useState({
-    name: 'Hensy Patel',
-    email: 'hensypatel@gmail.com',
-    dob: '01/01/2005',
-    age: 19,
+    name: '',
+    email: '',
+    dob: '',
+    age: '',
     cycleLength: 28,
     periodLength: 5,
-    memberSince: 'Jan 2026',
-    cyclesTracked: 2,
-    notesCreated: 16,
-    moodEntries: 42
+    memberSince: '',
+    cyclesTracked: 0,
+    notesCreated: 0,
+    moodEntries: 0
   })
 
   const [goals, setGoals] = useState({
-    water: { current: 1, target: 2, unit: 'L' },
-    sleep: { current: 6, target: 8, unit: 'h' },
-    mindfulness: { current: 10, target: 15, unit: 'm' }
+    water: { current: 0, target: 2, unit: 'L' },
+    sleep: { current: 0, target: 8, unit: 'h' },
+    mindfulness: { current: 0, target: 15, unit: 'm' }
   })
-
-  useEffect(() => {
-    // Check for goal completion and notify
-    Object.keys(goals).forEach(key => {
-      const goal = goals[key];
-      if (goal.current >= goal.target && !goal.notified) {
-        if (Notification.permission === "granted") {
-          new Notification(`Goal Achieved! 🌟`, {
-            body: `You've reached your daily ${key} goal. Amazing work!`,
-          });
-        }
-        setGoals(prev => ({
-          ...prev,
-          [key]: { ...prev[key], notified: true }
-        }));
-      }
-    });
-  }, [goals]);
 
   const [isEditingGoals, setIsEditingGoals] = useState(false)
   const [showResetModal, setShowResetModal] = useState(false)
@@ -157,6 +139,34 @@ export default function Profile() {
       showToast('Error updating profile', 'error')
     }
   }
+
+  const [reminderSettings, setReminderSettings] = useState({ daily_log: false });
+
+  const handleToggleNudge = async () => {
+    try {
+      const newStatus = !reminderSettings.daily_log;
+      await api.updateReminders({ daily_log: newStatus });
+      setReminderSettings({ ...reminderSettings, daily_log: newStatus });
+      
+      if (newStatus && getBrowserPermissionStatus() === 'default') {
+        await requestBrowserPermission();
+      }
+      
+      showToast(newStatus ? 'Reminders enabled' : 'Reminders disabled');
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    const fetchReminders = async () => {
+      try {
+        const data = await api.getReminders();
+        setReminderSettings({ daily_log: data.daily_log });
+      } catch (err) { console.error(err); }
+    };
+    fetchReminders();
+  }, []);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -258,7 +268,11 @@ export default function Profile() {
                   <div className="nudge-toggle-wrapper">
                     <span className="nudge-label">{t('nudge')}</span>
                     <label className="toggle-switch-mini">
-                      <input type="checkbox" defaultChecked />
+                      <input 
+                        type="checkbox" 
+                        checked={reminderSettings.daily_log} 
+                        onChange={handleToggleNudge}
+                      />
                       <span className="slider-mini round"></span>
                     </label>
                   </div>

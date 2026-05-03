@@ -168,8 +168,16 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  border: 6px solid var(--progress-bar-bg);
-  border-top-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circular-percentage {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--card-bg, #ffffff);
   display: flex;
   align-items: center;
   justify-content: center;

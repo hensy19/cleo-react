@@ -11,14 +11,13 @@ import './Reminders.css'
 
 export default function Reminders() {
   const navigate = useNavigate()
-  const { showToast } = useNotifications()
+  const { showToast, requestBrowserPermission, sendBrowserNotification, getBrowserPermissionStatus } = useNotifications()
   const { t } = useLanguage()
   const [reminders, setReminders] = useState({
     periodApproaching: true,
     ovulationApproaching: true,
     newCycleSummary: true,
     dailyLog: false,
-    pillReminder: false,
   })
 
   const [reminderTime, setReminderTime] = useState('09:00')
@@ -37,14 +36,11 @@ export default function Reminders() {
           ovulationApproaching: data.ovulation_approaching,
           newCycleSummary: data.new_cycle_summary ?? true,
           dailyLog: data.daily_log,
-          pillReminder: data.pill_reminder,
         });
         setDaysBeforePeriod(data.days_before_period);
-        // Format time properly just in case it comes back with seconds
+        
         let time = data.reminder_time;
-        if (time && time.length > 5) {
-          time = time.substring(0, 5);
-        }
+        if (time && time.length > 5) time = time.substring(0, 5);
         setReminderTime(time);
       } catch (err) {
         console.error("Failed to load reminders:", err);
@@ -61,15 +57,28 @@ export default function Reminders() {
         ovulation_approaching: reminders.ovulationApproaching,
         new_cycle_summary: reminders.newCycleSummary,
         daily_log: reminders.dailyLog,
-        pill_reminder: reminders.pillReminder,
-        reminder_time: reminderTime
+        reminder_time: reminderTime,
       });
-      showToast(t('passwordSavedSuccess') || 'Reminders saved successfully');
+      showToast(t('remindersSavedSuccess') || 'Reminders saved successfully');
+      
+      // Clear flags for testing
+      localStorage.removeItem('lastGoalReminderDate');
+      
+      if (reminders.dailyLog && getBrowserPermissionStatus() === 'default') {
+        await requestBrowserPermission();
+      }
     } catch (err) {
       console.error(err);
       showToast('Error saving reminders', 'error');
     }
   }
+
+  const handleTestNotification = () => {
+    sendBrowserNotification(
+      "Cleo Test Notification 🌸",
+      "This is how your daily reminders will look. Stay healthy!"
+    );
+  };
 
   return (
     <DashboardLayout>
@@ -103,20 +112,15 @@ export default function Reminders() {
                       onChange={(e) => setDaysBeforePeriod(Number(e.target.value))}
                       className="reminders-select"
                     >
-                      <option value={1}>1 {t('dayBefore')}</option>
-                      <option value={2}>2 {t('daysBefore')}</option>
-                      <option value={3}>3 {t('daysBefore')}</option>
-                      <option value={5}>5 {t('daysBefore')}</option>
+                      <option value={1}>1 Day</option>
+                      <option value={2}>2 Days</option>
+                      <option value={3}>3 Days</option>
                     </select>
                   </div>
                 )}
               </div>
               <label className="toggle-switch">
-                <input 
-                  type="checkbox" 
-                  checked={reminders.periodApproaching} 
-                  onChange={() => handleToggle('periodApproaching')} 
-                />
+                <input type="checkbox" checked={reminders.periodApproaching} onChange={() => handleToggle('periodApproaching')} />
                 <span className="slider round"></span>
               </label>
             </div>
@@ -130,11 +134,7 @@ export default function Reminders() {
                 <p>{t('ovulationWindowDesc')}</p>
               </div>
               <label className="toggle-switch">
-                <input 
-                  type="checkbox" 
-                  checked={reminders.ovulationApproaching} 
-                  onChange={() => handleToggle('ovulationApproaching')} 
-                />
+                <input type="checkbox" checked={reminders.ovulationApproaching} onChange={() => handleToggle('ovulationApproaching')} />
                 <span className="slider round"></span>
               </label>
             </div>
@@ -145,14 +145,10 @@ export default function Reminders() {
                   <span className="reminder-icon">📊</span>
                   <h4>{t('newCycleSummaryLabel') || 'New Cycle Summary'}</h4>
                 </div>
-                <p>{t('newCycleSummaryDesc') || 'Get a summary of your next predicted cycle and ovulation as soon as you log a new period.'}</p>
+                <p>{t('newCycleSummaryDesc') || 'Get a summary of your next predicted cycle.'}</p>
               </div>
               <label className="toggle-switch">
-                <input 
-                  type="checkbox" 
-                  checked={reminders.newCycleSummary} 
-                  onChange={() => handleToggle('newCycleSummary')} 
-                />
+                <input type="checkbox" checked={reminders.newCycleSummary} onChange={() => handleToggle('newCycleSummary')} />
                 <span className="slider round"></span>
               </label>
             </div>
@@ -167,32 +163,10 @@ export default function Reminders() {
                   <span className="reminder-icon">📝</span>
                   <h4>{t('dailyCheckInLabel')}</h4>
                 </div>
-                <p>{t('dailyCheckInDesc')}</p>
+                <p>{t('dailyCheckInDesc')} & Goal Reminders</p>
               </div>
               <label className="toggle-switch">
-                <input 
-                  type="checkbox" 
-                  checked={reminders.dailyLog} 
-                  onChange={() => handleToggle('dailyLog')} 
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-
-            <div className="reminder-item">
-              <div className="reminder-info">
-                <div className="reminder-title-row">
-                  <span className="reminder-icon">💊</span>
-                  <h4>{t('medicationReminderLabel')}</h4>
-                </div>
-                <p>{t('medicationReminderDesc')}</p>
-              </div>
-              <label className="toggle-switch">
-                <input 
-                  type="checkbox" 
-                  checked={reminders.pillReminder} 
-                  onChange={() => handleToggle('pillReminder')} 
-                />
+                <input type="checkbox" checked={reminders.dailyLog} onChange={() => handleToggle('dailyLog')} />
                 <span className="slider round"></span>
               </label>
             </div>
@@ -202,19 +176,28 @@ export default function Reminders() {
             <h3>{t('notificationPrefsLabel')}</h3>
             <div className="reminder-time-setting">
               <label>{t('defaultReminderTime')}</label>
-              <input 
-                type="time" 
-                value={reminderTime} 
-                onChange={(e) => setReminderTime(e.target.value)} 
-                className="time-input"
-              />
+              <input type="time" value={reminderTime} onChange={(e) => setReminderTime(e.target.value)} className="time-input" />
+            </div>
+            <p className="reminder-info-tip">💡 The app tab must be open to receive these browser notifications.</p>
+            
+            <div className="browser-notification-status">
+              <div className="status-info">
+                <span className="status-label">Browser Notifications:</span>
+                <span className={`status-badge ${getBrowserPermissionStatus()}`}>
+                  {getBrowserPermissionStatus().toUpperCase()}
+                </span>
+              </div>
+              <div className="status-actions">
+                {getBrowserPermissionStatus() !== 'granted' && (
+                  <Button variant="secondary" size="small" onClick={requestBrowserPermission}>Enable Notifications</Button>
+                )}
+                <Button variant="outline" size="small" onClick={handleTestNotification}>Test Notification</Button>
+              </div>
             </div>
           </Card>
 
           <div className="reminders-actions">
-            <Button onClick={handleSave} className="save-reminders-btn btn-primary">
-              {t('saveSettings')}
-            </Button>
+            <Button onClick={handleSave} className="save-reminders-btn btn-primary">{t('saveSettings')}</Button>
           </div>
         </div>
       </div>

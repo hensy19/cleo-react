@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Mail, ArrowLeft, CheckCircle2 } from 'lucide-react'
 import Navbar from '../../components/layout/Navbar'
 import { useLanguage } from '../../context/LanguageContext'
+import { api } from '../../utils/api'
 import './ForgotPassword.css'
 
 export default function ForgotPassword() {
@@ -10,11 +11,18 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (email) {
-      // Logic for sending reset email would go here
+    if (!email) return
+
+    try {
+      setError('')
+      await api.forgotPassword(email)
       setIsSubmitted(true)
+    } catch (err) {
+      setError(err.message || 'Failed to send reset link')
     }
   }
 

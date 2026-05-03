@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import NotificationContext from './NotificationContext';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
 import Toast from '../components/common/Toast';
+import { useBrowserNotifications } from '../hooks/useBrowserNotifications';
 import './NotificationStyles.css';
 
 export default function NotificationProvider({ children }) {
@@ -51,6 +52,16 @@ export default function NotificationProvider({ children }) {
     }, duration);
   }, []);
 
+  const { requestPermission, sendNotification, getPermissionStatus } = useBrowserNotifications();
+
+  const contextValue = useMemo(() => ({
+    showModal,
+    showToast,
+    requestBrowserPermission: requestPermission,
+    sendBrowserNotification: sendNotification,
+    getBrowserPermissionStatus: getPermissionStatus
+  }), [showModal, showToast, requestPermission, sendNotification, getPermissionStatus]);
+
   const handleConfirm = () => {
     if (modal.onConfirm) modal.onConfirm();
     hideModal();
@@ -62,7 +73,7 @@ export default function NotificationProvider({ children }) {
   };
 
   return (
-    <NotificationContext.Provider value={{ showModal, showToast }}>
+    <NotificationContext.Provider value={contextValue}>
       {children}
       
       {/* Global Confirmation Modal */}

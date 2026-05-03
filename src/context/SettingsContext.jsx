@@ -37,9 +37,6 @@ export function SettingsProvider({ children }) {
         parsedSettings.sessionTimeout = toBool(data.sessionTimeout, true)
         parsedSettings.pwdRequireLength = toBool(data.pwdRequireLength, true)
         parsedSettings.pwdRequireUppercase = toBool(data.pwdRequireUppercase, true)
-        parsedSettings.showTips = toBool(data.showTips, true)
-        parsedSettings.enableOvulationDisplay = toBool(data.enableOvulationDisplay, true)
-        parsedSettings.showCycleSummary = toBool(data.showCycleSummary, true)
         // Parse sessionDuration to number (minutes)
         parsedSettings.sessionDuration = parseInt(data.sessionDuration) || 20
 

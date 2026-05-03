@@ -17,7 +17,6 @@ const getReminders = async (req, res) => {
                 days_before_period: 2,
                 ovulation_approaching: true,
                 daily_log: false,
-                pill_reminder: false,
                 reminder_time: '09:00:00'
             });
         }
@@ -39,23 +38,21 @@ const updateReminders = async (req, res) => {
             days_before_period,
             ovulation_approaching,
             daily_log,
-            pill_reminder,
             reminder_time
         } = req.body;
 
         const result = await pool.query(
             `INSERT INTO reminders (
                 user_id, period_approaching, days_before_period, 
-                ovulation_approaching, daily_log, pill_reminder, reminder_time
+                ovulation_approaching, daily_log, reminder_time
              ) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7)
+             VALUES ($1, $2, $3, $4, $5, $6)
              ON CONFLICT (user_id) 
              DO UPDATE SET 
                 period_approaching = EXCLUDED.period_approaching,
                 days_before_period = EXCLUDED.days_before_period,
                 ovulation_approaching = EXCLUDED.ovulation_approaching,
                 daily_log = EXCLUDED.daily_log,
-                pill_reminder = EXCLUDED.pill_reminder,
                 reminder_time = EXCLUDED.reminder_time,
                 updated_at = CURRENT_TIMESTAMP
              RETURNING *`,
@@ -65,7 +62,6 @@ const updateReminders = async (req, res) => {
                 days_before_period ?? 2,
                 ovulation_approaching ?? true,
                 daily_log ?? false,
-                pill_reminder ?? false,
                 reminder_time ?? '09:00:00'
             ]
         );

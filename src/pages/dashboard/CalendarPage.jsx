@@ -42,6 +42,7 @@ export default function CalendarPage() {
   const [allMoods, setAllMoods] = useState([])
   const [allSymptoms, setAllSymptoms] = useState([])
   const [allNotes, setAllNotes] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   // Load initial data from API
   useEffect(() => {
@@ -304,7 +305,7 @@ export default function CalendarPage() {
       await api.logPeriod({
         start_date: startDate,
         end_date: endDate,
-        flow: selectedFlow
+        flow: selectedFlow.toLowerCase()
       })
 
       fetchAllData()

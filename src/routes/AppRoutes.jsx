@@ -5,6 +5,7 @@ import Home from '../pages/public/Home'
 import Login from '../pages/public/Login'
 import Signup from '../pages/public/Signup'
 import ForgotPassword from '../pages/public/ForgotPassword'
+import ResetPassword from '../pages/public/ResetPassword'
 
 // Onboarding
 import OnboardingPage from '../pages/OnboardingPage'
@@ -51,6 +52,7 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
 
       {/* Onboarding */}
       <Route path="/onboarding" element={<OnboardingPage />} />

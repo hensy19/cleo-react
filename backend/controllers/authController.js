@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const { sendPasswordResetEmail } = require('../services/emailService');
 
 
 /**
@@ -199,8 +200,93 @@ const googleLogin = async (req, res) => {
     }
 };
 
+/**
+ * Handle Forgot Password
+ */
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ message: "Email is required" });
+
+        const userQuery = await pool.query("SELECT id, name, email, password_hash FROM users WHERE email = $1", [email]);
+        if (userQuery.rows.length === 0) {
+            // Return 200 anyway to prevent email enumeration
+            return res.json({ message: "If an account exists, a reset link has been sent." });
+        }
+
+        const user = userQuery.rows[0];
+
+        // Create a stateless reset token using the current password hash as part of the secret.
+        // If the password changes, the token instantly becomes invalid.
+        const secret = process.env.JWT_SECRET + user.password_hash;
+        const resetToken = jwt.sign({ id: user.id, email: user.email }, secret, { expiresIn: '15m' });
+
+        await sendPasswordResetEmail(user.email, user.name, resetToken);
+
+        res.json({ message: "If an account exists, a reset link has been sent." });
+    } catch (err) {
+        console.error("Forgot password error:", err);
+        res.status(500).json({ message: "Error processing request" });
+    }
+};
+
+/**
+ * Handle Reset Password
+ */
+const resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+        if (!token || !newPassword) {
+            return res.status(400).json({ message: "Token and new password are required" });
+        }
+
+        // Decode token to get user ID without verifying yet
+        const decoded = jwt.decode(token);
+        if (!decoded || !decoded.id) {
+            return res.status(400).json({ message: "Invalid token" });
+        }
+
+        // Fetch user
+        const userQuery = await pool.query("SELECT id, password_hash FROM users WHERE id = $1", [decoded.id]);
+        if (userQuery.rows.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const user = userQuery.rows[0];
+
+        // Verify token securely using the old password hash
+        const secret = process.env.JWT_SECRET + user.password_hash;
+        try {
+            jwt.verify(token, secret);
+        } catch (verifyErr) {
+            return res.status(400).json({ message: "Invalid or expired token. Please request a new reset link." });
+        }
+
+        // Validate new password rules (from settings)
+        const settings = await getSystemSettings();
+        if (settings.pwdRequireLength && newPassword.length < 8) {
+            return res.status(400).json({ message: "Password must be at least 8 characters long." });
+        }
+        if (settings.pwdRequireUppercase && !/[A-Z]/.test(newPassword)) {
+            return res.status(400).json({ message: "Password must contain at least one uppercase letter." });
+        }
+
+        // Hash new password and save
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        await pool.query("UPDATE users SET password_hash = $1 WHERE id = $2", [hashedPassword, user.id]);
+
+        res.json({ message: "Password has been successfully reset." });
+    } catch (err) {
+        console.error("Reset password error:", err);
+        res.status(500).json({ message: "Error resetting password" });
+    }
+};
+
 module.exports = {
     signup,
     login,
-    googleLogin
+    googleLogin,
+    forgotPassword,
+    resetPassword
 };

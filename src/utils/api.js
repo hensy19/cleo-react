@@ -67,6 +67,14 @@ export const api = {
     method: 'POST',
     body: JSON.stringify({ idToken }),
   }),
+  forgotPassword: (email) => request('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  }),
+  resetPassword: (token, newPassword) => request('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ token, newPassword }),
+  }),
 
   // Admin Auth
   adminLogin: (credentials) => request('/admin/login', {

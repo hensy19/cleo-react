@@ -143,7 +143,12 @@ export default function Dashboard() {
         const notesData = await api.getNotes().catch(() => []);
         const recentNotesFromDB = notesData.slice(0, 3).map(n => ({
           id: n.id,
-          date: new Date(n.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }),
+          date: new Date(n.date).toLocaleDateString('en-US', { 
+            day: 'numeric', 
+            month: 'short', 
+            year: 'numeric',
+            timeZone: 'UTC' 
+          }),
           content: n.title || n.content
         }));
 
@@ -264,9 +269,15 @@ export default function Dashboard() {
                       <span className="cycle-day">{cycleData?.currentCycle?.day || 0}</span>
                       <span className="cycle-total">{t('of')} {cycleData?.currentCycle?.totalDays || 28} {t('days')}</span>
                     </div>
-                    <div className="circular-progress">
-                      {/* SVG circular progress can be added here or just styled div */}
-                      <div className="circular-percentage">50%</div>
+                    <div 
+                      className="circular-progress"
+                      style={{
+                        background: `conic-gradient(var(--primary-color) ${cycleData?.currentCycle?.percentage || 0}%, var(--progress-bar-bg) 0)`
+                      }}
+                    >
+                      <div className="circular-percentage">
+                        {Math.round(cycleData?.currentCycle?.percentage || 0)}%
+                      </div>
                     </div>
                   </div>
                 </Card>

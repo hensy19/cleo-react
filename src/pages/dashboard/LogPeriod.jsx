@@ -23,13 +23,18 @@ export default function LogPeriod() {
     setStartDate(startStr)
 
     if (startStr) {
-      const start = new Date(startStr)
-      // Add (periodLength - 1) days to the start date
-      const end = new Date(start)
-      end.setDate(start.getDate() + (defaultPeriodLength - 1))
+      // Split YYYY-MM-DD to avoid timezone shifting
+      const [year, month, day] = startStr.split('-').map(Number);
+      const start = new Date(year, month - 1, day);
       
-      const endStr = end.toISOString().split('T')[0]
-      setEndDate(endStr)
+      const end = new Date(start);
+      end.setDate(start.getDate() + (defaultPeriodLength - 1));
+      
+      // Format back to YYYY-MM-DD
+      const y = end.getFullYear();
+      const m = String(end.getMonth() + 1).padStart(2, '0');
+      const d = String(end.getDate()).padStart(2, '0');
+      setEndDate(`${y}-${m}-${d}`);
     }
   }
 

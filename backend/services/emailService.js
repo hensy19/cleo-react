@@ -56,7 +56,7 @@ const sendReminderEmail = async (userEmail, userName, type, date) => {
                 <p style="font-size: 16px; color: #555; text-align: center;">${message}</p>
                 
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/dashboard" 
+                    <a href="${process.env.FRONTEND_URL || 'http://localhost:5174'}/dashboard" 
                        style="background-color: #d63384; color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; font-weight: bold;">
                        Open Cleo App
                     </a>
@@ -75,7 +75,42 @@ const sendReminderEmail = async (userEmail, userName, type, date) => {
     }
 };
 
+const sendPasswordResetEmail = async (userEmail, userName, resetToken) => {
+    const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/reset-password/${resetToken}`;
+
+    const mailOptions = {
+        from: `"Cleo Health" <${process.env.EMAIL_USER}>`,
+        to: userEmail,
+        subject: '🔒 Reset Your Password - Cleo',
+        html: `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px;">
+                <h2 style="color: #d63384; text-align: center;">Hi ${userName},</h2>
+                <p style="font-size: 16px; color: #555; text-align: center;">We received a request to reset your password. Click the button below to choose a new password.</p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${resetLink}" 
+                       style="background-color: #d63384; color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; font-weight: bold; display: inline-block;">
+                       Reset Password
+                    </a>
+                </div>
+
+                <p style="font-size: 14px; color: #888; text-align: center;">If you didn't request a password reset, you can safely ignore this email.</p>
+                <p style="font-size: 12px; color: #aaa; text-align: center;">This link will expire in 15 minutes.</p>
+            </div>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Password reset email sent to ${userEmail}`);
+    } catch (error) {
+        console.error(`Error sending password reset email:`, error);
+        throw error;
+    }
+};
+
 module.exports = {
     sendCycleSummaryEmail,
-    sendReminderEmail
+    sendReminderEmail,
+    sendPasswordResetEmail
 };

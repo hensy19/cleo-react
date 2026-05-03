@@ -2,6 +2,23 @@ const pool = require("../db");
 const { sendCycleSummaryEmail } = require("../services/emailService");
 
 /**
+ * Helper to keep users table last_period_date perfectly synced
+ */
+const syncLastPeriodDate = async (userId) => {
+    const latest = await pool.query(
+        "SELECT start_date FROM period_logs WHERE user_id = $1 ORDER BY start_date DESC LIMIT 1",
+        [userId]
+    );
+    const newLastDate = latest.rows.length > 0 ? latest.rows[0].start_date : null;
+    
+    const userUpdate = await pool.query(
+        "UPDATE users SET last_period_date = $1 WHERE id = $2 RETURNING name, email, cycle_length, period_length",
+        [newLastDate, userId]
+    );
+    return userUpdate.rows[0];
+};
+
+/**
  * Get period history for the logged-in user
  */
 const getPeriods = async (req, res) => {
@@ -29,13 +46,8 @@ const logPeriod = async (req, res) => {
             [req.user.id, start_date, end_date, flow || 'medium']
         );
 
-        // 1. Update the user's last_period_date in the users table
-        const userUpdate = await pool.query(
-            "UPDATE users SET last_period_date = $1 WHERE id = $2 RETURNING name, email, cycle_length, period_length",
-            [start_date, req.user.id]
-        );
-        
-        const user = userUpdate.rows[0];
+        // 1. Update the user's last_period_date in the users table to stay perfectly in sync
+        const user = await syncLastPeriodDate(req.user.id);
 
         // 2. Check if user wants a cycle summary email
         const reminderPrefs = await pool.query(
@@ -95,6 +107,9 @@ const updatePeriod = async (req, res) => {
             return res.status(404).json({ message: "Period log not found" });
         }
 
+        // Keep dashboard predictions in sync with edited date
+        await syncLastPeriodDate(req.user.id);
+
         res.json(updated.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -116,6 +131,9 @@ const deletePeriod = async (req, res) => {
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "Period log not found" });
         }
+
+        // Sync dashboard predictions to reflect the deletion
+        await syncLastPeriodDate(req.user.id);
 
         res.json({ message: "Period log deleted successfully" });
     } catch (err) {

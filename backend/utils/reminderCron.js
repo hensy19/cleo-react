@@ -18,7 +18,14 @@ const initReminderCron = () => {
 
             for (const user of usersWithReminders.rows) {
                 const cycleLength = user.cycle_length || 28;
-                const lastPeriod = new Date(user.last_period_date);
+                
+                // Parse last_period_date safely (e.g. "2026-04-07")
+                const lastPeriodStr = user.last_period_date ? new Date(user.last_period_date).toISOString().split('T')[0] : null;
+                if (!lastPeriodStr) continue;
+                
+                const [y, m, d] = lastPeriodStr.split('-').map(Number);
+                const lastPeriod = new Date(y, m - 1, d);
+                
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
