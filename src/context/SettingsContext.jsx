@@ -29,7 +29,7 @@ export function SettingsProvider({ children }) {
         // Update specific tracked states
         if (data.logoUrl) setLogoUrl(data.logoUrl)
         if (data.siteName) setSiteName(data.siteName)
-        
+
         // Parse and store all settings for general use
         const parsedSettings = { ...data }
         // Pre-parse common booleans for convenience
@@ -55,14 +55,14 @@ export function SettingsProvider({ children }) {
   }, [])
 
   return (
-    <SettingsContext.Provider value={{ 
-      logoUrl, 
-      siteName, 
-      settings, 
+    <SettingsContext.Provider value={{
+      logoUrl,
+      siteName,
+      settings,
       isLoading,
-      setLogoUrl, 
-      setSiteName, 
-      refreshSettings: fetchAllSettings 
+      setLogoUrl,
+      setSiteName,
+      refreshSettings: fetchAllSettings
     }}>
       {children}
     </SettingsContext.Provider>
